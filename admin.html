@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم الأدمن - العفرون أونلاين</title>
+    <link rel="icon" type="image/png" href="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjbOPPWZ_6FVtNvqp4-S8RbzejyQt75-0jLytLFSUotGJn21nup8dvMv_qdHK8t3Aapqj6PmZwFQ2HuQtI4pt4lK-cTnKAWzwoqZAXya8dxmXJ0xpE14binYHeEMdacOXNiQkAl69t1fv4Yp6XsjLsGEIUUcrxs8JK43E1QhQRsAyf3GTWuZPZ-zYpcOBU/s320/Picsart_26-02-09_09-40-35-888.png">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-storage-compat.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * { font-family: 'Cairo', sans-serif; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .animate-fadeIn { animation: fadeIn 0.5s ease-out; }
+        .animate-slideIn { animation: slideIn 0.3s ease-out; }
+        .animate-pulse { animation: pulse 2s infinite; }
+        .animate-spin { animation: spin 1s linear infinite; }
+        
+        .sidebar-item {
+            transition: all 0.3s ease;
+        }
+        .sidebar-item:hover, .sidebar-item.active {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(-5px);
+        }
+        
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .table-row:hover {
+            background: #f8fafc;
+        }
+        
+        .modal-backdrop {
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+        }
+        
+        .toast {
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
+</head>
+<body class="bg-gray-900 min-h-screen">
+    <div id="app"></div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAaXp-gUOQ_G2s-kM8JhaqW8TJcJ4Nqcuo",
+            authDomain: "comondi-fae4b.firebaseapp.com",
+            projectId: "comondi-fae4b",
+            storageBucket: "comondi-fae4b.firebasestorage.app",
+            messagingSenderId: "932777870241",
+            appId: "1:932777870241:web:78b0cf3a3cf14046be01e0"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+
+        // Admin credentials
+        const ADMIN_USERNAME = 'admin';
+        const ADMIN_PASSWORD = 'abobob123';
+
+        // App State
+        let state = {
+            isLoggedIn: false,
+            currentPage: 'dashboard',
+            sidebarOpen: true,
+            stats: {
+                totalUsers: 0,
+                activeUsers: 0,
+                totalAds: 0,
+                todayAds: 0,
+                pendingReports: 0,
+                featuredAds: 0,
+                todayVisits: 0,
+                monthVisits: 0,
+                totalMessages: 0
+            },
+            ads: [],
+            users: [],
+            reports: [],
+            sliders: [],
+            banners: [],
+            htmlAds: [],
+            messages: [],
+            showModal: null,
+            editingItem: null,
+            searchQuery: '',
+            filterCategory: '',
+            filterStatus: ''
+        };
+
+        const categories = [
+            { id: 'cars', name: 'سيارات ومركبات' },
+            { id: 'realestate', name: 'عقارات' },
+            { id: 'phones', name: 'هواتف وإلكترونيات' },
+            { id: 'jobs', name: 'فرص عمل' },
+            { id: 'services', name: 'خدمات' },
+            { id: 'electronics', name: 'أجهزة كهرومنزلية' },
+            { id: 'fashion', name: 'ألبسة وموضة' },
+            { id: 'equipment', name: 'معدات مهنية' },
+            { id: 'sweets', name: 'حلويات' },
+            { id: 'sewing', name: 'خياطة' },
+            { id: 'beauty', name: 'تجميل وعناية' },
+            { id: 'other', name: 'أخرى' }
+        ];
+
+        const cities = ['العفرون', 'موزاية', 'شفة', 'واد جر', 'أحمر العين', 'حطاطبة'];
+
+        // Utility Functions
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast fixed top-4 right-4 z-50 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 ${
+                type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+            } text-white`;
+            toast.innerHTML = `
+                <span class="text-2xl">${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
+                <span class="font-medium">${message}</span>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function formatDate(timestamp) {
+            if (!timestamp) return '-';
+            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+            return date.toLocaleDateString('ar-DZ') + ' ' + date.toLocaleTimeString('ar-DZ', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function formatPrice(price) {
+            return new Intl.NumberFormat('ar-DZ').format(price) + ' د.ج';
+        }
+
+        function getCategoryName(id) {
+            const cat = categories.find(c => c.id === id);
+            return cat ? cat.name : id;
+        }
+
+        // Login Handler
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                state.isLoggedIn = true;
+                localStorage.setItem('adminLoggedIn', 'true');
+                showToast('تم تسجيل الدخول بنجاح');
+                loadAllData();
+                render();
+            } else {
+                showToast('اسم المستخدم أو كلمة المرور غير صحيحة', 'error');
+            }
+        }
+
+        function handleLogout() {
+            state.isLoggedIn = false;
+            localStorage.removeItem('adminLoggedIn');
+            showToast('تم تسجيل الخروج');
+            render();
+        }
+
+        // Data Loading Functions
+        async function loadAllData() {
+            await Promise.all([
+                loadStats(),
+                loadAds(),
+                loadUsers(),
+                loadReports(),
+                loadSliders(),
+                loadBanners(),
+                loadHtmlAds(),
+                loadMessages()
+            ]);
+            render();
+        }
+
+        async function loadStats() {
+            try {
+                // Users
+                const usersSnap = await db.collection('users').get();
+                state.stats.totalUsers = usersSnap.size;
+                
+                // Active users (last 24h)
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                const activeSnap = await db.collection('users').where('lastActive', '>', yesterday).get();
+                state.stats.activeUsers = activeSnap.size;
+                
+                // Ads
+                const adsSnap = await db.collection('ads').get();
+                state.stats.totalAds = adsSnap.size;
+                
+                // Today's ads
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const todayAdsSnap = await db.collection('ads').where('createdAt', '>', today).get();
+                state.stats.todayAds = todayAdsSnap.size;
+                
+                // Featured ads
+                const featuredSnap = await db.collection('ads').where('isFeatured', '==', true).get();
+                state.stats.featuredAds = featuredSnap.size;
+                
+                // Pending reports
+                const reportsSnap = await db.collection('reports').where('status', '==', 'pending').get();
+                state.stats.pendingReports = reportsSnap.size;
+                
+                // Messages
+                const messagesSnap = await db.collection('messages').get();
+                state.stats.totalMessages = messagesSnap.size;
+                
+                // Visits from localStorage
+                const visits = JSON.parse(localStorage.getItem('adminVisits') || '{}');
+                const todayStr = new Date().toDateString();
+                const monthStr = new Date().toISOString().slice(0, 7);
+                state.stats.todayVisits = visits[todayStr] || 0;
+                state.stats.monthVisits = Object.entries(visits)
+                    .filter(([key]) => key.includes(monthStr))
+                    .reduce((sum, [, val]) => sum + val, 0);
+                
+            } catch (error) {
+                console.log('Stats error:', error);
+            }
+        }
+
+        async function loadAds() {
+            try {
+                const snap = await db.collection('ads').orderBy('createdAt', 'desc').get();
+                state.ads = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            } catch (error) {
+                console.log('Ads error:', error);
+            }
+        }
+
+        async function loadUsers() {
+            try {
+                const snap = await db.collection('users').orderBy('createdAt', 'desc').get();
+                state.users = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            } catch (error) {
+                console.log('Users error:', error);
+            }
+        }
+
+        async function loadReports() {
+            try {
+                const snap = await db.collection('reports').orderBy('createdAt', 'desc').get();
+                state.reports = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            } catch (error) {
+                console.log('Reports error:', error);
+            }
+        }
+
+        async function loadSliders() {
+            try {
+                const snap = await db.collection('sliders').orderBy('createdAt', 'desc').get();
+                state.sliders = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            } catch (error) {
+                console.log('Sliders error:', error);
+            }
+        }
+
+        async function loadBanners() {
+            try {
+                const snap = await db.collection('banners').orderBy('createdAt', 'desc').get();
+                state.banners = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            } catch (error) {
+                console.log('Banners error:', error);
+            }
+        }
+
+        async function loadHtmlAds() {
+            try {
+                const snap = await db.collection('htmlAds').orderBy('createdAt', 'desc').get();
+                state.htmlAds = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            } catch (error) {
+                console.log('HTML Ads error:', error);
+            }
+        }
+
+        async function loadMessages() {
+            try {
+                const snap = await db.collection('messages').orderBy('createdAt', 'desc').limit(100).get();
+                state.messages = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            } catch (error) {
+                console.log('Messages error:', error);
+            }
+        }
+
+        // Ad Actions
+        async function toggleFeatured(adId, current) {
+            try {
+                await db.collection('ads').doc(adId).update({ isFeatured: !current });
+                showToast(current ? 'تم إلغاء التمييز' : 'تم تمييز الإعلان ⭐');
+                loadAds();
+                loadStats();
+            } catch (error) {
+                showToast('حدث خطأ', 'error');
+            }
+        }
+
+        async function toggleActive(adId, current) {
+            try {
+                await db.collection('ads').doc(adId).update({ isActive: !current });
+                showToast(current ? 'تم تعطيل الإعلان' : 'تم تفعيل الإعلان');
+                loadAds();
+            } catch (error) {
+                showToast('حدث خطأ', 'error');
+            }
+        }
+
+        async function deleteAd(adId) {
+            if (!confirm('هل أنت متأكد من حذف هذا الإعلان؟')) return;
+            try {
+                await db.collection('ads').doc(adId).delete();
+                showToast('تم حذف الإعلان');
+                loadAds();
+                loadStats();
+            } catch (error) {
+                showToast('حدث خطأ', 'error');
+            }
+        }
+
+        async function saveAdEdit(event) {
+            event.preventDefault();
+            const ad = state.editingItem;
+            try {
+                await db.collection('ads').doc(ad.id).update({
+                    title: document.getElementById('editTitle').value,
+                    description: document.getElementById('editDescription').value,
+                    price: Number(document.getElementById('editPrice').value),
+                    category: document.getElementById('editCategory').value,
+                    city: document.getElementById('editCity').value,
+                    phone: document.getElementById('editPhone').value
+                });
+                showToast('تم تحديث الإعلان');
+                state.showModal = null;
+                state.editingItem = null;
+                loadAds();
+            } catch (error) {
+                showToast('حدث خطأ', 'error');
+            }
+        }
+
+        // User Actions
+        async function toggleUserBan(userId, current) {
+            try {
+                await db.collection('users').doc(userId).update({ isBanned: !current });
+                showToast(current ? 'تم إلغاء الحظر' : 'تم حظر المستخدم');
+                loadUsers();
+            } catch (error) {
+                showToast('حدث خطأ', 'error');
+            }
+        }
+
+        async function deleteUser(userId) {
+            if (!confirm('هل أنت متأكد من حذف هذا المستخدم؟')) return;
+            try {
+                await db.collection('users').doc(userId).delete();
+                showToast('تم حذف المستخدم');
+                loadUsers();
+                loadStats();
+            } catch (error) {
+                showToast('حدث خطأ', 'error');
+            }
+        }
+
+        // Report Actions
+        async function updateReportStatus(reportId, status) {
+            try {
+                await db.collection('reports').doc(reportId).update({ status });
+                showToast('تم تحديث حالة البلاغ');
+                loadReports();
+                loadStats();
+            } catch (error) {
+                showToast('حدث خطأ', 'error');
+            }
+        }
+
+        async function deleteReport(reportId) {
+            try {
+                await db.collection('reports').doc(reportId).delete();
+                showToast('تم حذف البلاغ');
+                loadReports();
+                loadStats();
+            } catch (error) {
+                showToast('حدث خطأ', 'error');
+            }
+        }
+
+        // Slider Actions
+        async function addSlider(event) {
+            event.preventDefault();
+            try {
+                const imageFile = document.getElementById('sliderImage').files[0];
+                let imageUrl = document.getElementById('sliderImageUrl').value;
+                
+                if (imageFile) {
+                    const reader = new FileReader();
+                    reader.onload = async function(e) {
+                        imageUrl = e.target.result;
+                        await saveSlider(imageUrl);
+                    };
+                    reader.readAsDataURL(imageFile);
+                } else {
+                    await saveSlider(imageUrl);
+                }
+            } catch (error) {
+                showToast('حدث خطأ', 'error');
+            }
+        }
+
+        async function saveSlider(imageUrl) {
+            await db.collection('sliders').add({
+                title: document.getElementById('sliderTitle').value,
+                description: document.getElementById('sliderDescription').value,
+                image: imageUrl,
+                link: document.getElementById('sliderLink').value,
+                isActive: true,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            showToast('تم إضافة السلايدر');
+            state.showModal = null;
+            loadSliders();
+        }
+
+        async function deleteSlider(sliderId) {
+            if (!confirm('هل أنت متأكد من حذف هذا السلايدر؟')) return;
+            try {
+                await db.collection('sliders').doc(sliderId).delete();
+                showToast('تم حذف السلايدر');
+                loadSliders();
+            } catch (error) {
+                showToast('حدث خطأ', 'error');
+            }
+        }
+
+        // Banner Actions
+        async function addBanner(event) {
+            event.preventDefault();
+            try {
+                const imageFile = document.getElementById('bannerImage').files[0];
+                let imageUrl = document.getElementById('bannerImageUrl').value;
+                
+                if (imageFile) {
+                    const reader = new FileReader();
+                    reader.onload = async function(e) {
+                        imageUrl = e.target.result;
+                        await saveBanner(imageUrl);
+                    };
+                    reader.readAsDataURL(imageFile);
+                } else {
+                    await saveBanner(imageUrl);
+                }
+            } catch (error) {
+                showToast('حدث خطأ', 'error');
+            }
+        }
+
+        async function saveBanner(imageUrl) {
+            await db.collection('banners').add({
+                title: document.getElementById('bannerTitle').value,
+                image: imageUrl,
+                link: document.getElementById('bannerLink').value,
+                position: document.getElementById('bannerPosition').value,
+                isActive: true,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            showToast('تم إضافة البانر');
+            state.showModal = null;
+            loadBanners();
+        }
+
+        async function deleteBanner(bannerId) {
+            if (!confirm('هل أنت متأكد من حذف هذا البانر؟')) return;
+            try {
+                await db.collection('banners').doc(bannerId).delete();
+                showToast('تم حذف البانر');
+                loadBanners();
+            } catch (error) {
+                showToast('حدث خطأ', 'error');
+            }
+        }
+
+        // HTML Ads Actions
+        async function addHtmlAd(event) {
+            event.preventDefault();
+            try {
+                await db.collection('htmlAds').add({
+                    name: document.getElementById('htmlAdName').value,
+                    code: document.getElementById('htmlAdCode').value,
+                    position: document.getElementById('htmlAdPosition').value,
+                    isActive: true,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                showToast('تم إضافة الإعلان');
+                state.showModal = null;
+                loadHtmlAds();
+            } catch (error) {
+                showToast('حدث خطأ', 'error');
+            }
+        }
+
+        async function deleteHtmlAd(adId) {
+            if (!confirm('هل أنت متأكد من حذف هذا الإعلان؟')) return;
+            try {
+                await db.collection('htmlAds').doc(adId).delete();
+                showToast('تم حذف الإعلان');
+                loadHtmlAds();
+            } catch (error) {
+                showToast('حدث خطأ', 'error');
+            }
+        }
+
+        // Notification Actions
+        async function sendNotification(event) {
+            event.preventDefault();
+            const title = document.getElementById('notifTitle').value;
+            const message = document.getElementById('notifMessage').value;
+            const target = document.getElementById('notifTarget').value;
+            
+            try {
+                if (target === 'all') {
+                    const users = await db.collection('users').get();
+                    const batch = db.batch();
+                    users.forEach(user => {
+                        const ref = db.collection('notifications').doc();
+                        batch.set(ref, {
+                            userId: user.id,
+                            title,
+                            message,
+                            isRead: false,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    });
+                    await batch.commit();
+                } else {
+                    await db.collection('notifications').add({
+                        userId: target,
+                        title,
+                        message,
+                        isRead: false,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+                showToast('تم إرسال الإشعار');
+                state.showModal = null;
+            } catch (error) {
+                showToast('حدث خطأ', 'error');
+            }
+        }
+
+        // Render Functions
+        function renderLoginPage() {
+            return `
+                <div class="min-h-screen flex items-center justify-center p-4">
+                    <div class="bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-fadeIn">
+                        <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-center">
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjbOPPWZ_6FVtNvqp4-S8RbzejyQt75-0jLytLFSUotGJn21nup8dvMv_qdHK8t3Aapqj6PmZwFQ2HuQtI4pt4lK-cTnKAWzwoqZAXya8dxmXJ0xpE14binYHeEMdacOXNiQkAl69t1fv4Yp6XsjLsGEIUUcrxs8JK43E1QhQRsAyf3GTWuZPZ-zYpcOBU/s320/Picsart_26-02-09_09-40-35-888.png" 
+                                 alt="Logo" class="h-20 mx-auto mb-4">
+                            <h1 class="text-2xl font-bold text-white">لوحة تحكم الأدمن</h1>
+                            <p class="text-white/70">العفرون أونلاين</p>
+                        </div>
+                        <form onsubmit="handleLogin(event)" class="p-8 space-y-6">
+                            <div>
+                                <label class="block text-gray-300 font-medium mb-2">اسم المستخدم</label>
+                                <input type="text" id="username" required 
+                                       class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 font-medium mb-2">كلمة المرور</label>
+                                <input type="password" id="password" required 
+                                       class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            </div>
+                            <button type="submit" 
+                                    class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-bold text-lg hover:opacity-90 transition">
+                                🔐 تسجيل الدخول
+                            </button>
+                        </form>
+                        <div class="p-4 text-center border-t border-gray-700">
+                            <a href="index.html" class="text-blue-400 hover:text-blue-300">← العودة للموقع</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSidebar() {
+            const menuItems = [
+                { id: 'dashboard', icon: '📊', label: 'لوحة الرئيسية' },
+                { id: 'ads', icon: '📋', label: 'إدارة الإعلانات' },
+                { id: 'users', icon: '👥', label: 'إدارة المستخدمين' },
+                { id: 'reports', icon: '🚩', label: 'البلاغات' },
+                { id: 'sliders', icon: '🖼️', label: 'السلايدر' },
+                { id: 'banners', icon: '🎯', label: 'البانرات' },
+                { id: 'htmlads', icon: '💻', label: 'إعلانات HTML' },
+                { id: 'messages', icon: '💬', label: 'الرسائل' },
+                { id: 'notifications', icon: '🔔', label: 'الإشعارات' }
+            ];
+            
+            return `
+                <aside class="${state.sidebarOpen ? 'w-64' : 'w-20'} bg-gray-800 min-h-screen fixed right-0 top-0 transition-all duration-300 z-30">
+                    <div class="p-4 border-b border-gray-700 flex items-center ${state.sidebarOpen ? 'justify-between' : 'justify-center'}">
+                        ${state.sidebarOpen ? `
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjbOPPWZ_6FVtNvqp4-S8RbzejyQt75-0jLytLFSUotGJn21nup8dvMv_qdHK8t3Aapqj6PmZwFQ2HuQtI4pt4lK-cTnKAWzwoqZAXya8dxmXJ0xpE14binYHeEMdacOXNiQkAl69t1fv4Yp6XsjLsGEIUUcrxs8JK43E1QhQRsAyf3GTWuZPZ-zYpcOBU/s320/Picsart_26-02-09_09-40-35-888.png" 
+                                 alt="Logo" class="h-10">
+                        ` : ''}
+                        <button onclick="state.sidebarOpen = !state.sidebarOpen; render();" 
+                                class="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg">
+                            ${state.sidebarOpen ? '→' : '←'}
+                        </button>
+                    </div>
+                    <nav class="p-4 space-y-2">
+                        ${menuItems.map(item => `
+                            <button onclick="state.currentPage = '${item.id}'; render();" 
+                                    class="sidebar-item w-full p-3 rounded-xl flex items-center gap-3 text-gray-300 hover:text-white ${state.currentPage === item.id ? 'active bg-blue-600/20 text-blue-400' : ''}">
+                                <span class="text-xl">${item.icon}</span>
+                                ${state.sidebarOpen ? `<span>${item.label}</span>` : ''}
+                            </button>
+                        `).join('')}
+                    </nav>
+                    <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-700">
+                        <button onclick="handleLogout()" 
+                                class="w-full p-3 rounded-xl flex items-center justify-center gap-3 text-red-400 hover:bg-red-500/10">
+                            <span>🚪</span>
+                            ${state.sidebarOpen ? '<span>تسجيل الخروج</span>' : ''}
+                        </button>
+                    </div>
+                </aside>
+            `;
+        }
+
+        function renderHeader() {
+            return `
+                <header class="bg-gray-800 border-b border-gray-700 p-4 flex items-center justify-between">
+                    <div>
+                        <h1 class="text-xl font-bold text-white">
+                            ${state.currentPage === 'dashboard' ? '📊 لوحة الرئيسية' : ''}
+                            ${state.currentPage === 'ads' ? '📋 إدارة الإعلانات' : ''}
+                            ${state.currentPage === 'users' ? '👥 إدارة المستخدمين' : ''}
+                            ${state.currentPage === 'reports' ? '🚩 البلاغات' : ''}
+                            ${state.currentPage === 'sliders' ? '🖼️ السلايدر' : ''}
+                            ${state.currentPage === 'banners' ? '🎯 البانرات' : ''}
+                            ${state.currentPage === 'htmlads' ? '💻 إعلانات HTML' : ''}
+                            ${state.currentPage === 'messages' ? '💬 الرسائل' : ''}
+                            ${state.currentPage === 'notifications' ? '🔔 الإشعارات' : ''}
+                        </h1>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <a href="index.html" target="_blank" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
+                            🌐 عرض الموقع
+                        </a>
+                        <div class="flex items-center gap-2 text-gray-300">
+                            <div class="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                                A
+                            </div>
+                            <span class="font-medium">Admin</span>
+                        </div>
+                    </div>
+                </header>
+            `;
+        }
+
+        function renderDashboard() {
+            const stats = [
+                { icon: '👥', label: 'إجمالي المستخدمين', value: state.stats.totalUsers, color: 'from-blue-500 to-blue-600' },
+                { icon: '🟢', label: 'المستخدمين النشطين', value: state.stats.activeUsers, color: 'from-green-500 to-green-600' },
+                { icon: '📋', label: 'إجمالي الإعلانات', value: state.stats.totalAds, color: 'from-purple-500 to-purple-600' },
+                { icon: '📅', label: 'إعلانات اليوم', value: state.stats.todayAds, color: 'from-orange-500 to-orange-600' },
+                { icon: '⭐', label: 'إعلانات مميزة', value: state.stats.featuredAds, color: 'from-yellow-500 to-yellow-600' },
+                { icon: '🚩', label: 'بلاغات معلقة', value: state.stats.pendingReports, color: 'from-red-500 to-red-600' },
+                { icon: '👁️', label: 'زيارات اليوم', value: state.stats.todayVisits, color: 'from-teal-500 to-teal-600' },
+                { icon: '💬', label: 'إجمالي الرسائل', value: state.stats.totalMessages, color: 'from-pink-500 to-pink-600' }
+            ];
+            
+            return `
+                <div class="p-6 animate-fadeIn">
+                    <!-- Stats Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        ${stats.map(stat => `
+                            <div class="stat-card bg-gradient-to-r ${stat.color} rounded-2xl p-6 text-white shadow-xl">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-white/70 text-sm">${stat.label}</p>
+                                        <p class="text-3xl font-bold mt-1">${stat.value}</p>
+                                    </div>
+                                    <span class="text-4xl">${stat.icon}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Recent Ads -->
+                        <div class="bg-gray-800 rounded-2xl p-6">
+                            <h3 class="text-lg font-bold text-white mb-4">📋 أحدث الإعلانات</h3>
+                            <div class="space-y-3">
+                                ${state.ads.slice(0, 5).map(ad => `
+                                    <div class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-xl">
+                                        <img src="${ad.image || 'https://via.placeholder.com/50'}" class="w-12 h-12 rounded-lg object-cover">
+                                        <div class="flex-1">
+                                            <p class="text-white font-medium truncate">${ad.title}</p>
+                                            <p class="text-gray-400 text-sm">${formatPrice(ad.price)}</p>
+                                        </div>
+                                        <span class="px-2 py-1 bg-blue-500/20 text-blue-400 rounded text-xs">${getCategoryName(ad.category)}</span>
+                                    </div>
+                                `).join('') || '<p class="text-gray-500 text-center py-4">لا توجد إعلانات</p>'}
+                            </div>
+                        </div>
+                        
+                        <!-- Recent Reports -->
+                        <div class="bg-gray-800 rounded-2xl p-6">
+                            <h3 class="text-lg font-bold text-white mb-4">🚩 أحدث البلاغات</h3>
+                            <div class="space-y-3">
+                                ${state.reports.slice(0, 5).map(report => `
+                                    <div class="flex items-center gap-3 p-3 bg-gray-700/50 rounded-xl">
+                                        <span class="text-2xl">${report.status === 'pending' ? '⏳' : report.status === 'resolved' ? '✅' : '❌'}</span>
+                                        <div class="flex-1">
+                                            <p class="text-white font-medium truncate">${report.reason}</p>
+                                            <p class="text-gray-400 text-sm">${formatDate(report.createdAt)}</p>
+                                        </div>
+                                        <span class="px-2 py-1 ${report.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400' : report.status === 'resolved' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'} rounded text-xs">
+                                            ${report.status === 'pending' ? 'معلق' : report.status === 'resolved' ? 'تم الحل' : 'مرفوض'}
+                                        </span>
+                                    </div>
+                                `).join('') || '<p class="text-gray-500 text-center py-4">لا توجد بلاغات</p>'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderAdsPage() {
+            let filteredAds = [...state.ads];
+            if (state.searchQuery) {
+                filteredAds = filteredAds.filter(ad => 
+                    ad.title?.toLowerCase().includes(state.searchQuery.toLowerCase())
+                );
+            }
+            if (state.filterCategory) {
+                filteredAds = filteredAds.filter(ad => ad.category === state.filterCategory);
+            }
+            if (state.filterStatus === 'active') {
+                filteredAds = filteredAds.filter(ad => ad.isActive);
+            } else if (state.filterStatus === 'inactive') {
+                filteredAds = filteredAds.filter(ad => !ad.isActive);
+            } else if (state.filterStatus === 'featured') {
+                filteredAds = filteredAds.filter(ad => ad.isFeatured);
+            }
+            
+            return `
+                <div class="p-6 animate-fadeIn">
+                    <!-- Filters -->
+                    <div class="bg-gray-800 rounded-xl p-4 mb-6 flex flex-wrap items-center gap-4">
+                        <input type="text" placeholder="🔍 بحث بالعنوان..." 
+                               value="${state.searchQuery}"
+                               onkeyup="state.searchQuery = this.value; render();"
+                               class="flex-1 min-w-48 px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                        <select onchange="state.filterCategory = this.value; render();" 
+                                class="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                            <option value="">جميع الفئات</option>
+                            ${categories.map(cat => `
+                                <option value="${cat.id}" ${state.filterCategory === cat.id ? 'selected' : ''}>${cat.name}</option>
+                            `).join('')}
+                        </select>
+                        <select onchange="state.filterStatus = this.value; render();" 
+                                class="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                            <option value="">جميع الحالات</option>
+                            <option value="active" ${state.filterStatus === 'active' ? 'selected' : ''}>نشط</option>
+                            <option value="inactive" ${state.filterStatus === 'inactive' ? 'selected' : ''}>معطل</option>
+                            <option value="featured" ${state.filterStatus === 'featured' ? 'selected' : ''}>مميز</option>
+                        </select>
+                        <span class="text-gray-400">${filteredAds.length} إعلان</span>
+                    </div>
+                    
+                    <!-- Ads Table -->
+                    <div class="bg-gray-800 rounded-xl overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-700">
+                                    <tr>
+                                        <th class="text-right p-4 text-gray-300">الصورة</th>
+                                        <th class="text-right p-4 text-gray-300">العنوان</th>
+                                        <th class="text-right p-4 text-gray-300">السعر</th>
+                                        <th class="text-right p-4 text-gray-300">الفئة</th>
+                                        <th class="text-right p-4 text-gray-300">الحالة</th>
+                                        <th class="text-right p-4 text-gray-300">التاريخ</th>
+                                        <th class="text-right p-4 text-gray-300">الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${filteredAds.map(ad => `
+                                        <tr class="table-row border-t border-gray-700">
+                                            <td class="p-4">
+                                                <img src="${ad.image || 'https://via.placeholder.com/50'}" class="w-12 h-12 rounded-lg object-cover">
+                                            </td>
+                                            <td class="p-4">
+                                                <p class="text-white font-medium">${ad.title}</p>
+                                                <p class="text-gray-400 text-sm">${ad.userName}</p>
+                                            </td>
+                                            <td class="p-4 text-green-400 font-bold">${formatPrice(ad.price)}</td>
+                                            <td class="p-4 text-gray-300">${getCategoryName(ad.category)}</td>
+                                            <td class="p-4">
+                                                <div class="flex items-center gap-2">
+                                                    ${ad.isActive ? '<span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs">نشط</span>' : '<span class="px-2 py-1 bg-red-500/20 text-red-400 rounded text-xs">معطل</span>'}
+                                                    ${ad.isFeatured ? '<span class="px-2 py-1 bg-yellow-500/20 text-yellow-400 rounded text-xs">⭐ مميز</span>' : ''}
+                                                </div>
+                                            </td>
+                                            <td class="p-4 text-gray-400 text-sm">${formatDate(ad.createdAt)}</td>
+                                            <td class="p-4">
+                                                <div class="flex items-center gap-2">
+                                                    <button onclick="state.editingItem = state.ads.find(a => a.id === '${ad.id}'); state.showModal = 'editAd'; render();" 
+                                                            class="p-2 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30" title="تعديل">✏️</button>
+                                                    <button onclick="toggleFeatured('${ad.id}', ${ad.isFeatured})" 
+                                                            class="p-2 ${ad.isFeatured ? 'bg-yellow-500/20 text-yellow-400' : 'bg-gray-600 text-gray-400'} rounded-lg hover:opacity-80" title="تمييز">⭐</button>
+                                                    <button onclick="toggleActive('${ad.id}', ${ad.isActive})" 
+                                                            class="p-2 ${ad.isActive ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'} rounded-lg hover:opacity-80" title="تفعيل/تعطيل">
+                                                        ${ad.isActive ? '✅' : '🚫'}
+                                                    </button>
+                                                    <button onclick="deleteAd('${ad.id}')" 
+                                                            class="p-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30" title="حذف">🗑️</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    `).join('') || '<tr><td colspan="7" class="p-8 text-center text-gray-500">لا توجد إعلانات</td></tr>'}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderUsersPage() {
+            let filteredUsers = [...state.users];
+            if (state.searchQuery) {
+                filteredUsers = filteredUsers.filter(user => 
+                    user.name?.toLowerCase().includes(state.searchQuery.toLowerCase()) ||
+                    user.email?.toLowerCase().includes(state.searchQuery.toLowerCase())
+                );
+            }
+            
+            return `
+                <div class="p-6 animate-fadeIn">
+                    <div class="bg-gray-800 rounded-xl p-4 mb-6 flex items-center gap-4">
+                        <input type="text" placeholder="🔍 بحث بالاسم أو البريد..." 
+                               value="${state.searchQuery}"
+                               onkeyup="state.searchQuery = this.value; render();"
+                               class="flex-1 px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white">
+                        <span class="text-gray-400">${filteredUsers.length} مستخدم</span>
+                    </div>
+                    
+                    <div class="bg-gray-800 rounded-xl overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-700">
+                                    <tr>
+                                        <th class="text-right p-4 text-gray-300">المستخدم</th>
+                                        <th class="text-right p-4 text-gray-300">البريد</th>
+                                        <th class="text-right p-4 text-gray-300">الهاتف</th>
+                                        <th class="text-right p-4 text-gray-300">الحالة</th>
+                                        <th class="text-right p-4 text-gray-300">تاريخ التسجيل</th>
+                                        <th class="text-right p-4 text-gray-300">الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${filteredUsers.map(user => `
+                                        <tr class="table-row border-t border-gray-700">
+                                            <td class="p-4">
+                                                <div class="flex items-center gap-3">
+                                                    <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                                                        ${(user.name || 'U')[0].toUpperCase()}
+                                                    </div>
+                                                    <span class="text-white font-medium">${user.name || 'غير معروف'}</span>
+                                                </div>
+                                            </td>
+                                            <td class="p-4 text-gray-300">${user.email}</td>
+                                            <td class="p-4 text-gray-300">${user.phone || '-'}</td>
+                                            <td class="p-4">
+                                                ${user.isBanned ? '<span class="px-2 py-1 bg-red-500/20 text-red-400 rounded text-xs">محظور</span>' : '<span class="px-2 py-1 bg-green-500/20 text-green-400 rounded text-xs">نشط</span>'}
+                                            </td>
+                                            <td class="p-4 text-gray-400 text-sm">${formatDate(user.createdAt)}</td>
+                                            <td class="p-4">
+                                                <div class="flex items-center gap-2">
+                                                    <button onclick="toggleUserBan('${user.id}', ${user.isBanned || false})" 
+                                                            class="p-2 ${user.isBanned ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'} rounded-lg hover:opacity-80">
+                                                        ${user.isBanned ? '✅' : '🚫'}
+                                                    </button>
+                                                    <button onclick="deleteUser('${user.id}')" 
+                                                            class="p-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30">🗑️</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    `).join('') || '<tr><td colspan="6" class="p-8 text-center text-gray-500">لا يوجد مستخدمين</td></tr>'}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderReportsPage() {
+            return `
+                <div class="p-6 animate-fadeIn">
+                    <div class="bg-gray-800 rounded-xl overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-700">
+                                    <tr>
+                                        <th class="text-right p-4 text-gray-300">النوع</th>
+                                        <th class="text-right p-4 text-gray-300">السبب</th>
+                                        <th class="text-right p-4 text-gray-300">الحالة</th>
+                                        <th class="text-right p-4 text-gray-300">التاريخ</th>
+                                        <th class="text-right p-4 text-gray-300">الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${state.reports.map(report => `
+                                        <tr class="table-row border-t border-gray-700">
+                                            <td class="p-4 text-gray-300">${report.type === 'general' ? '📢 عام' : '📋 إعلان'}</td>
+                                            <td class="p-4 text-white">${report.reason}</td>
+                                            <td class="p-4">
+                                                <span class="px-2 py-1 ${report.status === 'pending' ? 'bg-yellow-500/20 text-yellow-400' : report.status === 'resolved' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'} rounded text-xs">
+                                                    ${report.status === 'pending' ? 'معلق' : report.status === 'resolved' ? 'تم الحل' : 'مرفوض'}
+                                                </span>
+                                            </td>
+                                            <td class="p-4 text-gray-400 text-sm">${formatDate(report.createdAt)}</td>
+                                            <td class="p-4">
+                                                <div class="flex items-center gap-2">
+                                                    <button onclick="updateReportStatus('${report.id}', 'resolved')" 
+                                                            class="p-2 bg-green-500/20 text-green-400 rounded-lg hover:bg-green-500/30" title="تم الحل">✅</button>
+                                                    <button onclick="updateReportStatus('${report.id}', 'rejected')" 
+                                                            class="p-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30" title="رفض">❌</button>
+                                                    <button onclick="deleteReport('${report.id}')" 
+                                                            class="p-2 bg-gray-600 text-gray-400 rounded-lg hover:bg-gray-500" title="حذف">🗑️</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    `).join('') || '<tr><td colspan="5" class="p-8 text-center text-gray-500">لا توجد بلاغات</td></tr>'}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSlidersPage() {
+            return `
+                <div class="p-6 animate-fadeIn">
+                    <div class="mb-6">
+                        <button onclick="state.showModal = 'addSlider'; render();" 
+                                class="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold hover:opacity-90 transition">
+                            + إضافة سلايدر جديد
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        ${state.sliders.map(slider => `
+                            <div class="bg-gray-800 rounded-xl overflow-hidden">
+                                <img src="${slider.image}" alt="${slider.title}" class="w-full h-40 object-cover">
+                                <div class="p-4">
+                                    <h3 class="text-white font-bold mb-2">${slider.title}</h3>
+                                    <p class="text-gray-400 text-sm mb-4">${slider.description || ''}</p>
+                                    <div class="flex items-center justify-between">
+                                        <span class="px-2 py-1 ${slider.isActive ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'} rounded text-xs">
+                                            ${slider.isActive ? 'نشط' : 'معطل'}
+                                        </span>
+                                        <button onclick="deleteSlider('${slider.id}')" 
+                                                class="p-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30">🗑️</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('') || '<p class="text-gray-500 col-span-3 text-center py-8">لا توجد سلايدرات</p>'}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderBannersPage() {
+            return `
+                <div class="p-6 animate-fadeIn">
+                    <div class="mb-6">
+                        <button onclick="state.showModal = 'addBanner'; render();" 
+                                class="px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl font-bold hover:opacity-90 transition">
+                            + إضافة بانر جديد
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        ${state.banners.map(banner => `
+                            <div class="bg-gray-800 rounded-xl overflow-hidden">
+                                <img src="${banner.image}" alt="${banner.title}" class="w-full h-32 object-cover">
+                                <div class="p-4">
+                                    <h3 class="text-white font-bold mb-2">${banner.title}</h3>
+                                    <p class="text-gray-400 text-sm mb-2">الموضع: ${banner.position === 'top' ? 'أعلى' : banner.position === 'sidebar' ? 'جانبي' : 'أسفل'}</p>
+                                    <div class="flex items-center justify-between">
+                                        <span class="px-2 py-1 ${banner.isActive ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'} rounded text-xs">
+                                            ${banner.isActive ? 'نشط' : 'معطل'}
+                                        </span>
+                                        <button onclick="deleteBanner('${banner.id}')" 
+                                                class="p-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30">🗑️</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('') || '<p class="text-gray-500 col-span-3 text-center py-8">لا توجد بانرات</p>'}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderHtmlAdsPage() {
+            return `
+                <div class="p-6 animate-fadeIn">
+                    <div class="mb-6">
+                        <button onclick="state.showModal = 'addHtmlAd'; render();" 
+                                class="px-6 py-3 bg-gradient-to-r from-green-500 to-teal-500 text-white rounded-xl font-bold hover:opacity-90 transition">
+                            + إضافة إعلان HTML
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        ${state.htmlAds.map(ad => `
+                            <div class="bg-gray-800 rounded-xl p-4">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div>
+                                        <h3 class="text-white font-bold">${ad.name}</h3>
+                                        <p class="text-gray-400 text-sm">الموضع: ${ad.position === 'header' ? 'الهيدر' : ad.position === 'sidebar' ? 'الشريط الجانبي' : ad.position === 'footer' ? 'الفوتر' : 'بين الإعلانات'}</p>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-2 py-1 ${ad.isActive ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'} rounded text-xs">
+                                            ${ad.isActive ? 'نشط' : 'معطل'}
+                                        </span>
+                                        <button onclick="deleteHtmlAd('${ad.id}')" 
+                                                class="p-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30">🗑️</button>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-900 rounded-lg p-3 overflow-x-auto">
+                                    <code class="text-green-400 text-sm">${ad.code?.substring(0, 100)}...</code>
+                                </div>
+                            </div>
+                        `).join('') || '<p class="text-gray-500 text-center py-8">لا توجد إعلانات HTML</p>'}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderMessagesPage() {
+            return `
+                <div class="p-6 animate-fadeIn">
+                    <div class="bg-gray-800 rounded-xl overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-700">
+                                    <tr>
+                                        <th class="text-right p-4 text-gray-300">من</th>
+                                        <th class="text-right p-4 text-gray-300">إلى</th>
+                                        <th class="text-right p-4 text-gray-300">الرسالة</th>
+                                        <th class="text-right p-4 text-gray-300">التاريخ</th>
+                                        <th class="text-right p-4 text-gray-300">الحالة</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${state.messages.map(msg => `
+                                        <tr class="table-row border-t border-gray-700">
+                                            <td class="p-4 text-white">${msg.fromUserName || 'غير معروف'}</td>
+                                            <td class="p-4 text-gray-300">${msg.toUserId?.substring(0, 8)}...</td>
+                                            <td class="p-4 text-gray-300 max-w-xs truncate">${msg.message}</td>
+                                            <td class="p-4 text-gray-400 text-sm">${formatDate(msg.createdAt)}</td>
+                                            <td class="p-4">
+                                                ${msg.isRead ? '<span class="px-2 py-1 bg-gray-600 text-gray-400 rounded text-xs">مقروءة</span>' : '<span class="px-2 py-1 bg-blue-500/20 text-blue-400 rounded text-xs">جديدة</span>'}
+                                            </td>
+                                        </tr>
+                                    `).join('') || '<tr><td colspan="5" class="p-8 text-center text-gray-500">لا توجد رسائل</td></tr>'}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderNotificationsPage() {
+            return `
+                <div class="p-6 animate-fadeIn">
+                    <div class="bg-gray-800 rounded-xl p-6 max-w-2xl mx-auto">
+                        <h2 class="text-xl font-bold text-white mb-6">📤 إرسال إشعار</h2>
+                        <form onsubmit="sendNotification(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-gray-300 font-medium mb-2">الهدف</label>
+                                <select id="notifTarget" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white">
+                                    <option value="all">جميع المستخدمين</option>
+                                    ${state.users.map(user => `
+                                        <option value="${user.id}">${user.name || user.email}</option>
+                                    `).join('')}
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 font-medium mb-2">العنوان</label>
+                                <input type="text" id="notifTitle" required 
+                                       class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 font-medium mb-2">الرسالة</label>
+                                <textarea id="notifMessage" required rows="4"
+                                          class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white"></textarea>
+                            </div>
+                            <button type="submit" 
+                                    class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-bold hover:opacity-90 transition">
+                                📤 إرسال الإشعار
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderModals() {
+            if (!state.showModal) return '';
+            
+            let modalContent = '';
+            
+            if (state.showModal === 'editAd' && state.editingItem) {
+                const ad = state.editingItem;
+                modalContent = `
+                    <div class="bg-gray-800 rounded-2xl w-full max-w-lg">
+                        <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-6 rounded-t-2xl">
+                            <h2 class="text-xl font-bold text-white">✏️ تعديل الإعلان</h2>
+                        </div>
+                        <form onsubmit="saveAdEdit(event)" class="p-6 space-y-4">
+                            <div>
+                                <label class="block text-gray-300 mb-2">العنوان</label>
+                                <input type="text" id="editTitle" value="${ad.title}" required 
+                                       class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">الوصف</label>
+                                <textarea id="editDescription" rows="3" required 
+                                          class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white">${ad.description}</textarea>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-gray-300 mb-2">السعر</label>
+                                    <input type="number" id="editPrice" value="${ad.price}" required 
+                                           class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-300 mb-2">الفئة</label>
+                                    <select id="editCategory" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white">
+                                        ${categories.map(cat => `
+                                            <option value="${cat.id}" ${ad.category === cat.id ? 'selected' : ''}>${cat.name}</option>
+                                        `).join('')}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-gray-300 mb-2">المدينة</label>
+                                    <select id="editCity" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white">
+                                        ${cities.map(city => `
+                                            <option value="${city}" ${ad.city === city ? 'selected' : ''}>${city}</option>
+                                        `).join('')}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-300 mb-2">الهاتف</label>
+                                    <input type="tel" id="editPhone" value="${ad.phone}" required 
+                                           class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white">
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold transition">
+                                    حفظ التغييرات
+                                </button>
+                                <button type="button" onclick="state.showModal = null; state.editingItem = null; render();" 
+                                        class="flex-1 bg-gray-600 hover:bg-gray-500 text-white py-3 rounded-xl font-bold transition">
+                                    إلغاء
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                `;
+            } else if (state.showModal === 'addSlider') {
+                modalContent = `
+                    <div class="bg-gray-800 rounded-2xl w-full max-w-lg">
+                        <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-6 rounded-t-2xl">
+                            <h2 class="text-xl font-bold text-white">🖼️ إضافة سلايدر جديد</h2>
+                        </div>
+                        <form onsubmit="addSlider(event)" class="p-6 space-y-4">
+                            <div>
+                                <label class="block text-gray-300 mb-2">العنوان</label>
+                                <input type="text" id="sliderTitle" required 
+                                       class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">الوصف</label>
+                                <textarea id="sliderDescription" rows="2"
+                                          class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">رابط الصورة</label>
+                                <input type="url" id="sliderImageUrl" 
+                                       class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">أو رفع صورة</label>
+                                <input type="file" id="sliderImage" accept="image/*"
+                                       class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">الرابط (اختياري)</label>
+                                <input type="url" id="sliderLink" 
+                                       class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white">
+                            </div>
+                            <div class="flex gap-4">
+                                <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold transition">
+                                    إضافة
+                                </button>
+                                <button type="button" onclick="state.showModal = null; render();" 
+                                        class="flex-1 bg-gray-600 hover:bg-gray-500 text-white py-3 rounded-xl font-bold transition">
+                                    إلغاء
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                `;
+            } else if (state.showModal === 'addBanner') {
+                modalContent = `
+                    <div class="bg-gray-800 rounded-2xl w-full max-w-lg">
+                        <div class="bg-gradient-to-r from-orange-500 to-red-500 p-6 rounded-t-2xl">
+                            <h2 class="text-xl font-bold text-white">🎯 إضافة بانر جديد</h2>
+                        </div>
+                        <form onsubmit="addBanner(event)" class="p-6 space-y-4">
+                            <div>
+                                <label class="block text-gray-300 mb-2">العنوان</label>
+                                <input type="text" id="bannerTitle" required 
+                                       class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">رابط الصورة</label>
+                                <input type="url" id="bannerImageUrl" 
+                                       class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">أو رفع صورة</label>
+                                <input type="file" id="bannerImage" accept="image/*"
+                                       class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">الرابط</label>
+                                <input type="url" id="bannerLink" 
+                                       class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">الموضع</label>
+                                <select id="bannerPosition" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white">
+                                    <option value="top">أعلى الصفحة</option>
+                                    <option value="sidebar">الشريط الجانبي</option>
+                                    <option value="bottom">أسفل الصفحة</option>
+                                </select>
+                            </div>
+                            <div class="flex gap-4">
+                                <button type="submit" class="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-bold transition">
+                                    إضافة
+                                </button>
+                                <button type="button" onclick="state.showModal = null; render();" 
+                                        class="flex-1 bg-gray-600 hover:bg-gray-500 text-white py-3 rounded-xl font-bold transition">
+                                    إلغاء
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                `;
+            } else if (state.showModal === 'addHtmlAd') {
+                modalContent = `
+                    <div class="bg-gray-800 rounded-2xl w-full max-w-lg">
+                        <div class="bg-gradient-to-r from-green-500 to-teal-500 p-6 rounded-t-2xl">
+                            <h2 class="text-xl font-bold text-white">💻 إضافة إعلان HTML</h2>
+                        </div>
+                        <form onsubmit="addHtmlAd(event)" class="p-6 space-y-4">
+                            <div>
+                                <label class="block text-gray-300 mb-2">اسم الإعلان</label>
+                                <input type="text" id="htmlAdName" required 
+                                       class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white">
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">كود HTML</label>
+                                <textarea id="htmlAdCode" rows="6" required placeholder="<script>...</script>"
+                                          class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white font-mono text-sm"></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-gray-300 mb-2">الموضع</label>
+                                <select id="htmlAdPosition" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-xl text-white">
+                                    <option value="header">الهيدر</option>
+                                    <option value="sidebar">الشريط الجانبي</option>
+                                    <option value="footer">الفوتر</option>
+                                    <option value="between">بين الإعلانات</option>
+                                </select>
+                            </div>
+                            <div class="flex gap-4">
+                                <button type="submit" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 rounded-xl font-bold transition">
+                                    إضافة
+                                </button>
+                                <button type="button" onclick="state.showModal = null; render();" 
+                                        class="flex-1 bg-gray-600 hover:bg-gray-500 text-white py-3 rounded-xl font-bold transition">
+                                    إلغاء
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <div onclick="state.showModal = null; state.editingItem = null; render();" class="absolute inset-0 modal-backdrop"></div>
+                    <div class="relative animate-fadeIn">
+                        ${modalContent}
+                    </div>
+                </div>
+            `;
+        }
+
+        function render() {
+            if (!state.isLoggedIn) {
+                document.getElementById('app').innerHTML = renderLoginPage();
+                return;
+            }
+            
+            let pageContent = '';
+            switch (state.currentPage) {
+                case 'dashboard': pageContent = renderDashboard(); break;
+                case 'ads': pageContent = renderAdsPage(); break;
+                case 'users': pageContent = renderUsersPage(); break;
+                case 'reports': pageContent = renderReportsPage(); break;
+                case 'sliders': pageContent = renderSlidersPage(); break;
+                case 'banners': pageContent = renderBannersPage(); break;
+                case 'htmlads': pageContent = renderHtmlAdsPage(); break;
+                case 'messages': pageContent = renderMessagesPage(); break;
+                case 'notifications': pageContent = renderNotificationsPage(); break;
+                default: pageContent = renderDashboard();
+            }
+            
+            document.getElementById('app').innerHTML = `
+                ${renderSidebar()}
+                <div class="${state.sidebarOpen ? 'mr-64' : 'mr-20'} transition-all duration-300">
+                    ${renderHeader()}
+                    <main class="min-h-screen">
+                        ${pageContent}
+                    </main>
+                </div>
+                ${renderModals()}
+            `;
+        }
+
+        // Check if already logged in
+        if (localStorage.getItem('adminLoggedIn') === 'true') {
+            state.isLoggedIn = true;
+            loadAllData();
+        }
+
+        // Track admin visits
+        const today = new Date().toDateString();
+        const visits = JSON.parse(localStorage.getItem('adminVisits') || '{}');
+        visits[today] = (visits[today] || 0) + 1;
+        localStorage.setItem('adminVisits', JSON.stringify(visits));
+
+        // Initial render
+        render();
+    </script>
+</body>
+</html>
