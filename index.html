@@ -267,67 +267,6 @@
             .modal { max-width: 95%; }
             .side-menu { width: 85%; max-width: 320px; }
         }
-        
-        .admin-container { display: flex; min-height: 100vh; direction: rtl; }
-        .admin-sidebar { width: 280px; background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%); color: white; position: fixed; height: 100vh; overflow-y: auto; transition: all 0.3s; z-index: 100; }
-        .admin-sidebar-header { padding: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 15px; }
-        .admin-sidebar-logo { font-size: 1.5rem; font-weight: bold; color: #fbbf24; }
-        .admin-nav { padding: 20px 0; }
-        .admin-nav-item { display: flex; align-items: center; gap: 15px; padding: 15px 25px; color: #94a3b8; cursor: pointer; transition: all 0.3s; border: none; background: none; width: 100%; text-align: right; font-size: 1rem; }
-        .admin-nav-item:hover { background: rgba(255,255,255,0.05); color: white; padding-right: 30px; }
-        .admin-nav-item.active { background: rgba(26,115,232,0.2); color: #60a5fa; border-right: 4px solid #60a5fa; }
-        .admin-nav-item span:first-child { font-size: 22px; width: 30px; text-align: center; }
-        .admin-main { flex: 1; margin-right: 280px; background: #f1f5f9; min-height: 100vh; transition: all 0.3s; }
-        .admin-header { background: white; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 50; }
-        .admin-content { padding: 30px; }
-        .admin-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; margin-bottom: 30px; }
-        .admin-stat-card { background: white; border-radius: 16px; padding: 25px; display: flex; align-items: center; gap: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: all 0.3s; }
-        .admin-stat-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .admin-stat-icon { width: 65px; height: 65px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; }
-        .admin-stat-icon.blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
-        .admin-stat-icon.green { background: linear-gradient(135deg, #10b981, #059669); }
-        .admin-stat-icon.orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
-        .admin-stat-icon.red { background: linear-gradient(135deg, #ef4444, #dc2626); }
-        .admin-stat-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-        .admin-stat-info h3 { font-size: 1.8rem; color: #1e293b; margin-bottom: 5px; }
-        .admin-stat-info p { color: #64748b; font-size: 0.95rem; }
-        .admin-card { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 25px; }
-        .admin-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #e2e8f0; }
-        .admin-card-title { font-size: 1.2rem; font-weight: 600; color: #1e293b; }
-        .admin-table { width: 100%; border-collapse: collapse; }
-        .admin-table th { text-align: right; padding: 15px; background: #f8fafc; color: #64748b; font-weight: 600; font-size: 0.9rem; }
-        .admin-table td { padding: 15px; border-bottom: 1px solid #e2e8f0; color: #334155; }
-        .admin-table tr:hover td { background: #f8fafc; }
-        .admin-table-img { width: 60px; height: 60px; object-fit: cover; border-radius: 10px; }
-        .admin-badge { padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 500; }
-        .admin-badge.success { background: #d1fae5; color: #059669; }
-        .admin-badge.warning { background: #fef3c7; color: #d97706; }
-        .admin-badge.danger { background: #fee2e2; color: #dc2626; }
-        .admin-badge.info { background: #dbeafe; color: #2563eb; }
-        .admin-btn { padding: 8px 16px; border-radius: 8px; border: none; cursor: pointer; font-size: 0.9rem; transition: all 0.3s; display: inline-flex; align-items: center; gap: 6px; }
-        .admin-btn.primary { background: #3b82f6; color: white; }
-        .admin-btn.primary:hover { background: #2563eb; }
-        .admin-btn.success { background: #10b981; color: white; }
-        .admin-btn.success:hover { background: #059669; }
-        .admin-btn.danger { background: #ef4444; color: white; }
-        .admin-btn.danger:hover { background: #dc2626; }
-        .admin-btn.warning { background: #f59e0b; color: white; }
-        .admin-btn.warning:hover { background: #d97706; }
-        .admin-login { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 20px; }
-        .admin-login-card { background: white; border-radius: 20px; padding: 50px 40px; width: 100%; max-width: 420px; text-align: center; animation: slideUp 0.5s ease; }
-        .admin-login-logo { font-size: 60px; margin-bottom: 20px; }
-        .admin-login-title { font-size: 1.8rem; color: #1e293b; margin-bottom: 10px; }
-        .admin-login-subtitle { color: #64748b; margin-bottom: 30px; }
-        .admin-empty { text-align: center; padding: 60px 20px; color: #94a3b8; }
-        .admin-empty-icon { font-size: 60px; margin-bottom: 20px; opacity: 0.5; }
-        
-        @media (max-width: 768px) {
-            .admin-sidebar { width: 100%; height: auto; position: relative; }
-            .admin-main { margin-right: 0; }
-            .admin-stats { grid-template-columns: 1fr; }
-            .admin-table { font-size: 0.85rem; }
-            .admin-table th, .admin-table td { padding: 10px 8px; }
-        }
     </style>
 </head>
 <body>
@@ -341,8 +280,7 @@
             projectId: "comondi-fae4b",
             storageBucket: "comondi-fae4b.firebasestorage.app",
             messagingSenderId: "932777870241",
-            appId: "1:932777870241:web:78b0cf3a3cf14046be01e0",
-            measurementId: "G-M09RX0V18S"
+            appId: "1:932777870241:web:78b0cf3a3cf14046be01e0"
         };
         
         firebase.initializeApp(firebaseConfig);
@@ -353,13 +291,10 @@
         const state = {
             lang: localStorage.getItem('lang') || 'ar',
             user: null,
-            isAdmin: false,
-            currentPage: window.location.hash === '#admin' ? 'admin-login' : 'home',
+            currentPage: 'home',
             ads: [],
             sliders: [],
             messages: [],
-            reports: [],
-            users: [],
             selectedAd: null,
             selectedProfile: null,
             selectedChat: null,
@@ -380,7 +315,6 @@
             showEditProfileModal: false,
             authTab: 'login',
             messagesTab: 'inbox',
-            adminPage: 'dashboard',
             toasts: []
         };
         
@@ -396,21 +330,20 @@
                 report: 'الإبلاغ عن هذا الإعلان', reportTitle: 'الإبلاغ', reportReason: 'سبب الإبلاغ',
                 reportSubmit: 'إرسال البلاغ', back: 'رجوع', email: 'البريد الإلكتروني', password: 'كلمة المرور',
                 confirmPassword: 'تأكيد كلمة المرور', name: 'الاسم', loginBtn: 'دخول', registerBtn: 'تسجيل',
-                noAccount: 'ليس لديك حساب؟', hasAccount: 'لديك حساب؟', aboutUs: 'من نحن',
-                privacy: 'سياسة الخصوصية', contact: 'اتصل بنا', reportProblem: 'الإبلاغ عن مشكل',
-                selectCategory: 'اختر الفئة', selectCity: 'اختر المدينة', allCategories: 'جميع الفئات',
-                allCities: 'جميع المدن', priceRange: 'نطاق السعر', minPrice: 'أدنى سعر', maxPrice: 'أقصى سعر',
-                applyFilter: 'تطبيق', resetFilter: 'إعادة تعيين', featuredAds: 'إعلانات مميزة',
-                latestAds: 'أحدث الإعلانات', viewAll: 'عرض الكل', seller: 'البائع', inbox: 'الواردة',
-                archive: 'الأرشيف', noMessages: 'لا توجد رسائل', typeMessage: 'اكتب رسالتك...', send: 'إرسال',
-                da: 'دج', browseAds: 'تصفح الإعلانات', uploadImage: 'انقر لرفع صورة',
-                requiredLogin: 'يجب تسجيل الدخول أولاً', adPublished: 'تم نشر الإعلان بنجاح',
-                messageSent: 'تم إرسال الرسالة', reportSent: 'تم إرسال البلاغ',
-                profileUpdated: 'تم تحديث الملف', errorOccurred: 'حدث خطأ', fillAllFields: 'يرجى ملء جميع الحقول'
+                noAccount: 'ليس لديك حساب؟', hasAccount: 'لديك حساب؟', aboutUs: 'من نحن', privacy: 'سياسة الخصوصية',
+                contact: 'اتصل بنا', reportProblem: 'الإبلاغ عن مشكل', selectCategory: 'اختر الفئة',
+                selectCity: 'اختر المدينة', allCategories: 'جميع الفئات', allCities: 'جميع المدن',
+                priceRange: 'نطاق السعر', minPrice: 'أدنى سعر', maxPrice: 'أقصى سعر', applyFilter: 'تطبيق الفلتر',
+                resetFilter: 'إعادة تعيين', featuredAds: 'إعلانات مميزة', latestAds: 'أحدث الإعلانات',
+                viewAll: 'عرض الكل', seller: 'البائع', inbox: 'الواردة', archive: 'الأرشيف',
+                noMessages: 'لا توجد رسائل', typeMessage: 'اكتب رسالتك...', send: 'إرسال', da: 'دج',
+                browseAds: 'تصفح الإعلانات', uploadImage: 'انقر لرفع صورة', requiredLogin: 'يجب تسجيل الدخول أولاً',
+                adPublished: 'تم نشر الإعلان بنجاح', messageSent: 'تم إرسال الرسالة', reportSent: 'تم إرسال البلاغ',
+                profileUpdated: 'تم تحديث الملف الشخصي', errorOccurred: 'حدث خطأ', fillAllFields: 'يرجى ملء جميع الحقول'
             },
             fr: {
                 home: 'Accueil', login: 'Connexion', register: 'Inscription', logout: 'Déconnexion',
-                myAds: 'Mes annonces', messages: 'Messages', profile: 'Profil', editProfile: 'Modifier',
+                myAds: 'Mes annonces', messages: 'Messages', profile: 'Profil', editProfile: 'Modifier le profil',
                 allAds: 'Toutes les annonces', categories: 'Catégories', addAd: 'Publier', filter: 'Filtrer',
                 search: 'Rechercher', searchPlaceholder: 'Rechercher...', category: 'Catégorie', title: 'Titre',
                 description: 'Description', price: 'Prix', city: 'Ville', phone: 'Téléphone', image: 'Image',
@@ -419,14 +352,14 @@
                 back: 'Retour', email: 'Email', password: 'Mot de passe', confirmPassword: 'Confirmer',
                 name: 'Nom', loginBtn: 'Connexion', registerBtn: 'S\'inscrire', noAccount: 'Pas de compte?',
                 hasAccount: 'Déjà inscrit?', aboutUs: 'À propos', privacy: 'Confidentialité', contact: 'Contact',
-                reportProblem: 'Signaler un problème', selectCategory: 'Choisir', selectCity: 'Ville',
+                reportProblem: 'Signaler un problème', selectCategory: 'Choisir', selectCity: 'Choisir',
                 allCategories: 'Toutes', allCities: 'Toutes', priceRange: 'Prix', minPrice: 'Min', maxPrice: 'Max',
                 applyFilter: 'Appliquer', resetFilter: 'Réinitialiser', featuredAds: 'Annonces vedettes',
                 latestAds: 'Dernières annonces', viewAll: 'Voir tout', seller: 'Vendeur', inbox: 'Boîte de réception',
-                archive: 'Archives', noMessages: 'Aucun message', typeMessage: 'Message...', send: 'Envoyer',
-                da: 'DA', browseAds: 'Parcourir', uploadImage: 'Télécharger', requiredLogin: 'Connexion requise',
-                adPublished: 'Publié', messageSent: 'Envoyé', reportSent: 'Signalé', profileUpdated: 'Mis à jour',
-                errorOccurred: 'Erreur', fillAllFields: 'Remplir tous les champs'
+                archive: 'Archives', noMessages: 'Aucun message', typeMessage: 'Tapez...', send: 'Envoyer', da: 'DA',
+                browseAds: 'Parcourir', uploadImage: 'Télécharger', requiredLogin: 'Connexion requise',
+                adPublished: 'Annonce publiée', messageSent: 'Message envoyé', reportSent: 'Signalement envoyé',
+                profileUpdated: 'Profil mis à jour', errorOccurred: 'Erreur', fillAllFields: 'Remplir tous les champs'
             }
         };
         
@@ -458,16 +391,16 @@
         const defaultSliders = [
             { title: { ar: '🎉 عروض خاصة على الهواتف', fr: '🎉 Offres spéciales' }, desc: { ar: 'خصومات تصل إلى 30%', fr: 'Réductions jusqu\'à 30%' }, img: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1200' },
             { title: { ar: '🏠 عقارات للبيع والإيجار', fr: '🏠 Immobilier' }, desc: { ar: 'أفضل العروض العقارية', fr: 'Les meilleures offres' }, img: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200' },
-            { title: { ar: '🚗 سيارات بأسعار مناسبة', fr: '🚗 Voitures' }, desc: { ar: 'سيارات جديدة ومستعملة', fr: 'Neuves et occasion' }, img: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1200' },
-            { title: { ar: '👕 موضة وأزياء', fr: '👕 Mode' }, desc: { ar: 'أحدث صيحات الموضة', fr: 'Dernières tendances' }, img: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=1200' }
+            { title: { ar: '🚗 سيارات بأسعار مناسبة', fr: '🚗 Voitures' }, desc: { ar: 'سيارات جديدة ومستعملة', fr: 'Neuves et d\'occasion' }, img: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1200' },
+            { title: { ar: '👕 موضة وأزياء', fr: '👕 Mode' }, desc: { ar: 'أحدث صيحات الموضة', fr: 'Les dernières tendances' }, img: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=1200' }
         ];
         
         // Helper Functions
         const getText = (key) => t[state.lang][key] || key;
-        const getCategoryName = (id) => categories.find(c => c.id === id)?.name[state.lang] || id;
-        const getCityName = (id) => cities.find(c => c.id === id)?.name[state.lang] || id;
-        const formatDate = (ts) => ts?.toDate ? ts.toDate().toLocaleDateString(state.lang === 'ar' ? 'ar-DZ' : 'fr-FR') : '';
-        const formatPrice = (p) => `${parseInt(p).toLocaleString()} ${getText('da')}`;
+        const getCategoryName = (catId) => { const cat = categories.find(c => c.id === catId); return cat ? cat.name[state.lang] : catId; };
+        const getCityName = (cityId) => { const city = cities.find(c => c.id === cityId); return city ? city.name[state.lang] : cityId; };
+        const formatDate = (timestamp) => { if (!timestamp) return ''; const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp); return date.toLocaleDateString(state.lang === 'ar' ? 'ar-DZ' : 'fr-FR'); };
+        const formatPrice = (price) => `${parseInt(price).toLocaleString()} ${getText('da')}`;
         
         const showToast = (message, type = 'info') => {
             const id = Date.now();
@@ -476,236 +409,202 @@
             setTimeout(() => { state.toasts = state.toasts.filter(t => t.id !== id); render(); }, 3000);
         };
         
-        // Auth
+        // Auth Functions
         const handleAuth = async (e) => {
             e.preventDefault();
             const form = e.target;
+            const email = form.email.value;
+            const password = form.password.value;
+            
             try {
                 if (state.authTab === 'login') {
-                    await auth.signInWithEmailAndPassword(form.email.value, form.password.value);
+                    await auth.signInWithEmailAndPassword(email, password);
+                    showToast('تم تسجيل الدخول بنجاح', 'success');
                 } else {
-                    if (form.password.value !== form.confirmPassword.value) {
-                        showToast('كلمات المرور غير متطابقة', 'error');
-                        return;
-                    }
-                    const result = await auth.createUserWithEmailAndPassword(form.email.value, form.password.value);
-                    await db.collection('users').doc(result.user.uid).set({
-                        name: form.name.value, email: form.email.value, phone: form.phone.value,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(), isActive: true
-                    });
+                    const name = form.name.value;
+                    const phone = form.phone.value;
+                    if (password !== form.confirmPassword.value) { showToast('كلمات المرور غير متطابقة', 'error'); return; }
+                    const result = await auth.createUserWithEmailAndPassword(email, password);
+                    await db.collection('users').doc(result.user.uid).set({ name, email, phone, createdAt: firebase.firestore.FieldValue.serverTimestamp(), isActive: true });
+                    showToast('تم إنشاء الحساب بنجاح', 'success');
                 }
                 state.showAuthModal = false;
-                showToast('تم بنجاح', 'success');
                 render();
             } catch (error) {
-                showToast(error.message, 'error');
+                let msg = 'حدث خطأ';
+                if (error.code === 'auth/email-already-in-use') msg = 'البريد مستخدم';
+                else if (error.code === 'auth/wrong-password') msg = 'كلمة المرور خاطئة';
+                else if (error.code === 'auth/user-not-found') msg = 'المستخدم غير موجود';
+                showToast(msg, 'error');
             }
         };
         
-        const handleLogout = async () => {
-            await auth.signOut();
-            state.user = null;
-            state.currentPage = 'home';
-            render();
-        };
+        const handleLogout = async () => { await auth.signOut(); state.user = null; state.currentPage = 'home'; showToast('تم تسجيل الخروج', 'info'); render(); };
         
         // Add Ad
         const handleAddAd = async (e) => {
             e.preventDefault();
-            if (!state.user) { state.showAuthModal = true; state.showAddAdModal = false; render(); return; }
+            if (!state.user) { showToast(getText('requiredLogin'), 'error'); state.showAuthModal = true; state.showAddAdModal = false; render(); return; }
             
             const form = e.target;
-            const { category, title, description, price, city, phone, image } = form;
+            const category = form.category.value, title = form.title.value, description = form.description.value;
+            const price = form.price.value, city = form.city.value, phone = form.phone.value;
+            const imageInput = form.image;
             
-            if (!category.value || !title.value || !description.value || !price.value || !city.value || !phone.value) {
-                showToast(getText('fillAllFields'), 'error');
-                return;
-            }
+            if (!category || !title || !description || !price || !city || !phone) { showToast(getText('fillAllFields'), 'error'); return; }
             
-            let imageUrl = 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=400';
-            if (image.files?.[0]) {
-                imageUrl = await new Promise(r => { const fr = new FileReader(); fr.onload = e => r(e.target.result); fr.readAsDataURL(image.files[0]); });
-            }
-            
-            await db.collection('ads').add({
-                category: category.value, title: title.value, description: description.value,
-                price: parseInt(price.value), city: city.value, phone: phone.value, imageUrl,
-                userId: state.user.uid, userName: state.user.name || state.user.email,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(), isActive: true, isFeatured: false
-            });
-            
-            showToast(getText('adPublished'), 'success');
-            state.showAddAdModal = false;
-            loadAds();
+            try {
+                let imageUrl = 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=400';
+                if (imageInput.files && imageInput.files[0]) {
+                    const reader = new FileReader();
+                    imageUrl = await new Promise((resolve) => { reader.onload = (e) => resolve(e.target.result); reader.readAsDataURL(imageInput.files[0]); });
+                }
+                
+                await db.collection('ads').add({
+                    category, title, description, price: parseInt(price), city, phone, imageUrl,
+                    userId: state.user.uid, userName: state.user.name || state.user.email,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(), isActive: true, isFeatured: false
+                });
+                
+                showToast(getText('adPublished'), 'success');
+                state.showAddAdModal = false;
+                loadAds();
+            } catch (error) { showToast(getText('errorOccurred'), 'error'); }
         };
         
-        // Messages & Reports
+        // Send Message
         const handleSendMessage = async (e) => {
             e.preventDefault();
-            if (!state.user) return;
-            await db.collection('messages').add({
-                senderId: state.user.uid, senderName: state.user.name || state.user.email,
-                receiverId: state.selectedAd.userId, receiverName: state.selectedAd.userName,
-                adId: state.selectedAd.id, adTitle: state.selectedAd.title,
-                message: e.target.message.value,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(), isRead: false
-            });
-            showToast(getText('messageSent'), 'success');
-            state.showMessageModal = false;
-            render();
+            if (!state.user) { showToast(getText('requiredLogin'), 'error'); return; }
+            const message = e.target.message.value;
+            if (!message.trim()) return;
+            
+            try {
+                await db.collection('messages').add({
+                    senderId: state.user.uid, senderName: state.user.name || state.user.email,
+                    receiverId: state.selectedAd.userId, receiverName: state.selectedAd.userName,
+                    adId: state.selectedAd.id, adTitle: state.selectedAd.title, message,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(), isRead: false
+                });
+                showToast(getText('messageSent'), 'success');
+                state.showMessageModal = false;
+                render();
+            } catch (error) { showToast(getText('errorOccurred'), 'error'); }
         };
         
+        // Report
         const handleReport = async (e) => {
             e.preventDefault();
-            if (!state.user) return;
-            await db.collection('reports').add({
-                reporterId: state.user.uid, reporterName: state.user.name,
-                adId: state.selectedAd?.id, adTitle: state.selectedAd?.title || 'بلاغ عام',
-                reason: e.target.reason.value, status: 'pending',
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            showToast(getText('reportSent'), 'success');
-            state.showReportModal = false;
-            state.selectedAd = null;
-            render();
+            if (!state.user) { showToast(getText('requiredLogin'), 'error'); return; }
+            const reason = e.target.reason.value;
+            if (!reason.trim()) return;
+            
+            try {
+                await db.collection('reports').add({
+                    reporterId: state.user.uid, reporterName: state.user.name || state.user.email,
+                    adId: state.selectedAd?.id || null, adTitle: state.selectedAd?.title || 'بلاغ عام',
+                    reason, status: 'pending', createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                showToast(getText('reportSent'), 'success');
+                state.showReportModal = false;
+                state.selectedAd = null;
+                render();
+            } catch (error) { showToast(getText('errorOccurred'), 'error'); }
         };
         
+        // Update Profile
         const handleUpdateProfile = async (e) => {
             e.preventDefault();
-            await db.collection('users').doc(state.user.uid).update({ name: e.target.name.value, phone: e.target.phone.value });
-            state.user.name = e.target.name.value;
-            state.user.phone = e.target.phone.value;
-            showToast(getText('profileUpdated'), 'success');
-            state.showEditProfileModal = false;
-            render();
+            const name = e.target.name.value, phone = e.target.phone.value;
+            try {
+                await db.collection('users').doc(state.user.uid).update({ name, phone });
+                state.user.name = name; state.user.phone = phone;
+                showToast(getText('profileUpdated'), 'success');
+                state.showEditProfileModal = false;
+                render();
+            } catch (error) { showToast(getText('errorOccurred'), 'error'); }
         };
         
         // Load Data
         const loadAds = async () => {
-            const snap = await db.collection('ads').where('isActive', '==', true).orderBy('createdAt', 'desc').get();
-            state.ads = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            render();
+            try {
+                const snapshot = await db.collection('ads').where('isActive', '==', true).orderBy('createdAt', 'desc').get();
+                state.ads = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                render();
+            } catch (error) { console.error('Error loading ads:', error); }
         };
         
         const loadSliders = async () => {
-            const snap = await db.collection('sliders').where('isActive', '==', true).get();
-            state.sliders = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            render();
+            try {
+                const snapshot = await db.collection('sliders').where('isActive', '==', true).get();
+                state.sliders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                render();
+            } catch (error) { console.error('Error loading sliders:', error); }
         };
         
         const loadMessages = async () => {
             if (!state.user) return;
-            const [sent, received] = await Promise.all([
-                db.collection('messages').where('senderId', '==', state.user.uid).get(),
-                db.collection('messages').where('receiverId', '==', state.user.uid).get()
-            ]);
-            state.messages = [...sent.docs, ...received.docs].map(d => ({ id: d.id, ...d.data() }));
-            render();
+            try {
+                const sent = await db.collection('messages').where('senderId', '==', state.user.uid).orderBy('createdAt', 'desc').get();
+                const received = await db.collection('messages').where('receiverId', '==', state.user.uid).orderBy('createdAt', 'desc').get();
+                const allMessages = [...sent.docs, ...received.docs].map(doc => ({ id: doc.id, ...doc.data() }));
+                state.messages = allMessages.sort((a, b) => (b.createdAt?.toDate() || 0) - (a.createdAt?.toDate() || 0));
+                render();
+            } catch (error) { console.error('Error loading messages:', error); }
         };
         
-        // Admin
-        const loadAdminData = async () => {
-            const [ads, users, reports, messages, sliders] = await Promise.all([
-                db.collection('ads').get(),
-                db.collection('users').get(),
-                db.collection('reports').get(),
-                db.collection('messages').get(),
-                db.collection('sliders').get()
-            ]);
-            state.ads = ads.docs.map(d => ({ id: d.id, ...d.data() }));
-            state.users = users.docs.map(d => ({ id: d.id, ...d.data() }));
-            state.reports = reports.docs.map(d => ({ id: d.id, ...d.data() }));
-            state.messages = messages.docs.map(d => ({ id: d.id, ...d.data() }));
-            state.sliders = sliders.docs.map(d => ({ id: d.id, ...d.data() }));
-            render();
-        };
-        
-        const handleAdminLogin = (e) => {
-            e.preventDefault();
-            if (e.target.username.value === 'admin' && e.target.password.value === 'abobob123') {
-                state.isAdmin = true;
-                state.currentPage = 'admin-dashboard';
-                loadAdminData();
-                showToast('مرحباً بك', 'success');
-            } else {
-                showToast('بيانات خاطئة', 'error');
-            }
-        };
-        
-        const toggleFeatured = async (id, val) => { await db.collection('ads').doc(id).update({ isFeatured: !val }); loadAdminData(); };
-        const toggleActive = async (id, val) => { await db.collection('ads').doc(id).update({ isActive: !val }); loadAdminData(); };
-        const deleteAd = async (id) => { if (confirm('حذف؟')) { await db.collection('ads').doc(id).delete(); loadAdminData(); } };
-        const deleteUser = async (id) => { if (confirm('حذف؟')) { await db.collection('users').doc(id).delete(); loadAdminData(); } };
-        const updateReport = async (id, status) => { await db.collection('reports').doc(id).update({ status }); loadAdminData(); };
-        
-        const handleAddSlider = async (e) => {
-            e.preventDefault();
-            const f = e.target;
-            await db.collection('sliders').add({
-                title: f.title.value, description: f.description.value, imageUrl: f.imageUrl.value,
-                link: f.link.value, isActive: true, createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            f.reset();
-            loadAdminData();
-            showToast('تمت الإضافة', 'success');
-        };
-        
-        const deleteSlider = async (id) => { await db.collection('sliders').doc(id).delete(); loadAdminData(); };
-        
-        // Filter
+        // Filter Ads
         const getFilteredAds = () => {
-            let ads = state.ads.filter(a => a.isActive);
-            if (state.filterCategory) ads = ads.filter(a => a.category === state.filterCategory);
-            if (state.filterCity) ads = ads.filter(a => a.city === state.filterCity);
-            if (state.filterPriceMin) ads = ads.filter(a => a.price >= parseInt(state.filterPriceMin));
-            if (state.filterPriceMax) ads = ads.filter(a => a.price <= parseInt(state.filterPriceMax));
-            if (state.searchQuery) ads = ads.filter(a => a.title.includes(state.searchQuery) || a.description.includes(state.searchQuery));
-            return ads;
+            let filtered = state.ads.filter(ad => ad.isActive);
+            if (state.filterCategory) filtered = filtered.filter(ad => ad.category === state.filterCategory);
+            if (state.filterCity) filtered = filtered.filter(ad => ad.city === state.filterCity);
+            if (state.filterPriceMin) filtered = filtered.filter(ad => ad.price >= parseInt(state.filterPriceMin));
+            if (state.filterPriceMax) filtered = filtered.filter(ad => ad.price <= parseInt(state.filterPriceMax));
+            if (state.searchQuery) {
+                const query = state.searchQuery.toLowerCase();
+                filtered = filtered.filter(ad => ad.title.toLowerCase().includes(query) || ad.description.toLowerCase().includes(query));
+            }
+            return filtered;
         };
         
-        // Auto-slide
+        // Slider Auto-play
         setInterval(() => {
-            const all = [...state.sliders.map(s => ({ ...s, title: { ar: s.title, fr: s.title }, desc: { ar: s.description, fr: s.description }, img: s.imageUrl })), ...defaultSliders];
-            if (all.length) { state.bannerIndex = (state.bannerIndex + 1) % all.length; render(); }
+            const allSliders = [...state.sliders.map(s => ({ ...s, title: { ar: s.title, fr: s.title }, desc: { ar: s.description, fr: s.description }, img: s.imageUrl })), ...defaultSliders];
+            if (allSliders.length > 0) { state.bannerIndex = (state.bannerIndex + 1) % allSliders.length; render(); }
         }, 3000);
         
         setInterval(() => { state.categoryIndex = (state.categoryIndex + 1) % 3; render(); }, 5000);
         
-        // Auth listener
+        // Auth State Listener
         auth.onAuthStateChanged(async (user) => {
             if (user) {
-                const doc = await db.collection('users').doc(user.uid).get();
-                state.user = { uid: user.uid, email: user.email, ...doc.data() };
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                state.user = { uid: user.uid, email: user.email, ...userDoc.data() };
                 loadMessages();
-            } else {
-                state.user = null;
-            }
+            } else { state.user = null; }
             render();
         });
         
+        // Initial Load
         loadAds();
         loadSliders();
         
-        // Render
+        // Render Function
         function render() {
             const app = document.getElementById('app');
             document.documentElement.lang = state.lang;
             document.documentElement.dir = state.lang === 'ar' ? 'rtl' : 'ltr';
             
-            if (state.currentPage.startsWith('admin')) {
-                app.innerHTML = renderAdmin();
-                return;
-            }
-            
             const allSliders = [...state.sliders.map(s => ({ ...s, title: { ar: s.title, fr: s.title }, desc: { ar: s.description, fr: s.description }, img: s.imageUrl })), ...defaultSliders];
-            const featuredAds = state.ads.filter(a => a.isFeatured && a.isActive);
+            const featuredAds = state.ads.filter(ad => ad.isFeatured && ad.isActive);
             const filteredAds = getFilteredAds();
-            const unread = state.messages.filter(m => m.receiverId === state.user?.uid && !m.isRead).length;
+            const unreadMessages = state.messages.filter(m => m.receiverId === state.user?.uid && !m.isRead).length;
             
             app.innerHTML = `
-                <div class="toast-container">${state.toasts.map(t => `<div class="toast ${t.type}"><span class="toast-icon">${t.type === 'success' ? '✓' : t.type === 'error' ? '✕' : 'ℹ'}</span><span>${t.message}</span></div>`).join('')}</div>
+                <div class="toast-container">${state.toasts.map(toast => `<div class="toast ${toast.type}"><span class="toast-icon">${toast.type === 'success' ? '✓' : toast.type === 'error' ? '✕' : 'ℹ'}</span><span>${toast.message}</span></div>`).join('')}</div>
                 
                 <div class="side-menu-overlay ${state.showSideMenu ? 'open' : ''}" onclick="state.showSideMenu = false; render();"></div>
+                
                 <div class="side-menu ${state.showSideMenu ? 'open' : ''}">
                     <button class="side-menu-close" onclick="state.showSideMenu = false; render();">×</button>
                     <div class="side-menu-header">
@@ -716,7 +615,7 @@
                         <button class="side-menu-item" onclick="state.currentPage = 'home'; state.selectedAd = null; state.selectedProfile = null; state.showSideMenu = false; render();"><span>🏠</span><span>${getText('home')}</span></button>
                         <button class="side-menu-item" onclick="state.currentPage = 'ads'; state.showSideMenu = false; render();"><span>📋</span><span>${getText('allAds')}</span></button>
                         ${state.user ? `
-                            <button class="side-menu-item" onclick="state.currentPage = 'messages'; state.showSideMenu = false; render();"><span>💬</span><span>${getText('messages')} ${unread > 0 ? `(${unread})` : ''}</span></button>
+                            <button class="side-menu-item" onclick="state.currentPage = 'messages'; state.showSideMenu = false; render();"><span>💬</span><span>${getText('messages')} ${unreadMessages > 0 ? `(${unreadMessages})` : ''}</span></button>
                             <button class="side-menu-item" onclick="state.selectedProfile = { id: state.user.uid, name: state.user.name }; state.currentPage = 'profile'; state.showSideMenu = false; render();"><span>👤</span><span>${getText('myAds')}</span></button>
                             <button class="side-menu-item" onclick="state.showEditProfileModal = true; state.showSideMenu = false; render();"><span>✏️</span><span>${getText('editProfile')}</span></button>
                         ` : ''}
@@ -737,7 +636,7 @@
                         </div>
                         <div class="header-actions">
                             ${state.user ? `
-                                <button class="header-btn" onclick="state.currentPage = 'messages'; render();">💬 ${unread > 0 ? `<span class="notification-badge">${unread}</span>` : ''}<span>${getText('messages')}</span></button>
+                                <button class="header-btn" onclick="state.currentPage = 'messages'; render();">💬 ${unreadMessages > 0 ? `<span class="notification-badge">${unreadMessages}</span>` : ''}<span>${getText('messages')}</span></button>
                                 <button class="header-btn" onclick="handleLogout();">🚪 <span>${getText('logout')}</span></button>
                             ` : `<button class="header-btn" onclick="state.showAuthModal = true; render();">👤 <span>${getText('login')}</span></button>`}
                             <button class="header-btn lang-switch" onclick="state.lang = state.lang === 'ar' ? 'fr' : 'ar'; localStorage.setItem('lang', state.lang); render();">${state.lang === 'ar' ? 'FR' : 'عربي'}</button>
@@ -745,38 +644,38 @@
                     </div>
                 </header>
                 
-                ${state.currentPage === 'home' ? renderHome(allSliders, featuredAds, filteredAds) : ''}
-                ${state.currentPage === 'ads' ? renderAds(filteredAds) : ''}
+                ${state.currentPage === 'home' ? renderHomePage(allSliders, featuredAds, filteredAds) : ''}
+                ${state.currentPage === 'ads' ? renderAdsPage(filteredAds) : ''}
                 ${state.currentPage === 'adDetail' && state.selectedAd ? renderAdDetail() : ''}
                 ${state.currentPage === 'profile' && state.selectedProfile ? renderProfile() : ''}
-                ${state.currentPage === 'messages' ? renderMsgs() : ''}
+                ${state.currentPage === 'messages' ? renderMessages() : ''}
                 ${state.currentPage === 'about' ? renderAbout() : ''}
                 ${state.currentPage === 'privacy' ? renderPrivacy() : ''}
                 ${state.currentPage === 'contact' ? renderContact() : ''}
                 
                 <div class="floating-buttons">
-                    <button class="float-btn add" onclick="state.showAddAdModal = true; render();">+</button>
-                    <button class="float-btn filter" onclick="state.showFilterModal = true; render();">⚙</button>
-                    <button class="float-btn search" onclick="state.showSearchModal = true; render();">🔍</button>
+                    <button class="float-btn add" onclick="state.showAddAdModal = true; render();" title="${getText('addAd')}">+</button>
+                    <button class="float-btn filter" onclick="state.showFilterModal = true; render();" title="${getText('filter')}">⚙</button>
+                    <button class="float-btn search" onclick="state.showSearchModal = true; render();" title="${getText('search')}">🔍</button>
                 </div>
                 
                 <footer class="footer">
                     <div class="footer-content">
-                        <div class="footer-section"><h3>العفرون أونلاين</h3><p>منصة الإعلانات المبوبة الأولى</p><div class="footer-social"><a href="#">📘</a><a href="#">📷</a><a href="#">📱</a></div></div>
-                        <div class="footer-section"><h3>روابط</h3><a href="#" onclick="state.currentPage = 'home'; render();">${getText('home')}</a><a href="#" onclick="state.currentPage = 'ads'; render();">${getText('allAds')}</a><a href="#" onclick="state.currentPage = 'about'; render();">${getText('aboutUs')}</a></div>
-                        <div class="footer-section"><h3>تواصل</h3><p>📧 contact@elaffroun-online.com</p><p>📞 +213 XX XX XX XX</p><p>📍 العفرون، البليدة</p></div>
+                        <div class="footer-section"><h3>العفرون أونلاين</h3><p>منصة الإعلانات المبوبة الأولى في منطقة العفرون</p><div class="footer-social"><a href="#">📘</a><a href="#">📷</a><a href="#">📱</a></div></div>
+                        <div class="footer-section"><h3>روابط سريعة</h3><a href="#" onclick="state.currentPage = 'home'; render();">${getText('home')}</a><a href="#" onclick="state.currentPage = 'ads'; render();">${getText('allAds')}</a><a href="#" onclick="state.currentPage = 'about'; render();">${getText('aboutUs')}</a><a href="#" onclick="state.currentPage = 'privacy'; render();">${getText('privacy')}</a></div>
+                        <div class="footer-section"><h3>تواصل معنا</h3><p>📧 contact@elaffroun-online.com</p><p>📞 +213 XX XX XX XX</p><p>📍 العفرون، البليدة، الجزائر</p></div>
                     </div>
-                    <div class="footer-bottom"><p>© 2024 العفرون أونلاين</p></div>
+                    <div class="footer-bottom"><p>© 2024 العفرون أونلاين - جميع الحقوق محفوظة</p></div>
                 </footer>
                 
                 ${renderModals()}
             `;
         }
         
-        function renderHome(sliders, featured, ads) {
+        function renderHomePage(sliders, featuredAds, ads) {
             return `
                 <div class="banner-slider">
-                    ${sliders.map((s, i) => `<div class="banner-slide ${i === state.bannerIndex ? 'active' : ''}"><img src="${s.img}"><div class="banner-overlay"><h2 class="banner-title">${s.title[state.lang]}</h2><p class="banner-desc">${s.desc[state.lang]}</p><button class="banner-btn" onclick="state.currentPage = 'ads'; render();">${getText('browseAds')}</button></div></div>`).join('')}
+                    ${sliders.map((slide, i) => `<div class="banner-slide ${i === state.bannerIndex ? 'active' : ''}"><img src="${slide.img}" alt=""><div class="banner-overlay"><h2 class="banner-title">${slide.title[state.lang]}</h2><p class="banner-desc">${slide.desc[state.lang]}</p><button class="banner-btn" onclick="state.currentPage = 'ads'; render();">${getText('browseAds')}</button></div></div>`).join('')}
                     <button class="banner-nav prev" onclick="state.bannerIndex = (state.bannerIndex - 1 + ${sliders.length}) % ${sliders.length}; render();">‹</button>
                     <button class="banner-nav next" onclick="state.bannerIndex = (state.bannerIndex + 1) % ${sliders.length}; render();">›</button>
                     <div class="banner-dots">${sliders.map((_, i) => `<button class="banner-dot ${i === state.bannerIndex ? 'active' : ''}" onclick="state.bannerIndex = ${i}; render();"></button>`).join('')}</div>
@@ -787,84 +686,241 @@
                     <div class="categories-slider">
                         <button class="cat-nav prev" onclick="state.categoryIndex = (state.categoryIndex - 1 + 3) % 3; render();">‹</button>
                         <div class="categories-track" style="transform: translateX(${state.categoryIndex * 100}%);">
-                            ${[0, 1, 2].map(i => `<div class="categories-slide">${categories.slice(i * 4, i * 4 + 4).map(c => `<div class="category-card" onclick="state.filterCategory = '${c.id}'; state.currentPage = 'ads'; render();"><img src="${c.img}" class="category-img"><span class="category-name">${c.name[state.lang]}</span></div>`).join('')}</div>`).join('')}
+                            ${[0, 1, 2].map(slideIndex => `<div class="categories-slide">${categories.slice(slideIndex * 4, (slideIndex + 1) * 4).map(cat => `<div class="category-card" onclick="state.filterCategory = '${cat.id}'; state.currentPage = 'ads'; render();"><img src="${cat.img}" class="category-img" alt="${cat.name[state.lang]}"><span class="category-name">${cat.name[state.lang]}</span></div>`).join('')}</div>`).join('')}
                         </div>
                         <button class="cat-nav next" onclick="state.categoryIndex = (state.categoryIndex + 1) % 3; render();">›</button>
                         <div class="cat-dots">${[0, 1, 2].map(i => `<button class="cat-dot ${i === state.categoryIndex ? 'active' : ''}" onclick="state.categoryIndex = ${i}; render();"></button>`).join('')}</div>
                     </div>
                 </section>
                 
-                ${featured.length ? `<section class="ads-section" style="background: linear-gradient(135deg, #fef3c7, #fde68a);"><h2 class="section-title">⭐ ${getText('featuredAds')}</h2><div class="ads-grid">${featured.slice(0, 4).map(a => renderCard(a)).join('')}</div></section>` : ''}
+                ${featuredAds.length > 0 ? `<section class="ads-section" style="background: linear-gradient(135deg, #fef3c7, #fde68a);"><h2 class="section-title">⭐ ${getText('featuredAds')}</h2><div class="ads-grid">${featuredAds.slice(0, 4).map(ad => renderAdCard(ad)).join('')}</div></section>` : ''}
                 
                 <section class="ads-section">
                     <h2 class="section-title">${getText('latestAds')}</h2>
-                    <div class="ads-grid">${ads.slice(0, 8).map(a => renderCard(a)).join('')}</div>
+                    <div class="ads-grid">${ads.slice(0, 8).map(ad => renderAdCard(ad)).join('')}</div>
                     <div style="text-align: center; margin-top: 30px;"><button class="form-btn" style="max-width: 300px; margin: 0 auto;" onclick="state.currentPage = 'ads'; render();">${getText('viewAll')} →</button></div>
                 </section>
             `;
         }
         
-        function renderAds(ads) {
-            return `<section class="ads-section" style="min-height: 80vh;"><h2 class="section-title">${getText('allAds')}</h2>${state.filterCategory || state.filterCity ? `<div style="text-align: center; margin-bottom: 20px;"><button class="form-btn secondary" style="max-width: 200px;" onclick="state.filterCategory = ''; state.filterCity = ''; state.filterPriceMin = ''; state.filterPriceMax = ''; render();">× ${getText('resetFilter')}</button></div>` : ''}<div class="ads-grid">${ads.length ? ads.map(a => renderCard(a)).join('') : '<div style="grid-column: 1/-1; text-align: center; padding: 60px; color: #999;"><div style="font-size: 60px;">📭</div><p>لا توجد إعلانات</p></div>'}</div></section>`;
-        }
-        
-        function renderCard(a) {
-            return `<div class="ad-card ${a.isFeatured ? 'featured' : ''}" onclick="state.selectedAd = state.ads.find(x => x.id === '${a.id}'); state.currentPage = 'adDetail'; render();">${a.isFeatured ? '<div class="ad-featured-badge">⭐ مميز</div>' : ''}<img src="${a.imageUrl}" class="ad-image"><div class="ad-content"><span class="ad-category">${getCategoryName(a.category)}</span><h3 class="ad-title">${a.title}</h3><p class="ad-price">${formatPrice(a.price)}</p><p class="ad-location">📍 ${getCityName(a.city)}</p></div><div class="ad-footer"><span class="ad-date">${formatDate(a.createdAt)}</span><div class="ad-actions">${state.user && state.user.uid !== a.userId ? `<button class="ad-action-btn message" onclick="event.stopPropagation(); state.selectedAd = state.ads.find(x => x.id === '${a.id}'); state.showMessageModal = true; render();">💬</button>` : ''}<button class="ad-action-btn report" onclick="event.stopPropagation(); state.selectedAd = state.ads.find(x => x.id === '${a.id}'); state.showReportModal = true; render();">🚩</button></div></div></div>`;
-        }
-        
-        function renderAdDetail() {
-            const a = state.selectedAd;
-            return `<div class="ad-detail animate-fade"><button class="ad-detail-back" onclick="state.selectedAd = null; state.currentPage = 'ads'; render();">← ${getText('back')}</button><img src="${a.imageUrl}" class="ad-detail-image"><div class="ad-detail-content"><div class="ad-detail-header"><div><span class="ad-category">${getCategoryName(a.category)}</span><h1 class="ad-detail-title">${a.title}</h1></div><div class="ad-detail-price">${formatPrice(a.price)}</div></div><div class="ad-detail-meta"><span class="ad-detail-meta-item">📍 ${getCityName(a.city)}</span><span class="ad-detail-meta-item">📅 ${formatDate(a.createdAt)}</span></div><p class="ad-detail-desc">${a.description}</p><div class="ad-detail-actions"><button class="ad-detail-btn phone" onclick="${state.user ? `alert('📞 ${a.phone}')` : `state.showAuthModal = true; render();`}">📞 ${getText('showPhone')}</button><button class="ad-detail-btn message" onclick="${state.user ? `state.showMessageModal = true; render();` : `state.showAuthModal = true; render();`}">💬 ${getText('sendMessage')}</button><button class="ad-detail-btn report" onclick="state.showReportModal = true; render();">🚩 ${getText('report')}</button></div><div class="ad-seller" onclick="state.selectedProfile = { id: '${a.userId}', name: '${a.userName}' }; state.currentPage = 'profile'; render();"><div class="ad-seller-avatar">${a.userName?.charAt(0).toUpperCase() || 'U'}</div><div class="ad-seller-info"><h4>${a.userName || 'مستخدم'}</h4><p>عرض جميع إعلاناته ←</p></div></div></div></div>`;
-        }
-        
-        function renderProfile() {
-            const p = state.selectedProfile;
-            const ads = state.ads.filter(a => a.userId === p.id && a.isActive);
-            return `<div class="profile-page animate-fade"><button class="ad-detail-back" onclick="state.selectedProfile = null; state.currentPage = 'home'; render();">← ${getText('back')}</button><div class="profile-header"><div class="profile-avatar">${p.name?.charAt(0).toUpperCase() || 'U'}</div><h1 class="profile-name">${p.name || 'مستخدم'}</h1><div class="profile-stats"><div class="profile-stat"><div class="profile-stat-value">${ads.length}</div><div class="profile-stat-label">${getText('allAds')}</div></div></div></div><h2 style="margin: 30px 0 20px;">${getText('allAds')}</h2><div class="ads-grid">${ads.length ? ads.map(a => renderCard(a)).join('') : '<div style="grid-column: 1/-1; text-align: center; padding: 60px; color: #999;">📭 لا توجد إعلانات</div>'}</div></div>`;
-        }
-        
-        function renderMsgs() {
-            const inbox = state.messages.filter(m => m.receiverId === state.user?.uid && !m.isRead);
-            const archive = state.messages.filter(m => m.receiverId === state.user?.uid && m.isRead);
-            const current = state.messagesTab === 'inbox' ? inbox : archive;
-            return `<div class="messages-page animate-fade"><button class="ad-detail-back" onclick="state.selectedChat = null; state.currentPage = 'home'; render();">← ${getText('back')}</button><div class="messages-container">${!state.selectedChat ? `<div class="messages-tabs"><button class="messages-tab ${state.messagesTab === 'inbox' ? 'active' : ''}" onclick="state.messagesTab = 'inbox'; render();">📥 ${getText('inbox')} (${inbox.length})</button><button class="messages-tab ${state.messagesTab === 'archive' ? 'active' : ''}" onclick="state.messagesTab = 'archive'; render();">📁 ${getText('archive')} (${archive.length})</button></div><div class="messages-list">${current.length ? current.map(m => `<div class="message-item ${!m.isRead ? 'unread' : ''}" onclick="state.selectedChat = state.messages.find(x => x.id === '${m.id}'); db.collection('messages').doc('${m.id}').update({ isRead: true }); render();"><div class="message-avatar">${m.senderName?.charAt(0).toUpperCase() || 'U'}</div><div class="message-content"><div class="message-header"><span class="message-sender">${m.senderName}</span><span class="message-time">${formatDate(m.createdAt)}</span></div><p class="message-text">${m.message}</p><small style="color: #999;">حول: ${m.adTitle}</small></div>${!m.isRead ? '<div class="message-unread-dot"></div>' : ''}</div>`).join('') : '<div style="text-align: center; padding: 60px; color: #999;">📭 ${getText("noMessages")}</div>'}</div>` : `<div class="chat-container"><div class="chat-header"><button class="chat-back" onclick="state.selectedChat = null; render();">←</button><div class="message-avatar">${state.selectedChat.senderName?.charAt(0).toUpperCase() || 'U'}</div><div><div style="font-weight: 600;">${state.selectedChat.senderId === state.user?.uid ? state.selectedChat.receiverName : state.selectedChat.senderName}</div><small style="color: #999;">${state.selectedChat.adTitle}</small></div></div><div class="chat-messages">${state.messages.filter(m => (m.senderId === state.selectedChat.senderId && m.receiverId === state.selectedChat.receiverId) || (m.senderId === state.selectedChat.receiverId && m.receiverId === state.selectedChat.senderId)).map(m => `<div class="chat-message ${m.senderId === state.user?.uid ? 'sent' : 'received'}">${m.message}</div>`).join('')}</div><form class="chat-input-container" onsubmit="event.preventDefault(); const msg = event.target.chatInput.value; if(!msg.trim()) return; db.collection('messages').add({ senderId: state.user.uid, senderName: state.user.name, receiverId: state.selectedChat.senderId === state.user.uid ? state.selectedChat.receiverId : state.selectedChat.senderId, receiverName: state.selectedChat.senderId === state.user.uid ? state.selectedChat.receiverName : state.selectedChat.senderName, adId: state.selectedChat.adId, adTitle: state.selectedChat.adTitle, message: msg, createdAt: firebase.firestore.FieldValue.serverTimestamp(), isRead: false }); event.target.chatInput.value = ''; loadMessages();"><input type="text" name="chatInput" class="chat-input" placeholder="${getText('typeMessage')}"><button type="submit" class="chat-send">➤</button></form></div>`}</div></div>`;
-        }
-        
-        function renderAbout() { return `<div class="info-page animate-fade"><button class="ad-detail-back" onclick="state.currentPage = 'home'; render();">← ${getText('back')}</button><h1>من نحن</h1><p>العفرون أونلاين هي منصة إعلانات مبوبة محلية تخدم سكان منطقة العفرون والمناطق المجاورة.</p><h2>رؤيتنا</h2><p>نسعى لتكون المنصة الأولى والأكثر موثوقية للإعلانات المبوبة في منطقتنا.</p><h2>مميزاتنا</h2><ul><li>سهولة الاستخدام</li><li>تصنيفات متعددة</li><li>نظام مراسلة آمن</li><li>دعم ثنائي اللغة</li></ul></div>`; }
-        
-        function renderPrivacy() { return `<div class="info-page animate-fade"><button class="ad-detail-back" onclick="state.currentPage = 'home'; render();">← ${getText('back')}</button><h1>سياسة الخصوصية</h1><h2>جمع المعلومات</h2><p>نقوم بجمع المعلومات التي تقدمها لنا مباشرة عند إنشاء حساب أو نشر إعلان.</p><h2>حماية المعلومات</h2><p>نتخذ إجراءات أمنية مناسبة لحماية معلوماتك الشخصية.</p></div>`; }
-        
-        function renderContact() { return `<div class="info-page animate-fade"><button class="ad-detail-back" onclick="state.currentPage = 'home'; render();">← ${getText('back')}</button><h1>اتصل بنا</h1><p>نحن هنا لمساعدتك!</p><div class="contact-cards"><div class="contact-card"><div class="contact-card-icon">📧</div><h3>البريد</h3><p>contact@elaffroun-online.com</p></div><div class="contact-card"><div class="contact-card-icon">📞</div><h3>الهاتف</h3><p>+213 XX XX XX XX</p></div><div class="contact-card"><div class="contact-card-icon">📍</div><h3>العنوان</h3><p>العفرون، البليدة</p></div></div></div>`; }
-        
-        function renderModals() {
+        function renderAdsPage(ads) {
             return `
-                <div class="modal-overlay ${state.showAuthModal ? 'open' : ''}" onclick="if(event.target === this) { state.showAuthModal = false; render(); }"><div class="modal"><div class="modal-header"><h2 class="modal-title">${state.authTab === 'login' ? getText('login') : getText('register')}</h2><button class="modal-close" onclick="state.showAuthModal = false; render();">×</button></div><div class="modal-body"><div class="tabs"><button class="tab ${state.authTab === 'login' ? 'active' : ''}" onclick="state.authTab = 'login'; render();">${getText('login')}</button><button class="tab ${state.authTab === 'register' ? 'active' : ''}" onclick="state.authTab = 'register'; render();">${getText('register')}</button></div><form onsubmit="handleAuth(event)">${state.authTab === 'register' ? `<div class="form-group"><label class="form-label">${getText('name')}</label><input type="text" name="name" class="form-input" required></div>` : ''}<div class="form-group"><label class="form-label">${getText('email')}</label><input type="email" name="email" class="form-input" required></div>${state.authTab === 'register' ? `<div class="form-group"><label class="form-label">${getText('phone')}</label><input type="tel" name="phone" class="form-input" required></div>` : ''}<div class="form-group"><label class="form-label">${getText('password')}</label><input type="password" name="password" class="form-input" required minlength="6"></div>${state.authTab === 'register' ? `<div class="form-group"><label class="form-label">${getText('confirmPassword')}</label><input type="password" name="confirmPassword" class="form-input" required minlength="6"></div>` : ''}<button type="submit" class="form-btn">${state.authTab === 'login' ? getText('loginBtn') : getText('registerBtn')}</button></form></div></div></div>
-                
-                <div class="modal-overlay ${state.showAddAdModal ? 'open' : ''}" onclick="if(event.target === this) { state.showAddAdModal = false; render(); }"><div class="modal"><div class="modal-header"><h2 class="modal-title">${getText('addAd')}</h2><button class="modal-close" onclick="state.showAddAdModal = false; render();">×</button></div><div class="modal-body"><form onsubmit="handleAddAd(event)"><div class="form-group"><label class="form-label">${getText('category')}</label><select name="category" class="form-select" required><option value="">${getText('selectCategory')}</option>${categories.map(c => `<option value="${c.id}">${c.name[state.lang]}</option>`).join('')}</select></div><div class="form-group"><label class="form-label">${getText('title')}</label><input type="text" name="title" class="form-input" required></div><div class="form-group"><label class="form-label">${getText('description')}</label><textarea name="description" class="form-textarea" required></textarea></div><div class="form-group"><label class="form-label">${getText('price')} (${getText('da')})</label><input type="number" name="price" class="form-input" required min="0"></div><div class="form-group"><label class="form-label">${getText('city')}</label><select name="city" class="form-select" required><option value="">${getText('selectCity')}</option>${cities.map(c => `<option value="${c.id}">${c.name[state.lang]}</option>`).join('')}</select></div><div class="form-group"><label class="form-label">${getText('phone')}</label><input type="tel" name="phone" class="form-input" required></div><div class="form-group"><label class="form-label">${getText('image')}</label><div class="image-upload" onclick="this.querySelector('input').click()"><input type="file" name="image" accept="image/*" onchange="if(this.files[0]) { this.parentElement.innerHTML = '<img src=\\'' + URL.createObjectURL(this.files[0]) + '\\' class=\\'image-preview\\'><input type=\\'file\\' name=\\'image\\' accept=\\'image/*\\' style=\\'display:none\\'>'; }"><div class="image-upload-icon">📷</div><p>${getText('uploadImage')}</p></div></div><button type="submit" class="form-btn">${getText('publish')}</button></form></div></div></div>
-                
-                <div class="modal-overlay ${state.showFilterModal ? 'open' : ''}" onclick="if(event.target === this) { state.showFilterModal = false; render(); }"><div class="modal"><div class="modal-header"><h2 class="modal-title">${getText('filter')}</h2><button class="modal-close" onclick="state.showFilterModal = false; render();">×</button></div><div class="modal-body"><div class="filter-section"><h4>${getText('category')}</h4><div class="filter-options"><button class="filter-option ${!state.filterCategory ? 'active' : ''}" onclick="state.filterCategory = ''; render();">${getText('allCategories')}</button>${categories.map(c => `<button class="filter-option ${state.filterCategory === c.id ? 'active' : ''}" onclick="state.filterCategory = '${c.id}'; render();">${c.name[state.lang]}</button>`).join('')}</div></div><div class="filter-section"><h4>${getText('city')}</h4><div class="filter-options"><button class="filter-option ${!state.filterCity ? 'active' : ''}" onclick="state.filterCity = ''; render();">${getText('allCities')}</button>${cities.map(c => `<button class="filter-option ${state.filterCity === c.id ? 'active' : ''}" onclick="state.filterCity = '${c.id}'; render();">${c.name[state.lang]}</button>`).join('')}</div></div><div class="filter-section"><h4>${getText('priceRange')}</h4><div class="price-range"><input type="number" class="form-input" placeholder="${getText('minPrice')}" value="${state.filterPriceMin}" onchange="state.filterPriceMin = this.value; render();"><span>-</span><input type="number" class="form-input" placeholder="${getText('maxPrice')}" value="${state.filterPriceMax}" onchange="state.filterPriceMax = this.value; render();"></div></div><button class="form-btn" onclick="state.showFilterModal = false; state.currentPage = 'ads'; render();">${getText('applyFilter')}</button><button class="form-btn secondary" style="margin-top: 10px;" onclick="state.filterCategory = ''; state.filterCity = ''; state.filterPriceMin = ''; state.filterPriceMax = ''; render();">${getText('resetFilter')}</button></div></div></div>
-                
-                <div class="modal-overlay ${state.showSearchModal ? 'open' : ''}" onclick="if(event.target === this) { state.showSearchModal = false; render(); }"><div class="modal"><div class="modal-header"><h2 class="modal-title">${getText('search')}</h2><button class="modal-close" onclick="state.showSearchModal = false; render();">×</button></div><div class="modal-body"><div class="form-group"><input type="text" class="form-input" placeholder="${getText('searchPlaceholder')}" value="${state.searchQuery}" onkeyup="state.searchQuery = this.value; render();"></div><button class="form-btn" onclick="state.showSearchModal = false; state.currentPage = 'ads'; render();">${getText('search')}</button></div></div></div>
-                
-                <div class="modal-overlay ${state.showMessageModal ? 'open' : ''}" onclick="if(event.target === this) { state.showMessageModal = false; render(); }"><div class="modal"><div class="modal-header"><h2 class="modal-title">${getText('sendMessage')}</h2><button class="modal-close" onclick="state.showMessageModal = false; render();">×</button></div><div class="modal-body"><p style="margin-bottom: 15px;">إلى: <strong>${state.selectedAd?.userName || 'البائع'}</strong></p><p style="margin-bottom: 15px; color: #999; font-size: 0.9rem;">حول: ${state.selectedAd?.title || ''}</p><form onsubmit="handleSendMessage(event)"><div class="form-group"><textarea name="message" class="form-textarea" placeholder="${getText('typeMessage')}" required></textarea></div><button type="submit" class="form-btn">${getText('send')}</button></form></div></div></div>
-                
-                <div class="modal-overlay ${state.showReportModal ? 'open' : ''}" onclick="if(event.target === this) { state.showReportModal = false; state.selectedAd = null; render(); }"><div class="modal"><div class="modal-header"><h2 class="modal-title">${getText('reportTitle')}</h2><button class="modal-close" onclick="state.showReportModal = false; state.selectedAd = null; render();">×</button></div><div class="modal-body">${state.selectedAd ? `<p style="margin-bottom: 15px;">حول: <strong>${state.selectedAd.title}</strong></p>` : ''}<form onsubmit="handleReport(event)"><div class="form-group"><label class="form-label">${getText('reportReason')}</label><textarea name="reason" class="form-textarea" required placeholder="اشرح سبب البلاغ..."></textarea></div><button type="submit" class="form-btn" style="background: linear-gradient(135deg, #ef4444, #dc2626);">${getText('reportSubmit')}</button></form></div></div></div>
-                
-                <div class="modal-overlay ${state.showEditProfileModal ? 'open' : ''}" onclick="if(event.target === this) { state.showEditProfileModal = false; render(); }"><div class="modal"><div class="modal-header"><h2 class="modal-title">${getText('editProfile')}</h2><button class="modal-close" onclick="state.showEditProfileModal = false; render();">×</button></div><div class="modal-body"><form onsubmit="handleUpdateProfile(event)"><div class="form-group"><label class="form-label">${getText('name')}</label><input type="text" name="name" class="form-input" value="${state.user?.name || ''}" required></div><div class="form-group"><label class="form-label">${getText('phone')}</label><input type="tel" name="phone" class="form-input" value="${state.user?.phone || ''}" required></div><button type="submit" class="form-btn">حفظ</button></form></div></div></div>
+                <section class="ads-section" style="min-height: 80vh;">
+                    <h2 class="section-title">${getText('allAds')}</h2>
+                    ${state.filterCategory || state.filterCity || state.filterPriceMin || state.filterPriceMax ? `<div style="text-align: center; margin-bottom: 20px;"><button class="form-btn secondary" style="max-width: 200px;" onclick="state.filterCategory = ''; state.filterCity = ''; state.filterPriceMin = ''; state.filterPriceMax = ''; render();">× ${getText('resetFilter')}</button></div>` : ''}
+                    <div class="ads-grid">${ads.length > 0 ? ads.map(ad => renderAdCard(ad)).join('') : `<div style="grid-column: 1/-1; text-align: center; padding: 60px; color: #999;"><div style="font-size: 60px; margin-bottom: 20px;">📭</div><p>لا توجد إعلانات</p></div>`}</div>
+                </section>
             `;
         }
         
-        // Admin Render
-        function renderAdmin() {
-            if (!state.isAdmin) {
-                return `<div class="admin-login"><div class="admin-login-card"><div class="admin-login-logo">🔐</div><h1 class="admin-login-title">لوحة تحكم الأدمن</h1><p class="admin-login-subtitle">أدخل بيانات الدخول</p><form onsubmit="handleAdminLogin(event)"><div class="form-group"><input type="text" name="username" class="form-input" placeholder="اسم المستخدم" required></div><div class="form-group"><input type="password" name="password" class="form-input" placeholder="كلمة المرور" required></div><button type="submit" class="form-btn">دخول</button></form><p style="margin-top: 20px;"><a href="#" onclick="window.location.hash = ''; state.currentPage = 'home'; render();" style="color: var(--primary);">← العودة للموقع</a></p></div></div><div class="toast-container">${state.toasts.map(t => `<div class="toast ${t.type}"><span>${t.message}</span></div>`).join('')}</div>`;
-            }
-            
-            const stats = { users: state.users.length, ads: state.ads.length, active: state.ads.filter(a => a.isActive).length, featured: state.ads.filter(a => a.isFeatured).length, reports: state.reports.filter(r => r.status === 'pending').length, messages: state.messages.length, sliders: state.sliders.length };
-            
-            return `<div class="admin-container"><div class="admin-sidebar"><div class="admin-sidebar-header"><span style="font-size: 30px;">⚙️</span><div class="admin-sidebar-logo">لوحة التحكم</div></div><nav class="admin-nav"><button class="admin-nav-item ${state.adminPage === 'dashboard' ? 'active' : ''}" onclick="state.adminPage = 'dashboard'; render();"><span>📊</span><span>الرئيسية</span></button><button class="admin-nav-item ${state.adminPage === 'ads' ? 'active' : ''}" onclick="state.adminPage = 'ads'; render();"><span>📋</span><span>الإعلانات</span></button><button class="admin-nav-item ${state.adminPage === 'users' ? 'active' : ''}" onclick="state.adminPage = 'users'; render();"><span>👥</span><span>المستخدمين</span></button><button class="admin-nav-item ${state.adminPage === 'reports' ? 'active' : ''}" onclick="state.adminPage = 'reports'; render();"><span>🚩</span><span>البلاغات</span></button><button class="admin-nav-item ${state.adminPage === 'sliders' ? 'active' : ''}" onclick="state.adminPage = 'sliders'; render();"><span>🖼️</span><span>السلايدر</span></button><button class="admin-nav-item ${state.adminPage === 'messages' ? 'active' : ''}" onclick="state.adminPage = 'messages'; render();"><span>💬</span><span>الرسائل</span></button><button class="admin-nav-item" onclick="window.location.hash = ''; state.isAdmin = false; state.currentPage = 'home'; render();"><span>🏠</span><span>العودة للموقع</span></button></nav></div><div class="admin-main"><div class="admin-header"><h1 style="font-size: 1.5rem; color: #1e293b;">${state.adminPage === 'dashboard' ? '📊 لوحة الرئيسية' : state.adminPage === 'ads' ? '📋 الإعلانات' : state.adminPage === 'users' ? '👥 المستخدمين' : state.adminPage === 'reports' ? '🚩 البلاغات' : state.adminPage === 'sliders' ? '🖼️ السلايدر' : '💬 الرسائل'}</h1><span style="color: #64748b;">مرحباً، Admin</span></div><div class="admin-content">${state.adminPage === 'dashboard' ? `<div class="admin-stats"><div class="admin-stat-card"><div class="admin-stat-icon blue">👥</div><div class="admin-stat-info"><h3>${stats.users}</h3><p>المستخدمين</p></div></div><div class="admin-stat-card"><div class="admin-stat-icon green">📋</div><div class="admin-stat-info"><h3>${stats.ads}</h3><p>الإعلانات</p></div></div><div class="admin-stat-card"><div class="admin-stat-icon orange">⭐</div><div class="admin-stat-info"><h3>${stats.featured}</h3><p>مميزة</p></div></div><div class="admin-stat-card"><div class="admin-stat-icon red">🚩</div><div class="admin-stat-info"><h3>${stats.reports}</h3><p>بلاغات</p></div></div><div class="admin-stat-card"><div class="admin-stat-icon purple">💬</div><div class="admin-stat-info"><h3>${stats.messages}</h3><p>الرسائل</p></div></div><div class="admin-stat-card"><div class="admin-stat-icon blue">🖼️</div><div class="admin-stat-info"><h3>${stats.sliders}</h3><p>سلايدرات</p></div></div></div><div class="admin-card"><div class="admin-card-header"><h3 class="admin-card-title">أحدث الإعلانات</h3></div><table class="admin-table"><thead><tr><th>الصورة</th><th>العنوان</th><th>الفئة</th><th>السعر</th><th>الحالة</th></tr></thead><tbody>${state.ads.slice(0, 5).map(a => `<tr><td><img src="${a.imageUrl}" class="admin-table-img"></td><td>${a.title}</td><td>${getCategoryName(a.category)}</td><td>${formatPrice(a.price)}</td><td><span class="admin-badge ${a.isActive ? 'success' : 'danger'}">${a.isActive ? 'نشط' : 'معطل'}</span></td></tr>`).join('')}</tbody></table></div>` : ''}${state.adminPage === 'ads' ? `<div class="admin-card"><div class="admin-card-header"><h3 class="admin-card-title">جميع الإعلانات (${state.ads.length})</h3></div><table class="admin-table"><thead><tr><th>الصورة</th><th>العنوان</th><th>الفئة</th><th>السعر</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody>${state.ads.map(a => `<tr><td><img src="${a.imageUrl}" class="admin-table-img"></td><td>${a.title}</td><td>${getCategoryName(a.category)}</td><td>${formatPrice(a.price)}</td><td><span class="admin-badge ${a.isActive ? 'success' : 'danger'}">${a.isActive ? 'نشط' : 'معطل'}</span> ${a.isFeatured ? '<span class="admin-badge warning">⭐</span>' : ''}</td><td><button class="admin-btn ${a.isFeatured ? 'warning' : 'primary'}" onclick="toggleFeatured('${a.id}', ${a.isFeatured})">${a.isFeatured ? '⭐ إلغاء' : '⭐ تمييز'}</button> <button class="admin-btn ${a.isActive ? 'danger' : 'success'}" onclick="toggleActive('${a.id}', ${a.isActive})">${a.isActive ? 'تعطيل' : 'تفعيل'}</button> <button class="admin-btn danger" onclick="deleteAd('${a.id}')">حذف</button></td></tr>`).join('')}</tbody></table></div>` : ''}${state.adminPage === 'users' ? `<div class="admin-card"><div class="admin-card-header"><h3 class="admin-card-title">المستخدمين (${state.users.length})</h3></div><table class="admin-table"><thead><tr><th>الاسم</th><th>البريد</th><th>الهاتف</th><th>تاريخ التسجيل</th><th>إجراءات</th></tr></thead><tbody>${state.users.map(u => `<tr><td>${u.name || '-'}</td><td>${u.email}</td><td>${u.phone || '-'}</td><td>${formatDate(u.createdAt)}</td><td><button class="admin-btn danger" onclick="deleteUser('${u.id}')">حذف</button></td></tr>`).join('')}</tbody></table></div>` : ''}${state.adminPage === 'reports' ? `<div class="admin-card"><div class="admin-card-header"><h3 class="admin-card-title">البلاغات (${state.reports.length})</h3></div><table class="admin-table"><thead><tr><th>المُبلغ</th><th>الإعلان</th><th>السبب</th><th>الحالة</th><th>إجراءات</th></tr></thead><tbody>${state.reports.map(r => `<tr><td>${r.reporterName}</td><td>${r.adTitle}</td><td>${r.reason}</td><td><span class="admin-badge ${r.status === 'pending' ? 'warning' : r.status === 'resolved' ? 'success' : 'danger'}">${r.status === 'pending' ? 'معلق' : r.status === 'resolved' ? 'تم الحل' : 'مرفوض'}</span></td><td><button class="admin-btn success" onclick="updateReport('${r.id}', 'resolved')">✓</button> <button class="admin-btn danger" onclick="updateReport('${r.id}', 'rejected')">✕</button></td></tr>`).join('')}</tbody></table></div>` : ''}${state.adminPage === 'sliders' ? `<div class="admin-card"><div class="admin-card-header"><h3 class="admin-card-title">إضافة سلايدر</h3></div><form onsubmit="handleAddSlider(event)" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;"><input type="text" name="title" class="form-input" placeholder="العنوان" required><input type="text" name="description" class="form-input" placeholder="الوصف" required><input type="url" name="imageUrl" class="form-input" placeholder="رابط الصورة" required><input type="url" name="link" class="form-input" placeholder="الرابط (اختياري)"><button type="submit" class="admin-btn primary">إضافة</button></form></div><div class="admin-card"><div class="admin-card-header"><h3 class="admin-card-title">السلايدرات (${state.sliders.length})</h3></div><table class="admin-table"><thead><tr><th>الصورة</th><th>العنوان</th><th>الوصف</th><th>إجراءات</th></tr></thead><tbody>${state.sliders.map(s => `<tr><td><img src="${s.imageUrl}" class="admin-table-img"></td><td>${s.title}</td><td>${s.description}</td><td><button class="admin-btn danger" onclick="deleteSlider('${s.id}')">حذف</button></td></tr>`).join('')}</tbody></table></div>` : ''}${state.adminPage === 'messages' ? `<div class="admin-card"><div class="admin-card-header"><h3 class="admin-card-title">الرسائل (${state.messages.length})</h3></div><table class="admin-table"><thead><tr><th>المرسل</th><th>المستلم</th><th>الإعلان</th><th>الرسالة</th><th>التاريخ</th></tr></thead><tbody>${state.messages.map(m => `<tr><td>${m.senderName}</td><td>${m.receiverName}</td><td>${m.adTitle}</td><td>${m.message.substring(0, 50)}...</td><td>${formatDate(m.createdAt)}</td></tr>`).join('')}</tbody></table></div>` : ''}</div></div></div><div class="toast-container">${state.toasts.map(t => `<div class="toast ${t.type}"><span>${t.message}</span></div>`).join('')}</div>`;
+        function renderAdCard(ad) {
+            return `
+                <div class="ad-card ${ad.isFeatured ? 'featured' : ''}" onclick="state.selectedAd = state.ads.find(a => a.id === '${ad.id}'); state.currentPage = 'adDetail'; render();">
+                    ${ad.isFeatured ? '<div class="ad-featured-badge">⭐ مميز</div>' : ''}
+                    <img src="${ad.imageUrl}" class="ad-image" alt="${ad.title}">
+                    <div class="ad-content">
+                        <span class="ad-category">${getCategoryName(ad.category)}</span>
+                        <h3 class="ad-title">${ad.title}</h3>
+                        <p class="ad-price">${formatPrice(ad.price)}</p>
+                        <p class="ad-location">📍 ${getCityName(ad.city)}</p>
+                    </div>
+                    <div class="ad-footer">
+                        <span class="ad-date">${formatDate(ad.createdAt)}</span>
+                        <div class="ad-actions">
+                            ${state.user && state.user.uid !== ad.userId ? `<button class="ad-action-btn message" onclick="event.stopPropagation(); state.selectedAd = state.ads.find(a => a.id === '${ad.id}'); state.showMessageModal = true; render();">💬</button>` : ''}
+                            <button class="ad-action-btn report" onclick="event.stopPropagation(); state.selectedAd = state.ads.find(a => a.id === '${ad.id}'); state.showReportModal = true; render();">🚩</button>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
         
+        function renderAdDetail() {
+            const ad = state.selectedAd;
+            return `
+                <div class="ad-detail animate-fade">
+                    <button class="ad-detail-back" onclick="state.selectedAd = null; state.currentPage = 'ads'; render();">← ${getText('back')}</button>
+                    <img src="${ad.imageUrl}" class="ad-detail-image" alt="${ad.title}">
+                    <div class="ad-detail-content">
+                        <div class="ad-detail-header"><div><span class="ad-category">${getCategoryName(ad.category)}</span><h1 class="ad-detail-title">${ad.title}</h1></div><div class="ad-detail-price">${formatPrice(ad.price)}</div></div>
+                        <div class="ad-detail-meta"><span class="ad-detail-meta-item">📍 ${getCityName(ad.city)}</span><span class="ad-detail-meta-item">📅 ${formatDate(ad.createdAt)}</span></div>
+                        <p class="ad-detail-desc">${ad.description}</p>
+                        <div class="ad-detail-actions">
+                            <button class="ad-detail-btn phone" onclick="${state.user ? `alert('📞 ${ad.phone}')` : `state.showAuthModal = true; render();`}">📞 ${getText('showPhone')}</button>
+                            <button class="ad-detail-btn message" onclick="${state.user ? `state.showMessageModal = true; render();` : `state.showAuthModal = true; render();`}">💬 ${getText('sendMessage')}</button>
+                            <button class="ad-detail-btn report" onclick="state.showReportModal = true; render();">🚩 ${getText('report')}</button>
+                        </div>
+                        <div class="ad-seller" onclick="state.selectedProfile = { id: '${ad.userId}', name: '${ad.userName}' }; state.currentPage = 'profile'; render();">
+                            <div class="ad-seller-avatar">${ad.userName?.charAt(0).toUpperCase() || 'U'}</div>
+                            <div class="ad-seller-info"><h4>${ad.userName || 'مستخدم'}</h4><p>عرض جميع إعلاناته ←</p></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function renderProfile() {
+            const profile = state.selectedProfile;
+            const userAds = state.ads.filter(ad => ad.userId === profile.id && ad.isActive);
+            return `
+                <div class="profile-page animate-fade">
+                    <button class="ad-detail-back" onclick="state.selectedProfile = null; state.currentPage = 'home'; render();">← ${getText('back')}</button>
+                    <div class="profile-header"><div class="profile-avatar">${profile.name?.charAt(0).toUpperCase() || 'U'}</div><h1 class="profile-name">${profile.name || 'مستخدم'}</h1><div class="profile-stats"><div class="profile-stat"><div class="profile-stat-value">${userAds.length}</div><div class="profile-stat-label">${getText('allAds')}</div></div></div></div>
+                    <h2 style="margin: 30px 0 20px; color: var(--dark);">${getText('allAds')}</h2>
+                    <div class="ads-grid">${userAds.length > 0 ? userAds.map(ad => renderAdCard(ad)).join('') : `<div style="grid-column: 1/-1; text-align: center; padding: 60px; color: #999;"><div style="font-size: 60px; margin-bottom: 20px;">📭</div><p>لا توجد إعلانات</p></div>`}</div>
+                </div>
+            `;
+        }
+        
+        function renderMessages() {
+            const inboxMessages = state.messages.filter(m => m.receiverId === state.user?.uid && !m.isRead);
+            const archiveMessages = state.messages.filter(m => m.receiverId === state.user?.uid && m.isRead);
+            const currentMessages = state.messagesTab === 'inbox' ? inboxMessages : archiveMessages;
+            
+            return `
+                <div class="messages-page animate-fade">
+                    <button class="ad-detail-back" onclick="state.selectedChat = null; state.currentPage = 'home'; render();">← ${getText('back')}</button>
+                    <div class="messages-container">
+                        ${!state.selectedChat ? `
+                            <div class="messages-tabs">
+                                <button class="messages-tab ${state.messagesTab === 'inbox' ? 'active' : ''}" onclick="state.messagesTab = 'inbox'; render();">📥 ${getText('inbox')} (${inboxMessages.length})</button>
+                                <button class="messages-tab ${state.messagesTab === 'archive' ? 'active' : ''}" onclick="state.messagesTab = 'archive'; render();">📁 ${getText('archive')} (${archiveMessages.length})</button>
+                            </div>
+                            <div class="messages-list">
+                                ${currentMessages.length > 0 ? currentMessages.map(msg => `
+                                    <div class="message-item ${!msg.isRead ? 'unread' : ''}" onclick="state.selectedChat = state.messages.find(m => m.id === '${msg.id}'); db.collection('messages').doc('${msg.id}').update({ isRead: true }); render();">
+                                        <div class="message-avatar">${msg.senderName?.charAt(0).toUpperCase() || 'U'}</div>
+                                        <div class="message-content"><div class="message-header"><span class="message-sender">${msg.senderName}</span><span class="message-time">${formatDate(msg.createdAt)}</span></div><p class="message-text">${msg.message}</p><small style="color: #999;">حول: ${msg.adTitle}</small></div>
+                                        ${!msg.isRead ? '<div class="message-unread-dot"></div>' : ''}
+                                    </div>
+                                `).join('') : `<div style="text-align: center; padding: 60px; color: #999;"><div style="font-size: 60px; margin-bottom: 20px;">📭</div><p>${getText('noMessages')}</p></div>`}
+                            </div>
+                        ` : `
+                            <div class="chat-container">
+                                <div class="chat-header"><button class="chat-back" onclick="state.selectedChat = null; render();">←</button><div class="message-avatar">${state.selectedChat.senderName?.charAt(0).toUpperCase() || 'U'}</div><div><div style="font-weight: 600;">${state.selectedChat.senderId === state.user?.uid ? state.selectedChat.receiverName : state.selectedChat.senderName}</div><small style="color: #999;">${state.selectedChat.adTitle}</small></div></div>
+                                <div class="chat-messages">${state.messages.filter(m => (m.senderId === state.selectedChat.senderId && m.receiverId === state.selectedChat.receiverId) || (m.senderId === state.selectedChat.receiverId && m.receiverId === state.selectedChat.senderId)).map(msg => `<div class="chat-message ${msg.senderId === state.user?.uid ? 'sent' : 'received'}">${msg.message}</div>`).join('')}</div>
+                                <div class="chat-input-container"><input type="text" id="chatInput" class="chat-input" placeholder="${getText('typeMessage')}"><button class="chat-send" onclick="const input = document.getElementById('chatInput'); if(input.value.trim()) { db.collection('messages').add({ senderId: state.user.uid, senderName: state.user.name || state.user.email, receiverId: state.selectedChat.senderId === state.user.uid ? state.selectedChat.receiverId : state.selectedChat.senderId, receiverName: state.selectedChat.senderId === state.user.uid ? state.selectedChat.receiverName : state.selectedChat.senderName, adId: state.selectedChat.adId, adTitle: state.selectedChat.adTitle, message: input.value, createdAt: firebase.firestore.FieldValue.serverTimestamp(), isRead: false }); input.value = ''; loadMessages(); }">➤</button></div>
+                            </div>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+        
+        function renderAbout() {
+            return `<div class="info-page animate-fade"><button class="ad-detail-back" onclick="state.currentPage = 'home'; render();">← ${getText('back')}</button><h1>من نحن</h1><p>العفرون أونلاين هي منصة إعلانات مبوبة محلية تخدم سكان منطقة العفرون والمناطق المجاورة في ولاية البليدة، الجزائر.</p><h2>رؤيتنا</h2><p>نسعى لتكون المنصة الأولى والأكثر موثوقية للإعلانات المبوبة في منطقتنا.</p><h2>مميزاتنا</h2><ul><li>سهولة الاستخدام والنشر</li><li>تصنيفات متعددة</li><li>نظام مراسلة آمن</li><li>دعم ثنائي اللغة</li></ul></div>`;
+        }
+        
+        function renderPrivacy() {
+            return `<div class="info-page animate-fade"><button class="ad-detail-back" onclick="state.currentPage = 'home'; render();">← ${getText('back')}</button><h1>سياسة الخصوصية</h1><h2>جمع المعلومات</h2><p>نقوم بجمع المعلومات التي تقدمها لنا مباشرة عند إنشاء حساب أو نشر إعلان.</p><h2>استخدام المعلومات</h2><p>نستخدم المعلومات لتقديم خدماتنا وتحسينها.</p><h2>حماية المعلومات</h2><p>نتخذ إجراءات أمنية مناسبة لحماية معلوماتك.</p></div>`;
+        }
+        
+        function renderContact() {
+            return `<div class="info-page animate-fade"><button class="ad-detail-back" onclick="state.currentPage = 'home'; render();">← ${getText('back')}</button><h1>اتصل بنا</h1><p>نحن هنا لمساعدتك!</p><div class="contact-cards"><div class="contact-card"><div class="contact-card-icon">📧</div><h3>البريد الإلكتروني</h3><p>contact@elaffroun-online.com</p></div><div class="contact-card"><div class="contact-card-icon">📞</div><h3>الهاتف</h3><p dir="ltr">+213 XX XX XX XX</p></div><div class="contact-card"><div class="contact-card-icon">📍</div><h3>العنوان</h3><p>العفرون، البليدة، الجزائر</p></div></div></div>`;
+        }
+        
+        function renderModals() {
+            return `
+                <div class="modal-overlay ${state.showAuthModal ? 'open' : ''}" onclick="if(event.target === this) { state.showAuthModal = false; render(); }">
+                    <div class="modal">
+                        <div class="modal-header"><h2 class="modal-title">${state.authTab === 'login' ? getText('login') : getText('register')}</h2><button class="modal-close" onclick="state.showAuthModal = false; render();">×</button></div>
+                        <div class="modal-body">
+                            <div class="tabs"><button class="tab ${state.authTab === 'login' ? 'active' : ''}" onclick="state.authTab = 'login'; render();">${getText('login')}</button><button class="tab ${state.authTab === 'register' ? 'active' : ''}" onclick="state.authTab = 'register'; render();">${getText('register')}</button></div>
+                            <form onsubmit="handleAuth(event)">
+                                ${state.authTab === 'register' ? `<div class="form-group"><label class="form-label">${getText('name')}</label><input type="text" name="name" class="form-input" required></div>` : ''}
+                                <div class="form-group"><label class="form-label">${getText('email')}</label><input type="email" name="email" class="form-input" required></div>
+                                ${state.authTab === 'register' ? `<div class="form-group"><label class="form-label">${getText('phone')}</label><input type="tel" name="phone" class="form-input" required></div>` : ''}
+                                <div class="form-group"><label class="form-label">${getText('password')}</label><input type="password" name="password" class="form-input" required minlength="6"></div>
+                                ${state.authTab === 'register' ? `<div class="form-group"><label class="form-label">${getText('confirmPassword')}</label><input type="password" name="confirmPassword" class="form-input" required minlength="6"></div>` : ''}
+                                <button type="submit" class="form-btn">${state.authTab === 'login' ? getText('loginBtn') : getText('registerBtn')}</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-overlay ${state.showAddAdModal ? 'open' : ''}" onclick="if(event.target === this) { state.showAddAdModal = false; render(); }">
+                    <div class="modal">
+                        <div class="modal-header"><h2 class="modal-title">${getText('addAd')}</h2><button class="modal-close" onclick="state.showAddAdModal = false; render();">×</button></div>
+                        <div class="modal-body">
+                            <form onsubmit="handleAddAd(event)">
+                                <div class="form-group"><label class="form-label">${getText('category')}</label><select name="category" class="form-select" required><option value="">${getText('selectCategory')}</option>${categories.map(cat => `<option value="${cat.id}">${cat.name[state.lang]}</option>`).join('')}</select></div>
+                                <div class="form-group"><label class="form-label">${getText('title')}</label><input type="text" name="title" class="form-input" required></div>
+                                <div class="form-group"><label class="form-label">${getText('description')}</label><textarea name="description" class="form-textarea" required></textarea></div>
+                                <div class="form-group"><label class="form-label">${getText('price')} (${getText('da')})</label><input type="number" name="price" class="form-input" required min="0"></div>
+                                <div class="form-group"><label class="form-label">${getText('city')}</label><select name="city" class="form-select" required><option value="">${getText('selectCity')}</option>${cities.map(city => `<option value="${city.id}">${city.name[state.lang]}</option>`).join('')}</select></div>
+                                <div class="form-group"><label class="form-label">${getText('phone')}</label><input type="tel" name="phone" class="form-input" required></div>
+                                <div class="form-group"><label class="form-label">${getText('image')}</label><div class="image-upload" onclick="this.querySelector('input').click()"><input type="file" name="image" accept="image/*" onchange="if(this.files[0]) { this.parentElement.innerHTML = '<img src=\\'' + URL.createObjectURL(this.files[0]) + '\\' class=\\'image-preview\\'><input type=\\'file\\' name=\\'image\\' accept=\\'image/*\\' style=\\'display:none\\'>'; }"><div class="image-upload-icon">📷</div><p>${getText('uploadImage')}</p></div></div>
+                                <button type="submit" class="form-btn">${getText('publish')}</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-overlay ${state.showFilterModal ? 'open' : ''}" onclick="if(event.target === this) { state.showFilterModal = false; render(); }">
+                    <div class="modal">
+                        <div class="modal-header"><h2 class="modal-title">${getText('filter')}</h2><button class="modal-close" onclick="state.showFilterModal = false; render();">×</button></div>
+                        <div class="modal-body">
+                            <div class="filter-section"><h4>${getText('category')}</h4><div class="filter-options"><button class="filter-option ${!state.filterCategory ? 'active' : ''}" onclick="state.filterCategory = ''; render();">${getText('allCategories')}</button>${categories.map(cat => `<button class="filter-option ${state.filterCategory === cat.id ? 'active' : ''}" onclick="state.filterCategory = '${cat.id}'; render();">${cat.name[state.lang]}</button>`).join('')}</div></div>
+                            <div class="filter-section"><h4>${getText('city')}</h4><div class="filter-options"><button class="filter-option ${!state.filterCity ? 'active' : ''}" onclick="state.filterCity = ''; render();">${getText('allCities')}</button>${cities.map(city => `<button class="filter-option ${state.filterCity === city.id ? 'active' : ''}" onclick="state.filterCity = '${city.id}'; render();">${city.name[state.lang]}</button>`).join('')}</div></div>
+                            <div class="filter-section"><h4>${getText('priceRange')}</h4><div class="price-range"><input type="number" class="form-input" placeholder="${getText('minPrice')}" value="${state.filterPriceMin}" onchange="state.filterPriceMin = this.value; render();"><span>-</span><input type="number" class="form-input" placeholder="${getText('maxPrice')}" value="${state.filterPriceMax}" onchange="state.filterPriceMax = this.value; render();"></div></div>
+                            <button class="form-btn" onclick="state.showFilterModal = false; state.currentPage = 'ads'; render();">${getText('applyFilter')}</button>
+                            <button class="form-btn secondary" style="margin-top: 10px;" onclick="state.filterCategory = ''; state.filterCity = ''; state.filterPriceMin = ''; state.filterPriceMax = ''; render();">${getText('resetFilter')}</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-overlay ${state.showSearchModal ? 'open' : ''}" onclick="if(event.target === this) { state.showSearchModal = false; render(); }">
+                    <div class="modal">
+                        <div class="modal-header"><h2 class="modal-title">${getText('search')}</h2><button class="modal-close" onclick="state.showSearchModal = false; render();">×</button></div>
+                        <div class="modal-body">
+                            <div class="form-group"><input type="text" class="form-input" placeholder="${getText('searchPlaceholder')}" value="${state.searchQuery}" onkeyup="state.searchQuery = this.value; render();"></div>
+                            <button class="form-btn" onclick="state.showSearchModal = false; state.currentPage = 'ads'; render();">${getText('search')}</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-overlay ${state.showMessageModal ? 'open' : ''}" onclick="if(event.target === this) { state.showMessageModal = false; render(); }">
+                    <div class="modal">
+                        <div class="modal-header"><h2 class="modal-title">${getText('sendMessage')}</h2><button class="modal-close" onclick="state.showMessageModal = false; render();">×</button></div>
+                        <div class="modal-body">
+                            <p style="margin-bottom: 15px; color: #666;">إلى: <strong>${state.selectedAd?.userName || 'البائع'}</strong></p>
+                            <form onsubmit="handleSendMessage(event)">
+                                <div class="form-group"><textarea name="message" class="form-textarea" placeholder="${getText('typeMessage')}" required></textarea></div>
+                                <button type="submit" class="form-btn">${getText('send')}</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-overlay ${state.showReportModal ? 'open' : ''}" onclick="if(event.target === this) { state.showReportModal = false; state.selectedAd = null; render(); }">
+                    <div class="modal">
+                        <div class="modal-header"><h2 class="modal-title">${getText('reportTitle')}</h2><button class="modal-close" onclick="state.showReportModal = false; state.selectedAd = null; render();">×</button></div>
+                        <div class="modal-body">
+                            ${state.selectedAd ? `<p style="margin-bottom: 15px; color: #666;">حول: <strong>${state.selectedAd.title}</strong></p>` : ''}
+                            <form onsubmit="handleReport(event)">
+                                <div class="form-group"><label class="form-label">${getText('reportReason')}</label><textarea name="reason" class="form-textarea" required placeholder="اشرح سبب البلاغ..."></textarea></div>
+                                <button type="submit" class="form-btn" style="background: linear-gradient(135deg, #ef4444, #dc2626);">${getText('reportSubmit')}</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-overlay ${state.showEditProfileModal ? 'open' : ''}" onclick="if(event.target === this) { state.showEditProfileModal = false; render(); }">
+                    <div class="modal">
+                        <div class="modal-header"><h2 class="modal-title">${getText('editProfile')}</h2><button class="modal-close" onclick="state.showEditProfileModal = false; render();">×</button></div>
+                        <div class="modal-body">
+                            <form onsubmit="handleUpdateProfile(event)">
+                                <div class="form-group"><label class="form-label">${getText('name')}</label><input type="text" name="name" class="form-input" value="${state.user?.name || ''}" required></div>
+                                <div class="form-group"><label class="form-label">${getText('phone')}</label><input type="tel" name="phone" class="form-input" value="${state.user?.phone || ''}" required></div>
+                                <button type="submit" class="form-btn">حفظ</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Initial Render
         render();
     </script>
 </body>
