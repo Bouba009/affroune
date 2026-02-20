@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Affroun Online | العفرون أونلاين</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- واجهة المستخدم العادية -->
+    <div id="main-app">
+        <!-- الهيدر -->
+        <header>
+            <div class="header-container">
+                <div class="menu-logo">
+                    <i class="fas fa-bars" id="menu-btn"></i>
+                    <h1 class="logo">العفرون<span>أونلاين</span></h1>
+                </div>
+                <div class="header-actions">
+                    <button id="lang-toggle">FR</button>
+                    <i class="fas fa-envelope" id="messages-icon" style="display:none;"></i>
+                    <button class="btn-login" id="header-login-btn" data-i18n="login">تسجيل الدخول</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- القائمة الجانبية -->
+        <nav id="sidebar" class="sidebar">
+            <i class="fas fa-times" id="close-sidebar"></i>
+            <ul class="sidebar-links">
+                <li data-i18n="home"><i class="fas fa-home"></i> الرئيسية</li>
+                <li data-i18n="privacy"><i class="fas fa-shield-alt"></i> سياسة الخصوصية</li>
+                <li data-i18n="about"><i class="fas fa-info-circle"></i> من نحن</li>
+                <li data-i18n="contact"><i class="fas fa-phone"></i> اتصل بنا</li>
+                <li id="report-issue-btn" data-i18n="report"><i class="fas fa-exclamation-triangle"></i> إبلاغ عن مشكلة</li>
+            </ul>
+        </nav>
+
+        <!-- سلايدر الإعلانات -->
+        <section class="banner-slider">
+            <div class="slide" style="background-image: url('https://via.placeholder.com/1200x300?text=إعلان+بانر');"></div>
+        </section>
+
+        <!-- الفئات (دوائر) -->
+        <section class="categories-container">
+            <div class="categories-scroll" id="categories-list">
+                <!-- سيتم توليدها بواسطة JS -->
+            </div>
+        </section>
+
+        <!-- الإعلانات المميزة -->
+        <section class="ads-section">
+            <h2 class="section-title"><i class="fas fa-star" style="color: gold;"></i> <span data-i18n="featured_ads">إعلانات مميزة</span></h2>
+            <div class="ads-grid" id="featured-ads"></div>
+        </section>
+
+        <!-- جميع الإعلانات -->
+        <section class="ads-section">
+            <h2 class="section-title" data-i18n="all_ads">جميع الإعلانات</h2>
+            <div class="ads-grid" id="all-ads"></div>
+        </section>
+
+        <!-- الأزرار العائمة -->
+        <div class="fab-container">
+            <button class="fab" id="fab-filter" title="فلترة"><i class="fas fa-filter"></i></button>
+            <button class="fab" id="fab-add" title="نشر إعلان"><i class="fas fa-plus"></i></button>
+        </div>
+
+        <!-- الفوتر -->
+        <footer>
+            <p>&copy; 2026 El Affroun Online. All rights reserved.</p>
+            <span id="admin-secret-login" style="cursor: pointer; opacity: 0.5;">🔒</span>
+        </footer>
+    </div>
+
+    <!-- لوحة تحكم الأدمن (مخفية افتراضيا) -->
+    <div id="admin-dashboard" style="display: none;">
+        <header class="admin-header">
+            <h2>لوحة تحكم الإدارة</h2>
+            <button id="admin-logout" class="btn-danger">خروج</button>
+        </header>
+        <div class="dashboard-stats">
+            <div class="stat-card" style="background: #3498db;"><h3>زيارات اليوم</h3><p>150</p></div>
+            <div class="stat-card" style="background: #2ecc71;"><h3>زيارات الشهر</h3><p>4,200</p></div>
+            <div class="stat-card" style="background: #f1c40f;"><h3>منشورات جديدة</h3><p>25</p></div>
+            <div class="stat-card" style="background: #e74c3c;"><h3>المستخدمين</h3><p>850</p></div>
+        </div>
+        <!-- أزرار الإدارة -->
+        <div class="admin-controls">
+            <button class="btn-admin">إدارة الإعلانات</button>
+            <button class="btn-admin">إدارة المستخدمين</button>
+            <button class="btn-admin">إدارة البانر (Slider)</button>
+            <button class="btn-admin">إعدادات الموقع</button>
+            <button class="btn-admin">التقارير والمشاكل</button>
+        </div>
+    </div>
+
+    <!-- النوافذ المنبثقة (Modals) -->
+    <!-- 1. نشر إعلان -->
+    <div class="modal" id="add-ad-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 data-i18n="publish_ad">نشر إعلان جديد</h2>
+            <form id="add-ad-form">
+                <input type="text" id="ad-title" placeholder="اسم المنتج أو الخدمة" required>
+                <textarea id="ad-desc" placeholder="الوصف" required></textarea>
+                <input type="number" id="ad-price" placeholder="السعر (دج)" required>
+                <select id="ad-category" required></select>
+                <select id="ad-condition">
+                    <option value="none">الحالة (اختياري)</option>
+                    <option value="new">جديدة</option>
+                    <option value="used">مستعملة</option>
+                </select>
+                <select id="ad-city" required>
+                    <option value="">اختر المدينة...</option>
+                    <option value="العفرون">العفرون</option>
+                    <option value="موزاية">موزاية</option>
+                    <option value="شفة">شفة</option>
+                    <option value="واد جر">واد جر</option>
+                    <option value="حطاطبة">حطاطبة</option>
+                    <option value="أحمر العين">أحمر العين</option>
+                </select>
+                <input type="file" id="ad-image" accept="image/*">
+                <button type="submit" class="btn-primary" data-i18n="publish">نشر الإعلان</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. تسجيل الدخول -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>تسجيل الدخول / إنشاء حساب</h2>
+            <input type="email" id="auth-email" placeholder="البريد الإلكتروني">
+            <input type="password" id="auth-pass" placeholder="كلمة المرور">
+            <button id="btn-login-submit" class="btn-primary">دخول</button>
+            <button id="btn-register-submit" class="btn-secondary">إنشاء حساب جديد</button>
+        </div>
+    </div>
+
+    <!-- استدعاء الجافاسكريبت -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>
