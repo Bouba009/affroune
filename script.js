@@ -1,9 +1,7 @@
-// Import Firebase using CDN for pure JS setup
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, getDocs, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// Firebase Configuration (من طلبك)
 const firebaseConfig = {
   apiKey: "AIzaSyDXdDA6rH50zAv5pmZKRkXnqosoFnC3GjY",
   authDomain: "filahadz-31183.firebaseapp.com",
@@ -15,151 +13,111 @@ const firebaseConfig = {
   measurementId: "G-BQC5Q4Q16M"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// --- State Management ---
 let currentUser = null;
-let currentLang = localStorage.getItem('lang') || 'ar';
 
-// --- Data ---
+// تم إصلاح مصفوفة الفئات وإضافة صور حقيقية دقيقة
 const categories =;
 
-const dictionaries = {
-    ar: {
-        login: "تسجيل الدخول", logout: "خروج", home: "الرئيسية", privacy: "سياسة الخصوصية",
-        about: "من نحن", contact: "اتصل بنا", report: "إبلاغ عن مشكلة", publish_ad: "نشر إعلان جديد",
-        publish: "نشر", all_ads: "جميع الإعلانات", featured_ads: "إعلانات مميزة"
-    },
-    fr: {
-        login: "Connexion", logout: "Déconnexion", home: "Accueil", privacy: "Confidentialité",
-        about: "À propos", contact: "Contact", report: "Signaler un problème", publish_ad: "Publier une annonce",
-        publish: "Publier", all_ads: "Toutes les annonces", featured_ads: "Annonces à la une"
-    }
-};
-
-// --- DOM Elements ---
-const menuBtn = document.getElementById('menu-btn');
-const sidebar = document.getElementById('sidebar');
-const closeSidebar = document.getElementById('close-sidebar');
-const langToggle = document.getElementById('lang-toggle');
-const categoriesList = document.getElementById('categories-list');
-const loginBtn = document.getElementById('header-login-btn');
+// عناصر DOM
 const loginModal = document.getElementById('login-modal');
 const addAdModal = document.getElementById('add-ad-modal');
+const headerLoginBtn = document.getElementById('header-login-btn');
 const fabAdd = document.getElementById('fab-add');
-const messagesIcon = document.getElementById('messages-icon');
+const loginForm = document.getElementById('login-form');
+const btnRegister = document.getElementById('btn-register-submit');
+const addAdForm = document.getElementById('add-ad-form');
 
-// --- Initialization ---
-function init() {
-    renderCategories();
-    applyLanguage(currentLang);
-    fetchAds();
-}
-
-// --- UI Interactions ---
-menuBtn.addEventListener('click', () => sidebar.classList.add('active'));
-closeSidebar.addEventListener('click', () => sidebar.classList.remove('active'));
-
-// إغلاق المودال
-document.querySelectorAll('.close-modal').forEach(btn => {
-    btn.addEventListener('click', function() {
-        this.closest('.modal').style.display = 'none';
-    });
-});
-
-window.onclick = function(event) {
-    if (event.target.classList.contains('modal')) {
-        event.target.style.display = "none";
-    }
-}
-
-// --- Language Toggle ---
-langToggle.addEventListener('click', () => {
-    currentLang = currentLang === 'ar' ? 'fr' : 'ar';
-    localStorage.setItem('lang', currentLang);
-    applyLanguage(currentLang);
-});
-
-function applyLanguage(lang) {
-    document.documentElement.lang = lang;
-    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-    langToggle.innerText = lang === 'ar' ? 'FR' : 'AR';
-    
-    document.querySelectorAll('').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (dictionaries) {
-            // Check if it has icons inside to preserve them
-            if(el.querySelector('i')){
-                const icon = el.querySelector('i').outerHTML;
-                el.innerHTML = icon + ' ' + dictionaries;
-            } else {
-                el.innerText = dictionaries;
-            }
-        }
-    });
-    renderCategories(); // إعادة رسم الفئات باللغة الجديدة
-}
-
-// --- Render Categories ---
+// دالة مبدئية لعرض الفئات
 function renderCategories() {
-    categoriesList.innerHTML = '';
-    const selectCat = document.getElementById('ad-category');
-    if(selectCat) selectCat.innerHTML = '<option value="">اختر الفئة...</option>';
+    const list = document.getElementById('categories-list');
+    const select = document.getElementById('ad-category');
+    list.innerHTML = '';
+    select.innerHTML = '<option value="">اختر الفئة...</option>';
 
     categories.forEach(cat => {
-        const name = currentLang === 'ar' ? cat.nameAr : cat.nameFr;
-        
-        // للواجهة
-        categoriesList.innerHTML += `
+        list.innerHTML += `
             <div class="cat-item">
-                <div class="cat-circle" style="background-image: url('${cat.img}?auto=format&fit=crop&w=150&q=80');"></div>
-                <span style="font-size:12px; font-weight:bold;">${name}</span>
+                <div class="cat-circle" style="background-image: url('${cat.img}');"></div>
+                <span style="font-size:14px; font-weight:700;">${cat.nameAr}</span>
             </div>
         `;
-        
-        // لقائمة إضافة الإعلان
-        if(selectCat) selectCat.innerHTML += `<option value="${cat.id}">${name}</option>`;
+        select.innerHTML += `<option value="${cat.id}">${cat.nameAr}</option>`;
     });
 }
+renderCategories();
 
-// --- Auth State ---
+// --- نظام الدخول والنشر المصلح (لا يوجد تحديث للصفحة) ---
+
 onAuthStateChanged(auth, (user) => {
     if (user) {
         currentUser = user;
-        loginBtn.innerText = dictionaries.logout;
-        messagesIcon.style.display = 'inline-block';
+        headerLoginBtn.innerHTML = `<i class="fas fa-sign-out-alt"></i> خروج`;
+        document.getElementById('messages-icon').style.display = 'inline-block';
     } else {
         currentUser = null;
-        loginBtn.innerText = dictionaries.login;
-        messagesIcon.style.display = 'none';
+        headerLoginBtn.innerHTML = `<i class="fas fa-user"></i> تسجيل الدخول`;
+        document.getElementById('messages-icon').style.display = 'none';
     }
 });
 
-// زر الدخول في الهيدر
-loginBtn.addEventListener('click', () => {
-    if(currentUser) {
-        signOut(auth);
-    } else {
-        loginModal.style.display = 'flex';
-    }
-});
-
-// --- FAB زر النشر ---
-fabAdd.addEventListener('click', () => {
-    if (currentUser) {
-        addAdModal.style.display = 'flex';
-    } else {
-        alert("يرجى تسجيل الدخول أولاً لنشر إعلان.");
-        loginModal.style.display = 'flex';
-    }
-});
-
-// --- إضافة إعلان في Firebase ---
-document.getElementById('add-ad-form').addEventListener('submit', async (e) => {
+// زر الهيدر
+headerLoginBtn.addEventListener('click', (e) => {
     e.preventDefault();
+    if(currentUser) { signOut(auth); }
+    else { loginModal.style.display = 'flex'; }
+});
+
+// زر النشر العائم FAB (يمنع النشر بدون دخول)
+fabAdd.addEventListener('click', (e) => {
+    e.preventDefault(); // منع أي تصرف افتراضي
+    if (!currentUser) {
+        alert("عذراً، يجب عليك تسجيل الدخول أولاً لتتمكن من نشر إعلان.");
+        loginModal.style.display = 'flex';
+    } else {
+        addAdModal.style.display = 'flex';
+    }
+});
+
+// إرسال نموذج الدخول
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault(); // الحل الجذري لمشكلة تحديث الصفحة
+    const email = document.getElementById('auth-email').value;
+    const pass = document.getElementById('auth-pass').value;
+    try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        loginModal.style.display = 'none';
+        loginForm.reset();
+        alert("تم تسجيل الدخول بنجاح!");
+    } catch (error) {
+        alert("خطأ في تسجيل الدخول. تأكد من البيانات.");
+    }
+});
+
+// إرسال طلب إنشاء حساب جديد
+btnRegister.addEventListener('click', async (e) => {
+    e.preventDefault(); // يمنع زر الحساب الجديد من عمل Submit للـ Form
+    const email = document.getElementById('auth-email').value;
+    const pass = document.getElementById('auth-pass').value;
+    if(!email || !pass) return alert("يرجى إدخال البريد وكلمة المرور");
+    try {
+        await createUserWithEmailAndPassword(auth, email, pass);
+        loginModal.style.display = 'none';
+        loginForm.reset();
+        alert("تم إنشاء الحساب بنجاح!");
+    } catch (error) {
+        alert("حدث خطأ أثناء إنشاء الحساب. قد يكون الإيميل مستخدماً أو كلمة المرور ضعيفة.");
+    }
+});
+
+// إرسال الإعلان لفايربيز
+addAdForm.addEventListener('submit', async (e) => {
+    e.preventDefault(); // يمنع تحديث الصفحة عند النشر
+    if(!currentUser) return; // تحقق أمني إضافي
+
     const title = document.getElementById('ad-title').value;
     const desc = document.getElementById('ad-desc').value;
     const price = document.getElementById('ad-price').value;
@@ -174,70 +132,25 @@ document.getElementById('add-ad-form').addEventListener('submit', async (e) => {
             isFeatured: false,
             createdAt: new Date()
         });
-        alert("تم نشر الإعلان بنجاح!");
+        alert("تم نشر الإعلان بنجاح وسيظهر للجميع فوراً!");
         addAdModal.style.display = 'none';
-        document.getElementById('add-ad-form').reset();
+        addAdForm.reset();
     } catch (error) {
-        console.error("Error adding document: ", error);
-        alert("حدث خطأ أثناء النشر");
+        console.error("Error: ", error);
+        alert("حدث خطأ أثناء نشر الإعلان");
     }
 });
 
-// --- جلب وعرض الإعلانات (Realtime) ---
-function fetchAds() {
-    const q = query(collection(db, "ads"), orderBy("createdAt", "desc"));
-    onSnapshot(q, (snapshot) => {
-        const allAdsContainer = document.getElementById('all-ads');
-        const featuredAdsContainer = document.getElementById('featured-ads');
-        
-        allAdsContainer.innerHTML = '';
-        featuredAdsContainer.innerHTML = '';
-
-        snapshot.forEach((doc) => {
-            const ad = doc.data();
-            const adHtml = `
-                <div class="ad-card ${ad.isFeatured ? 'featured' : ''}" onclick="openAdDetails('${doc.id}')">
-                    <img src="https://via.placeholder.com/300x200?text=صورة+المنتج" alt="Product">
-                    <div class="ad-info">
-                        <h3>${ad.title}</h3>
-                        <p class="ad-price">${ad.price} د.ج</p>
-                        <p style="font-size:12px; color:#7f8c8d;"><i class="fas fa-map-marker-alt"></i> ${ad.city}</p>
-                    </div>
-                </div>
-            `;
-            
-            if(ad.isFeatured) {
-                featuredAdsContainer.innerHTML += adHtml;
-            } else {
-                allAdsContainer.innerHTML += adHtml;
-            }
-        });
-    });
-}
-
-window.openAdDetails = (id) => {
-    // في مشروع حقيقي يتم فتح نافذة جديدة أو Modal بكامل الشاشة
-    // هنا سنطلب تسجيل الدخول لرؤية الرقم
-    if(!currentUser) {
-        alert("الرجاء تسجيل الدخول لرؤية التفاصيل ومراسلة البائع");
-        loginModal.style.display = 'flex';
-        return;
-    }
-    alert("فتح تفاصيل الإعلان ID: " + id + "\n(هنا تظهر أزرار الاتصال والرسائل)");
-};
-
-
-// --- نظام الأدمن السري ---
+// --- قفل الأدمن المخفي ---
 const adminSecret = document.getElementById('admin-secret-login');
 adminSecret.addEventListener('click', () => {
     const user = prompt("Username:");
     const pass = prompt("Password:");
-    
     if (user === "admin" && pass === "abobob123") {
         document.getElementById('main-app').style.display = 'none';
         document.getElementById('admin-dashboard').style.display = 'block';
     } else {
-        alert("Wrong credentials");
+        alert("Accès Refusé");
     }
 });
 
@@ -246,5 +159,9 @@ document.getElementById('admin-logout').addEventListener('click', () => {
     document.getElementById('admin-dashboard').style.display = 'none';
 });
 
-// Run
-init();
+// إغلاق النوافذ
+document.querySelectorAll('.close-modal').forEach(btn => {
+    btn.addEventListener('click', function() {
+        this.closest('.modal').style.display = 'none';
+    });
+});
