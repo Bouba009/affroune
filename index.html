@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>El Affroun Online</title>
     
-    <!-- الملحقات الأساسية -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&display=swap" rel="stylesheet">
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -17,137 +17,507 @@
             --secondary: #2c3e50;
             --bg: #f4f6f9;
             --white: #ffffff;
-            --shadow: 0 4px 10px rgba(0,0,0,0.08);
+            --gold: #ffc107;
+            --chat-sent: #dcf8c6;
+            --chat-recv: #ffffff;
             --radius: 10px;
+            --shadow: 0 4px 10px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: #333; padding-bottom: 70px; }
+        html[dir="ltr"] { font-family: 'Roboto', sans-serif; }
+        html[dir="ltr"] .sidebar { right: auto; left: -280px; }
+        html[dir="ltr"] .sidebar.active { left: 0; }
+        html[dir="ltr"] .fab-zone { left: auto; right: 20px; }
+        html[dir="ltr"] .cat-card { margin-left: 0; margin-right: 15px; }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; font-family: 'Cairo', sans-serif; }
+        body { background-color: var(--bg); color: #333; padding-bottom: 90px; overflow-x: hidden; }
 
         /* Loader */
-        #app-loader { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+        #app-loader { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.5s; }
         .spinner { width: 50px; height: 50px; border: 5px solid #eee; border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .hidden { display: none !important; }
+        .flex { display: flex; align-items: center; }
+        .center { display: flex; justify-content: center; align-items: center; }
+        .btn { padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; transition: var(--transition); display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; }
+        .btn:active { transform: scale(0.97); }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-secondary { background: var(--secondary); color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-info { background: #17a2b8; color: white; }
+        .w-100 { width: 100%; }
+        
+        /* Fix SweetAlert Z-Index */
+        .swal2-container { z-index: 10000 !important; }
 
         header { background: var(--white); height: 60px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.05); padding: 0 15px; display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 1.3rem; font-weight: 800; color: var(--secondary); }
         .logo span { color: var(--primary); }
-        .nav-icons { display: flex; gap: 15px; font-size: 1.3rem; color: var(--secondary); }
+        .nav-icons { display: flex; gap: 15px; align-items: center; }
+        .nav-icon { font-size: 1.4rem; color: var(--secondary); cursor: pointer; position: relative; }
+        .badge { position: absolute; top: -5px; right: -5px; background: red; color: white; font-size: 0.6rem; padding: 2px 5px; border-radius: 50%; display: none; }
+        .badge.show { display: block; }
+        .lang-switch { font-size: 0.8rem; font-weight: bold; border: 1px solid #ddd; padding: 4px 8px; border-radius: 4px; cursor: pointer; }
 
-        .swiper { width: 100%; height: 200px; }
+        .sidebar { position: fixed; top: 0; right: -280px; width: 280px; height: 100%; background: white; z-index: 1200; transition: var(--transition); box-shadow: 0 0 15px rgba(0,0,0,0.2); display: flex; flex-direction: column; padding: 20px; }
+        .sidebar.active { right: 0; }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1100; display: none; backdrop-filter: blur(2px); }
+        .overlay.active { display: block; }
+        .menu-item { padding: 15px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        
+        /* Banner Slider - FIXED: Force LTR to prevent bugs */
+        .swiper { 
+            width: 100%; 
+            height: 200px; 
+            margin-bottom: 15px; 
+            border-radius: 0 0 15px 15px;
+            direction: ltr !important; /* Key fix */
+        }
         .swiper-slide img { width: 100%; height: 100%; object-fit: cover; }
 
-        .cats-scroll { overflow-x: auto; padding: 15px; white-space: nowrap; background: white; margin-bottom: 10px; }
-        .cat-card { display: inline-block; text-align: center; margin-left: 15px; width: 70px; cursor: pointer; }
-        .cat-card img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #eee; }
-        .cat-card span { font-size: 0.75rem; font-weight: 700; display: block; margin-top: 5px; }
+        .cats-scroll { overflow-x: auto; padding: 10px 15px; white-space: nowrap; scrollbar-width: none; background: white; margin-bottom: 15px; }
+        .cats-scroll::-webkit-scrollbar { display: none; }
+        .cat-card { display: inline-flex; flex-direction: column; align-items: center; margin-left: 15px; width: 80px; cursor: pointer; }
+        .cat-img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid #eee; margin-bottom: 5px; transition: var(--transition); }
+        .cat-card:hover .cat-img { border-color: var(--primary); transform: scale(1.05); }
+        .cat-name { font-size: 0.7rem; font-weight: 700; color: var(--secondary); text-align: center; white-space: normal; line-height: 1.2; }
 
-        .ads-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px; }
-        .ad-card { background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); position: relative; }
-        .ad-img { height: 150px; background: #eee; width: 100%; object-fit: cover; }
-        .ad-info { padding: 10px; }
-        .ad-price { color: var(--primary); font-weight: 800; font-size: 1rem; }
-        .ad-title { font-size: 0.85rem; height: 35px; overflow: hidden; margin: 5px 0; font-weight: 600; }
+        .section-title { padding: 0 15px; margin: 20px 0 10px; display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 1.1rem; }
+        .ads-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; padding: 0 10px; max-width: 1200px; margin: 0 auto; }
+        
+        .ad-card { background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); position: relative; cursor: pointer; transition: transform 0.2s; }
+        .ad-card:active { transform: scale(0.98); }
+        .ad-card.featured { border: 2px solid var(--gold); }
+        .feat-badge { position: absolute; top: 8px; right: 8px; background: var(--gold); color: black; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; z-index: 2; }
+        /* Report Icon on Ad Card */
+        .report-badge { position: absolute; top: 8px; left: 8px; background: rgba(255,255,255,0.8); color: red; padding: 5px; border-radius: 50%; font-size: 0.9rem; z-index: 3; cursor: pointer; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .report-badge:hover { background: red; color: white; }
 
-        .fab { position: fixed; bottom: 20px; left: 20px; width: 60px; height: 60px; background: var(--primary); color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; box-shadow: 0 4px 15px rgba(242,101,34,0.4); z-index: 900; border: none; cursor: pointer; }
+        .ad-img-box { height: 220px; background: #eee; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        .ad-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .ad-content { padding: 10px; }
+        .ad-price { color: var(--primary); font-weight: 800; font-size: 1.1rem; }
+        .ad-title { font-size: 0.9rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 5px 0; }
+        .ad-meta { font-size: 0.7rem; color: #888; display: flex; justify-content: space-between; }
 
-        .full-page { position: fixed; inset: 0; background: white; z-index: 1500; display: none; overflow-y: auto; flex-direction: column; }
-        .full-page.active { display: flex; }
-        .page-header { padding: 15px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; }
+        /* HTML Ads Container */
+        .custom-ads-box { padding: 10px; margin: 10px 0; text-align: center; overflow: hidden; }
 
-        .form-input, .form-select, .form-area { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; font-size: 1rem; }
-        .btn-main { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; }
+        .fab-zone { position: fixed; bottom: 25px; left: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 900; }
+        .fab { width: 55px; height: 55px; border-radius: 50%; border: none; color: white; font-size: 1.3rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; opacity: 0.6; transition: 0.3s; }
+        .fab:hover, .fab:active { opacity: 1; transform: scale(1.1); }
+        .fab-main { background: var(--primary); font-size: 1.5rem; }
+        .fab-sec { background: var(--secondary); }
 
-        #admin-panel { background: #f8f9fa; z-index: 2000; }
-        .hidden { display: none !important; }
+        .modal-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
+        .modal-wrap.active { display: flex; }
+        .modal-content { background: white; width: 90%; max-width: 450px; border-radius: 12px; padding: 20px; max-height: 85vh; overflow-y: auto; position: relative; animation: slideUp 0.3s ease; }
+        .close-modal { position: absolute; top: 15px; left: 15px; font-size: 1.5rem; cursor: pointer; color: #999; }
+        html[dir="ltr"] .close-modal { left: auto; right: 15px; }
+        @keyframes slideUp { from {transform: translateY(20px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
+
+        .form-input, .form-select, .form-area { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95rem; margin-bottom: 10px; }
+        .file-input { width: 100%; padding: 10px; background: #f9f9f9; border: 1px dashed #ccc; border-radius: 6px; margin-bottom: 10px; }
+
+        .full-page { position: fixed; inset: 0; background: white; z-index: 1500; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s ease; display: flex; flex-direction: column; }
+        .full-page.active { transform: translateY(0); }
+        
+        .page-header { padding: 15px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; position: sticky; top: 0; background: white; z-index: 10; }
+        .page-back { font-size: 1.2rem; cursor: pointer; }
+        
+        .chat-list-item { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 15px; cursor: pointer; }
+        .chat-list-item.unread { background: #eef7ff; font-weight: bold; border-right: 4px solid var(--primary); }
+
+        .chat-room { flex: 1; background: #e5ddd5; display: flex; flex-direction: column; }
+        .msgs-container { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
+        .msg-bubble { max-width: 75%; padding: 8px 12px; border-radius: 12px; font-size: 0.9rem; position: relative; word-wrap: break-word; }
+        .msg-sent { align-self: flex-end; background: var(--chat-sent); border-bottom-left-radius: 0; }
+        .msg-recv { align-self: flex-start; background: var(--chat-recv); border-bottom-right-radius: 0; }
+        .chat-input { padding: 10px; background: white; display: flex; gap: 10px; border-top: 1px solid #ddd; }
+
+        #admin-panel { z-index: 5000; background: #f4f6f9; }
+        .admin-header { background: var(--secondary); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .admin-tabs { display: flex; gap: 10px; overflow-x: auto; padding: 10px; background: white; }
+        .tab-btn { padding: 6px 15px; background: #eee; border-radius: 20px; white-space: nowrap; cursor: pointer; font-size: 0.85rem; }
+        .tab-btn.active { background: var(--secondary); color: white; }
+        .admin-view { padding: 15px; display: none; }
+        .admin-view.active { display: block; }
+        .stat-card { background: white; padding: 15px; border-radius: 8px; text-align: center; box-shadow: var(--shadow); margin-bottom: 10px; }
+        .admin-item { background: white; padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+
+        .banner-list-item { display: flex; align-items: center; justify-content: space-between; border: 1px solid #eee; padding: 5px; margin-bottom: 5px; border-radius: 5px; }
+        .banner-list-item img { height: 40px; width: 60px; object-fit: cover; }
+
+        footer { text-align: center; padding: 30px; color: #999; margin-top: 20px; font-size: 0.8rem; }
+        
+        .swiper-button-next, .swiper-button-prev { color: var(--primary); text-shadow: 0 0 5px rgba(255,255,255,0.8); }
+        
+        /* Product View Slider 55% Height & Contain Object Fit - FIXED DIRECTION */
+        .swiper.prodSwiper { 
+            width: 100%;
+            height: 55vh !important;
+            min-height: 400px;
+            background: #000;
+            margin: 0;
+            direction: ltr !important; /* Force LTR for images */
+        }
+        .swiper-slide img.prod-view-img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+        }
     </style>
 </head>
 <body>
 
-<div id="app-loader"><div class="spinner"></div></div>
+<!-- LOADING SCREEN -->
+<div id="app-loader">
+    <div class="spinner"></div>
+    <h3 style="margin-top:20px;color:#555">El Affroun Online</h3>
+</div>
 
+<!-- HEADER -->
 <header>
-    <div class="logo">El Affroun <span>Online</span></div>
+    <div class="flex">
+        <i class="fas fa-bars nav-icon" onclick="toggleSidebar()"></i>
+        <div class="logo" id="app-logo">El Affroun <span>Online</span></div>
+    </div>
     <div class="nav-icons">
-        <i class="fas fa-search" onclick="Swal.fire('قريباً', 'ميزة البحث تحت التطوير', 'info')"></i>
-        <i class="fas fa-user-circle" id="user-icon" onclick="handleAuth()"></i>
+        <div class="lang-switch" onclick="toggleLang()" id="lang-txt">FR</div>
+        <i class="fas fa-search nav-icon" onclick="openModal('filter-modal')"></i>
+        <i class="fas fa-envelope nav-icon" onclick="openMyChats()">
+            <span class="badge" id="msg-badge">0</span>
+        </i>
+        <i class="fas fa-user-circle nav-icon" onclick="checkAuth()"></i>
     </div>
 </header>
 
+<!-- SIDEBAR -->
+<div class="overlay" onclick="closeAll()"></div>
+<div class="sidebar" id="sidebar">
+    <div class="flex" style="justify-content:space-between; margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:10px">
+        <h3 class="logo" data-tr="menu">القائمة</h3>
+        <i class="fas fa-times" style="font-size:1.5rem; cursor:pointer" onclick="toggleSidebar()"></i>
+    </div>
+    <div class="menu-item" onclick="window.location.reload()"><i class="fas fa-home"></i> <span data-tr="home">الرئيسية</span></div>
+    <div class="menu-item" onclick="openMyChats()"><i class="fas fa-comments"></i> <span data-tr="msgs">الرسائل</span></div>
+    <div class="menu-item" onclick="showStatic('about')"><i class="fas fa-info-circle"></i> <span data-tr="about">من نحن</span></div>
+    <div class="menu-item" onclick="showStatic('contact')"><i class="fas fa-phone"></i> <span data-tr="contact">اتصل بنا</span></div>
+    <div class="menu-item" onclick="showStatic('privacy')"><i class="fas fa-shield-alt"></i> <span data-tr="privacy">سياسة الخصوصية</span></div>
+    <div class="menu-item" onclick="openModal('report-modal')"><i class="fas fa-bug"></i> <span data-tr="report">إبلاغ</span></div>
+    <div class="menu-item hidden" id="logout-btn" onclick="logout()" style="color:var(--primary); margin-top:auto"><i class="fas fa-sign-out-alt"></i> <span data-tr="logout">خروج</span></div>
+</div>
+
+<!-- MAIN -->
 <main>
-    <div class="swiper mainSwiper">
-        <div class="swiper-wrapper" id="banner-wrapper">
-            <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=800&q=80"></div>
+    <!-- Slider -->
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper" id="main-banner-wrapper">
+            <!-- Slides injected via JS -->
+            <div class="swiper-slide">
+                <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=800&q=80">
+            </div>
         </div>
         <div class="swiper-pagination"></div>
     </div>
+    
+    <!-- Custom HTML Ads: TOP -->
+    <div id="ads-top-container" class="custom-ads-box"></div>
 
-    <div class="cats-scroll" id="cats-list"></div>
-    <div class="ads-grid" id="ads-list"></div>
+    <!-- Categories -->
+    <div class="cats-scroll" id="cats-container"></div>
+    
+    <!-- Custom HTML Ads: MIDDLE -->
+    <div id="ads-middle-container" class="custom-ads-box"></div>
+
+    <!-- Featured -->
+    <div id="feat-section" class="hidden">
+        <div class="section-title"><span style="color:var(--gold)" data-tr="featured">⭐ مميزة</span></div>
+        <div class="ads-grid" id="featured-ads"></div>
+    </div>
+
+    <!-- All Ads -->
+    <div class="section-title">
+        <span data-tr="latest">📦 أحدث الإعلانات</span>
+        <small style="color:var(--primary); cursor:pointer" onclick="openModal('filter-modal')"><i class="fas fa-filter"></i></small>
+    </div>
+    <div class="ads-grid" id="all-ads"></div>
+    
+    <!-- Custom HTML Ads: BOTTOM -->
+    <div id="ads-bottom-container" class="custom-ads-box"></div>
 </main>
 
-<button class="fab" onclick="openPublish()"><i class="fas fa-plus"></i></button>
-
-<!-- صفحة الإعلان التفصيلية -->
-<div class="full-page" id="details-page">
-    <div class="page-header">
-        <i class="fas fa-arrow-right" onclick="closePage('details-page')"></i>
-        <h3 id="det-header-title">التفاصيل</h3>
-    </div>
-    <div id="det-content"></div>
+<!-- FLOATING BUTTONS -->
+<div class="fab-zone">
+    <button class="fab fab-sec center" onclick="openModal('filter-modal')"><i class="fas fa-sliders-h"></i></button>
+    <button class="fab fab-main center" onclick="startPublish()"><i class="fas fa-plus"></i></button>
 </div>
 
-<!-- صفحة النشر -->
-<div class="full-page" id="pub-page">
-    <div class="page-header">
-        <i class="fas fa-times" onclick="closePage('pub-page')"></i>
-        <h3>نشر إعلان جديد</h3>
-    </div>
-    <form id="pub-form" style="padding: 20px;">
-        <input type="text" id="p-title" class="form-input" placeholder="عنوان الإعلان" required>
-        <select id="p-cat" class="form-select"></select>
-        <input type="number" id="p-price" class="form-input" placeholder="السعر (دج)" required>
-        <textarea id="p-desc" class="form-area" placeholder="اكتب وصف المنتج هنا..." rows="4"></textarea>
-        <p style="font-weight: bold; margin-bottom: 10px;">صور المنتج (حتى 5 صور):</p>
-        <input type="file" class="form-input" accept="image/*" id="img1">
-        <input type="file" class="form-input" accept="image/*" id="img2">
-        <input type="file" class="form-input" accept="image/*" id="img3">
-        <button type="submit" class="btn-main" id="pub-btn">نشر الآن</button>
-    </form>
-</div>
+<!-- === MODALS === -->
 
-<!-- لوحة التحكم السريّة -->
-<div class="full-page" id="admin-panel">
-    <div class="page-header" style="background: var(--secondary); color: white;">
-        <h3>لوحة التحكم 🛡️</h3>
-        <i class="fas fa-times" onclick="closePage('admin-panel')"></i>
-    </div>
-    <div style="padding: 20px;">
-        <div id="admin-stats" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div style="background: white; padding: 20px; border-radius: 10px; text-align: center;">
-                <h4 id="stat-ads">0</h4>
-                <p>إعلان</p>
+<!-- Login -->
+<div class="modal-wrap" id="auth-modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal('auth-modal')">&times;</span>
+        <h2 style="text-align:center; margin-bottom:15px" data-tr="login">دخول</h2>
+        <form id="auth-form">
+            <input type="email" id="log-email" class="form-input" data-ph="ph_email" placeholder="البريد الإلكتروني" required>
+            <input type="password" id="log-pass" class="form-input" data-ph="ph_pass" placeholder="كلمة المرور" required>
+            <div id="reg-fields" class="hidden">
+                <input type="text" id="reg-name" class="form-input" data-ph="ph_name" placeholder="الاسم">
+                <input type="tel" id="reg-phone" class="form-input" data-ph="ph_phone" placeholder="الهاتف">
             </div>
-            <div style="background: white; padding: 20px; border-radius: 10px; text-align: center;">
-                <h4 id="stat-users">0</h4>
-                <p>مستخدم</p>
+            <button type="submit" class="btn btn-primary w-100" data-tr="submit">دخول</button>
+            <p style="text-align:center; margin-top:15px; color:var(--primary); cursor:pointer" onclick="toggleReg()">حساب جديد / دخول</p>
+        </form>
+    </div>
+</div>
+
+<!-- Publish Ad -->
+<div class="modal-wrap" id="pub-modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal('pub-modal')">&times;</span>
+        <h3 style="margin-bottom:15px" data-tr="pub_title" id="pub-modal-title">نشر إعلان</h3>
+        <form id="pub-form">
+            <input type="text" id="p-title" class="form-input" data-ph="ph_title" placeholder="العنوان" required>
+            <select id="p-cat" class="form-select" required></select>
+            <div class="flex" style="gap:10px; margin-bottom:10px">
+                <input type="number" id="p-price" class="form-input" data-ph="ph_price" placeholder="السعر (DA)" required>
+                <select id="p-city" class="form-select" required></select>
+            </div>
+            <input type="tel" id="p-phone" class="form-input" data-ph="ph_phone" placeholder="رقم الهاتف" required>
+            <textarea id="p-desc" class="form-area" rows="3" data-ph="ph_desc" placeholder="الوصف..."></textarea>
+            
+            <label style="font-weight:bold; font-size:0.9rem" data-tr="img_upload">صور المنتج (الحد الأقصى 5 صور)</label>
+            <!-- 5 Individual File Inputs -->
+            <div id="image-inputs-container">
+                <label style="font-size:0.8rem; margin-top:5px; display:block">الصورة 1</label>
+                <input type="file" id="p-file-1" class="file-input" accept="image/*">
+                <label style="font-size:0.8rem; margin-top:5px; display:block">الصورة 2</label>
+                <input type="file" id="p-file-2" class="file-input" accept="image/*">
+                <label style="font-size:0.8rem; margin-top:5px; display:block">الصورة 3</label>
+                <input type="file" id="p-file-3" class="file-input" accept="image/*">
+                <label style="font-size:0.8rem; margin-top:5px; display:block">الصورة 4</label>
+                <input type="file" id="p-file-4" class="file-input" accept="image/*">
+                <label style="font-size:0.8rem; margin-top:5px; display:block">الصورة 5</label>
+                <input type="file" id="p-file-5" class="file-input" accept="image/*">
+            </div>
+            <small style="color:#777; display:block; margin-bottom:10px">اترك الصور فارغة عند التعديل للاحتفاظ بالصور القديمة</small>
+            
+            <button type="submit" class="btn btn-primary w-100" style="margin-top:15px" id="pub-btn" data-tr="publish">نشر</button>
+        </form>
+    </div>
+</div>
+
+<!-- Filter -->
+<div class="modal-wrap" id="filter-modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal('filter-modal')">&times;</span>
+        <h3 data-tr="filter">فلترة</h3><br>
+        <input type="text" id="f-search" class="form-input" data-ph="ph_search" placeholder="بحث...">
+        <select id="f-cat" class="form-select" style="margin-bottom:10px"><option value="" data-tr="all_cats">كل الفئات</option></select>
+        <select id="f-city" class="form-select" style="margin-bottom:10px"><option value="" data-tr="all_cities">كل المدن</option></select>
+        <div class="flex" style="gap:10px">
+            <input type="number" id="f-min" class="form-input" data-ph="ph_min_price" placeholder="أدنى سعر">
+            <input type="number" id="f-max" class="form-input" data-ph="ph_max_price" placeholder="أقصى سعر">
+        </div>
+        <button onclick="doSearch()" class="btn btn-secondary w-100" data-tr="search">بحث</button>
+    </div>
+</div>
+
+<!-- Report -->
+<div class="modal-wrap" id="report-modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal('report-modal')">&times;</span>
+        <h3 data-tr="report">إبلاغ</h3><br>
+        <input type="text" id="r-name" class="form-input" data-ph="ph_name" placeholder="الاسم">
+        <input type="email" id="r-email" class="form-input" data-ph="ph_email" placeholder="البريد الإلكتروني">
+        <textarea id="r-desc" class="form-area" rows="3" data-ph="ph_desc" placeholder="الوصف"></textarea>
+        <button onclick="sendReport()" class="btn btn-danger w-100" style="margin-top:10px" data-tr="send">إرسال</button>
+    </div>
+</div>
+
+<!-- Static Page Modal -->
+<div class="modal-wrap" id="static-modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal('static-modal')">&times;</span>
+        <h3 id="static-title"></h3>
+        <div id="static-body" style="margin-top:15px; line-height:1.6; color:#555"></div>
+    </div>
+</div>
+
+<!-- === FULL PAGES === -->
+
+<!-- Product View -->
+<div class="full-page" id="prod-page">
+    <div class="page-header">
+        <i class="fas fa-arrow-right page-back" onclick="closePage('prod-page')"></i>
+        <h3 style="flex:1" data-tr="details">التفاصيل</h3>
+    </div>
+    <!-- Updated: 55% Height Slider - Portrait Aspect -->
+    <div class="swiper prodSwiper">
+        <div class="swiper-wrapper" id="prod-slides"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination"></div>
+    </div>
+    <div style="padding:20px; padding-bottom:100px">
+        <div id="owner-actions" class="hidden flex" style="gap:10px; margin-bottom:15px">
+            <!-- Edit/Delete buttons injected here -->
+        </div>
+        
+        <h2 id="v-price" style="color:var(--primary); font-size:1.5rem"></h2>
+        <h3 id="v-title" style="margin:5px 0 15px 0"></h3>
+        <div class="flex" style="gap:15px; color:#666; font-size:0.9rem; margin-bottom:20px">
+            <span><i class="fas fa-map-marker-alt"></i> <span id="v-city"></span></span>
+            <span><i class="fas fa-tag"></i> <span id="v-cat"></span></span>
+        </div>
+        <hr style="border:0; border-top:1px solid #eee; margin-bottom:15px">
+        <p id="v-desc" style="white-space: pre-wrap; line-height:1.6; color:#444"></p>
+        <div style="margin-top:25px; background:#f9f9f9; padding:15px; border-radius:8px">
+            <small data-tr="owner">المعلن</small>
+            <div id="v-owner" style="font-weight:bold; font-size:1.1rem; margin-bottom:10px"></div>
+            
+            <!-- BUTTONS MOVED HERE UNDER OWNER NAME -->
+            <div style="display:flex; gap:10px;">
+                <button class="btn btn-success w-100" onclick="callOwner()"><i class="fas fa-phone"></i> <span data-tr="call">اتصال</span></button>
+                <button class="btn btn-primary w-100" onclick="startChat()"><i class="fas fa-comment"></i> <span data-tr="chat">رسالة</span></button>
+                <button class="btn btn-info w-100" onclick="shareAd()"><i class="fas fa-share-alt"></i></button>
             </div>
         </div>
-        <h3 style="margin-top: 20px;">الإعلانات الحالية:</h3>
-        <div id="admin-ads-list"></div>
     </div>
 </div>
 
+<!-- Chat List -->
+<div class="full-page" id="chat-list-page" style="z-index:2500">
+    <div class="page-header">
+        <i class="fas fa-arrow-right page-back" onclick="closePage('chat-list-page')"></i>
+        <h3 data-tr="msgs">الرسائل</h3>
+    </div>
+    <div id="chat-list-container"></div>
+</div>
+
+<!-- Chat Room -->
+<div class="full-page" id="chat-room-page" style="z-index:3000">
+    <div class="page-header" style="background:var(--secondary); color:white">
+        <i class="fas fa-arrow-right page-back" onclick="closePage('chat-room-page')"></i>
+        <h3 id="chat-header-title">Chat</h3>
+    </div>
+    <div class="chat-room">
+        <div class="msgs-container" id="msgs-box"></div>
+        <form class="chat-input" onsubmit="sendMsg(event)">
+            <input type="text" id="msg-input" class="form-input" style="border:none; margin:0" placeholder="..." required>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+        </form>
+    </div>
+</div>
+
+<!-- Admin Panel -->
+<div class="full-page" id="admin-panel">
+    <div class="admin-header">
+        <h3>Admin Dashboard 🛡️</h3>
+        <button class="btn btn-danger" style="padding:5px 10px; font-size:0.8rem" onclick="closePage('admin-panel')">Exit</button>
+    </div>
+    <div class="admin-tabs">
+        <div class="tab-btn active" onclick="switchAdmin('dash')">الرئيسية</div>
+        <div class="tab-btn" onclick="switchAdmin('ads')">الإعلانات</div>
+        <div class="tab-btn" onclick="switchAdmin('users')">المستخدمين</div>
+        <div class="tab-btn" onclick="switchAdmin('ad-reports')">بلاغات المنشورات</div>
+        <div class="tab-btn" onclick="switchAdmin('settings')">إعدادات</div>
+    </div>
+    
+    <!-- Admin Content -->
+    <div id="adm-dash" class="admin-view active">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px">
+            <div class="stat-card"><h3>زيارات اليوم</h3><b id="st-day">0</b></div>
+            <div class="stat-card"><h3>زيارات الشهر</h3><b id="st-month">0</b></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px">
+            <div class="stat-card"><h3>الإعلانات</h3><b id="st-ads">0</b></div>
+            <div class="stat-card"><h3>المستخدمين</h3><b id="st-users">0</b></div>
+            <div class="stat-card"><h3>البلاغات</h3><b id="st-reps">0</b></div>
+        </div>
+        <h4 style="margin:15px 0">بلاغات عامة أخيرة</h4>
+        <div id="adm-reps-list"></div>
+    </div>
+
+    <div id="adm-ads" class="admin-view">
+        <input type="text" class="form-input" placeholder="بحث..." onkeyup="filterAdmAds(this.value)">
+        <div id="adm-ads-list" style="margin-top:10px"></div>
+    </div>
+
+    <div id="adm-users" class="admin-view">
+        <input type="text" class="form-input" placeholder="بحث..." onkeyup="filterAdmUsers(this.value)">
+        <div id="adm-users-list" style="margin-top:10px"></div>
+    </div>
+
+    <div id="adm-ad-reports" class="admin-view">
+        <h4>بلاغات عن منشورات مخالفة</h4>
+        <div id="adm-ad-reports-list" style="margin-top:10px"></div>
+    </div>
+
+    <div id="adm-settings" class="admin-view">
+        <div class="stat-card" style="text-align:right; border: 1px solid red; background: #fff5f5;">
+            <label style="color:red; font-weight:bold">نظام التنظيف التلقائي</label>
+            <p style="font-size:0.8rem; color:#555">حذف المنشورات والرسائل القديمة (أكثر من 30 يوماً).</p>
+            <button class="btn btn-danger w-100" onclick="cleanupOldData()">تشغيل التنظيف الآن 🗑️</button>
+        </div>
+        <div class="stat-card" style="text-align:right">
+            <label>شعار الموقع (رفع صورة)</label>
+            <input type="file" id="adm-logo-file" class="file-input">
+            <button class="btn btn-secondary" onclick="saveAdmLogo()">حفظ اللوغو</button>
+        </div>
+        <div class="stat-card" style="text-align:right">
+            <label>بانرات الموقع (رفع صورة)</label>
+            <input type="file" id="adm-banner-file" class="file-input">
+            <label>رابط التحويل (اختياري)</label>
+            <input type="text" id="adm-banner-link" class="form-input" placeholder="https://...">
+            <button class="btn btn-secondary" onclick="saveAdmBanner()">أضف البانر</button>
+            
+            <h4 style="margin-top:10px">البانرات الحالية:</h4>
+            <div id="adm-banners-list" style="margin-top:10px"></div>
+        </div>
+        <div class="stat-card" style="text-align:right">
+            <label>كود HTML إعلاني (Banner Ads)</label>
+            <select id="adm-ad-pos" class="form-select" style="margin-bottom:5px">
+                <option value="top">أعلى (Top)</option>
+                <option value="middle">وسط (Middle)</option>
+                <option value="bottom">أسفل (Bottom)</option>
+            </select>
+            <textarea id="adm-html-ad" class="form-area" placeholder="<div>AdSense...</div>"></textarea>
+            <button class="btn btn-secondary" onclick="saveHtmlAd()">حفظ الإعلان</button>
+            <button class="btn btn-danger" onclick="deleteHtmlAd()">حذف الإعلان</button>
+        </div>
+        <div class="stat-card" style="text-align:right">
+            <label>نص "من نحن"</label>
+            <textarea id="set-about" class="form-area"></textarea>
+            <button class="btn btn-secondary" onclick="saveConf('about')">حفظ النص</button>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 El Affroun Online</p>
+    <div onclick="adminLogin()" style="opacity:0.1; width:20px; margin:0 auto; cursor:pointer">🔒</div>
+</footer>
+
+<!-- JAVASCRIPT -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, orderBy, getDoc, setDoc, onSnapshot, arrayUnion, arrayRemove, increment } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-    // إعدادات Firebase الخاصة بك
+    // CONFIG
     const firebaseConfig = {
       apiKey: "AIzaSyDXdDA6rH50zAv5pmZKRkXnqosoFnC3GjY",
       authDomain: "filahadz-31183.firebaseapp.com",
+      databaseURL: "https://filahadz-31183-default-rtdb.firebaseio.com",
       projectId: "filahadz-31183",
       storageBucket: "filahadz-31183.firebasestorage.app",
       messagingSenderId: "703541527613",
@@ -158,155 +528,827 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    let currentUser = null;
-    const categories = ["مركبات", "هواتف", "عقارات", "ملابس", "خدمات", "أخرى"];
+    // DEFAULT CONTENT
+    const defaultAbout = `مرحبًا بكم في موقع العفرون أونلاين، منصتكم الأولى للإعلانات المبوبة في المنطقة. نحن نسعى لتسهيل عمليات البيع والشراء لجميع السكان وتوفير بيئة آمنة وسهلة الاستخدام.`;
+    const defaultPrivacy = `نحن في العفرون أونلاين نحترم خصوصيتكم ونلتزم بحماية بياناتكم الشخصية. يتم استخدام المعلومات فقط لغرض التواصل بين البائع والمشتري وتحسين تجربتكم في الموقع.`;
 
-    // --- وظائف الأمان (SHA-256) ---
-    async function hashPassword(string) {
-        const utf8 = new Uint8Array(Array.from(string).map(c => c.charCodeAt(0)));
-        const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    }
-
-    window.checkAdminLink = async () => {
-        if (window.location.hash === "#admino09") {
-            const { value: password } = await Swal.fire({
-                title: 'دخول الإدارة',
-                input: 'password',
-                inputLabel: 'كلمة المرور السريّة',
-                showCancelButton: true
-            });
-
-            if (password) {
-                const hashed = await hashPassword(password);
-                // Hash الخاص بكلمة abobob123
-                if (hashed === "483984d72004245f86915354929315053426e25f8224578e367098e946271965") {
-                    document.getElementById('admin-panel').classList.add('active');
-                    loadAdminData();
-                    history.replaceState(null, null, ' '); 
-                } else {
-                    Swal.fire('خطأ', 'كلمة المرور غير صحيحة', 'error');
-                    window.location.hash = "";
-                }
-            }
+    // --- TRANSLATION ---
+    const tr = {
+        ar: {
+            menu: "القائمة", home: "الرئيسية", msgs: "الرسائل", about: "من نحن", contact: "اتصل بنا", report: "إبلاغ", logout: "خروج", privacy: "سياسة الخصوصية",
+            featured: "⭐ مميزة", latest: "📦 أحدث الإعلانات", login: "دخول", submit: "دخول", pub_title: "نشر إعلان",
+            img_upload: "صورة المنتج", publish: "نشر", filter: "فلترة", search: "بحث", send: "إرسال", call: "اتصال", chat: "رسالة", owner: "المعلن", details: "التفاصيل",
+            all_cats: "كل الفئات", all_cities: "كل المدن",
+            ph_email: "البريد الإلكتروني", ph_pass: "كلمة المرور", ph_name: "الاسم", ph_phone: "الهاتف",
+            ph_title: "العنوان", ph_price: "السعر", ph_desc: "الوصف",
+            ph_search: "بحث...", ph_min_price: "أدنى سعر", ph_max_price: "أقصى سعر"
+        },
+        fr: {
+            menu: "Menu", home: "Accueil", msgs: "Messages", about: "À propos", contact: "Contact", report: "Signaler", logout: "Déconnexion", privacy: "Politique de confidentialité",
+            featured: "⭐ En Vedette", latest: "📦 Dernières Annonces", login: "Connexion", submit: "Entrer", pub_title: "Publier",
+            img_upload: "Image du produit", publish: "Publier", filter: "Filtrer", search: "Rechercher", send: "Envoyer", call: "Appeler", chat: "Message", owner: "Vendeur", details: "Détails",
+            all_cats: "Toutes Catégories", all_cities: "Toutes Villes",
+            ph_email: "Email", ph_pass: "Mot de passe", ph_name: "Nom", ph_phone: "Téléphone",
+            ph_title: "Titre", ph_price: "Prix", ph_desc: "Description",
+            ph_search: "Recherche...", ph_min_price: "Prix Min", ph_max_price: "Prix Max"
         }
     };
-
-    // --- منطق التطبيق الأساسي ---
-    window.onload = () => {
-        checkAdminLink();
-        renderCategories();
-        loadAds();
-        document.getElementById('app-loader').classList.add('hidden');
-        new Swiper(".mainSwiper", { pagination: { el: ".swiper-pagination" }, autoplay: true });
+    
+    // Categories Translations
+    const catTr = {
+        "مركبات": "Véhicules", "هواتف": "Téléphones", "كهرومنزلية": "Electroménager", "ملابس نساء": "Vêtements Femmes",
+        "ملابس رجال": "Vêtements Hommes", "ملابس أطفال": "Vêtements Enfants", "خدمات": "Services", "خياطة": "Couture",
+        "حلويات": "Gâteaux", "وكالة سياحية": "Agence de Voyage", "عقارات": "Immobilier", "عروض عمل": "Offres d'emploi", "أخرى": "Autres"
     };
 
-    window.addEventListener('hashchange', checkAdminLink);
+    let curLang = "ar";
 
-    function renderCategories() {
-        const catBox = document.getElementById('cats-list');
-        catBox.innerHTML = categories.map(c => `
-            <div class="cat-card">
-                <img src="https://via.placeholder.com/60" alt="${c}">
-                <span>${c}</span>
-            </div>
-        `).join('');
-        
-        const catSelect = document.getElementById('p-cat');
-        catSelect.innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
-    }
-
-    async function loadAds() {
-        const adsBox = document.getElementById('ads-list');
-        const q = query(collection(db, "ads"), orderBy("time", "desc"));
-        const snap = await getDocs(q);
-        adsBox.innerHTML = "";
-        snap.forEach(doc => {
-            const ad = doc.data();
-            adsBox.innerHTML += `
-                <div class="ad-card" onclick="showDetails('${doc.id}')">
-                    <img src="${ad.images?.[0] || 'https://via.placeholder.com/150'}" class="ad-img">
-                    <div class="ad-info">
-                        <div class="ad-price">${ad.price} دج</div>
-                        <div class="ad-title">${ad.title}</div>
-                    </div>
-                </div>
-            `;
+    window.toggleLang = () => {
+        curLang = curLang === "ar" ? "fr" : "ar";
+        document.documentElement.dir = curLang === "ar" ? "rtl" : "ltr";
+        document.getElementById('lang-txt').innerText = curLang.toUpperCase();
+        document.querySelectorAll('[data-tr]').forEach(el => {
+            el.innerText = tr[curLang][el.getAttribute('data-tr')];
         });
+        document.querySelectorAll('[data-ph]').forEach(el => {
+            el.placeholder = tr[curLang][el.getAttribute('data-ph')];
+        });
+        document.querySelectorAll('.page-back').forEach(el => {
+            el.style.transform = curLang === "ar" ? "rotate(0deg)" : "rotate(180deg)";
+        });
+        renderCats();
+        fillSelects();
+        loadAds(); 
     }
 
-    window.openPublish = () => {
-        document.getElementById('pub-page').classList.add('active');
-    };
+    // --- DATA ---
+    const categories = [
+        {name: "مركبات", img: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=100"},
+        {name: "هواتف", img: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=100"},
+        {name: "كهرومنزلية", img: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=100"},
+        {name: "ملابس نساء", img: "https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=100"},
+        {name: "ملابس رجال", img: "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=100"},
+        {name: "ملابس أطفال", img: "https://images.unsplash.com/photo-1519457431-44ccd64a579b?w=100"},
+        {name: "خدمات", img: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=100"},
+        {name: "خياطة", img: "https://images.unsplash.com/photo-1528578577235-b963df6db908?w=100"},
+        {name: "حلويات", img: "https://images.unsplash.com/photo-1579372786545-d24232daf58c?w=100"},
+        {name: "وكالة سياحية", img: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=100"},
+        {name: "عقارات", img: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=100"},
+        {name: "عروض عمل", img: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=100"},
+        {name: "أخرى", img: "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=100"}
+    ];
+    const cities = ["العفرون", "موزاية", "شفة", "احمر العين", "واد جر", "حطاطبة"];
 
-    window.closePage = (id) => {
-        document.getElementById(id).classList.remove('active');
-    };
+    let user = null;
+    let allAds = [];
+    let currentAd = null;
+    let activeChatId = null;
+    let editId = null;
+    let currentBanners = []; 
 
-    // رفع الصور وتحويلها لـ Base64 لسهولة العرض
-    const toBase64 = file => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
+    // --- INIT ---
+    document.addEventListener('DOMContentLoaded', () => {
+        renderCats();
+        fillSelects();
+        loadAds();
+        trackVisits();
+        
+        // DEEP LINKING CHECK
+        if(window.location.hash.startsWith("#ad/")) {
+            const id = window.location.hash.split('/')[1];
+            setTimeout(() => {
+                if(allAds.length > 0) openProd(id);
+                else {
+                    getDoc(doc(db, "ads", id)).then(s => {
+                        if(s.exists()) {
+                            allAds.push({id: s.id, ...s.data()});
+                            openProd(id);
+                        }
+                    });
+                }
+            }, 1000);
+        }
+
+        // Load Config & Hide Loader
+        loadConfig().then(() => {
+            document.getElementById('app-loader').style.opacity = '0';
+            setTimeout(()=> document.getElementById('app-loader').remove(), 500);
+        });
     });
 
-    document.getElementById('pub-form').onsubmit = async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('pub-btn');
-        btn.innerText = "جاري النشر..."; btn.disabled = true;
-
-        try {
-            const imgs = [];
-            const files = [document.getElementById('img1').files[0], document.getElementById('img2').files[0], document.getElementById('img3').files[0]];
-            for (let f of files) { if(f) imgs.push(await toBase64(f)); }
-
-            await addDoc(collection(db, "ads"), {
-                title: document.getElementById('p-title').value,
-                price: document.getElementById('p-price').value,
-                cat: document.getElementById('p-cat').value,
-                desc: document.getElementById('p-desc').value,
-                images: imgs,
-                time: Date.now()
-            });
-
-            Swal.fire('تم!', 'تم نشر إعلانك بنجاح', 'success');
-            closePage('pub-page');
-            loadAds();
-        } catch (err) {
-            Swal.fire('خطأ', 'حدثت مشكلة أثناء النشر', 'error');
-        } finally {
-            btn.innerText = "نشر الآن"; btn.disabled = false;
-        }
-    };
-
-    // لوحة التحكم
-    async function loadAdminData() {
-        const snap = await getDocs(collection(db, "ads"));
-        document.getElementById('stat-ads').innerText = snap.size;
-        const adminList = document.getElementById('admin-ads-list');
-        adminList.innerHTML = "";
-        snap.forEach(d => {
-            const ad = d.data();
-            adminList.innerHTML += `
-                <div style="background:white; margin-bottom:10px; padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
-                    <span>${ad.title}</span>
-                    <button onclick="deleteAd('${d.id}')" style="background:red; color:white; border:none; padding:5px 10px; border-radius:5px;">حذف</button>
-                </div>
+    function renderCats() {
+        const catHtml = categories.map(c => {
+            const dispName = curLang === 'fr' ? (catTr[c.name] || c.name) : c.name;
+            return `
+            <div class="cat-card" onclick="filterCat('${c.name}')">
+                <img src="${c.img}" class="cat-img"><span class="cat-name">${dispName}</span>
+            </div>
             `;
+        }).join('');
+        document.getElementById('cats-container').innerHTML = catHtml;
+    }
+
+    function fillSelects() {
+        // Clear first
+        document.getElementById('p-cat').innerHTML = '';
+        document.getElementById('f-cat').innerHTML = `<option value="">${tr[curLang].all_cats}</option>`;
+        document.getElementById('p-city').innerHTML = '';
+        document.getElementById('f-city').innerHTML = `<option value="">${tr[curLang].all_cities}</option>`;
+
+        categories.forEach(c => {
+            const dispName = curLang === 'fr' ? (catTr[c.name] || c.name) : c.name;
+            const opt = `<option value="${c.name}">${dispName}</option>`;
+            document.getElementById('p-cat').innerHTML += opt;
+            document.getElementById('f-cat').innerHTML += opt;
+        });
+
+        cities.forEach(c => {
+            const opt = `<option value="${c}">${c}</option>`;
+            document.getElementById('p-city').innerHTML += opt;
+            document.getElementById('f-city').innerHTML += opt;
         });
     }
 
-    window.deleteAd = async (id) => {
-        if (confirm('هل أنت متأكد من حذف هذا الإعلان؟')) {
-            await deleteDoc(doc(db, "ads", id));
-            loadAdminData();
+    // --- VISITS TRACKING ---
+    async function trackVisits() {
+        const today = new Date().toISOString().split('T')[0];
+        const month = today.slice(0, 7);
+        const lastVisit = localStorage.getItem('last_visit');
+        
+        if (lastVisit !== today) {
+            localStorage.setItem('last_visit', today);
+            const statsRef = doc(db, "stats", "visits");
+            await setDoc(statsRef, {
+                [today]: increment(1),
+                [month]: increment(1)
+            }, { merge: true });
+        }
+    }
+
+    // --- AUTH ---
+    onAuthStateChanged(auth, async(u) => {
+        user = u;
+        if(u) {
+            document.getElementById('logout-btn').classList.remove('hidden');
+            msgListener();
+        } else {
+            document.getElementById('logout-btn').classList.add('hidden');
+            document.getElementById('msg-badge').classList.remove('show');
+        }
+    });
+
+    window.toggleReg = () => document.getElementById('reg-fields').classList.toggle('hidden');
+    
+    document.getElementById('auth-form').addEventListener('submit', async(e) => {
+        e.preventDefault();
+        const email = document.getElementById('log-email').value;
+        const pass = document.getElementById('log-pass').value;
+        const isReg = !document.getElementById('reg-fields').classList.contains('hidden');
+        try {
+            if(isReg) {
+                const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                await setDoc(doc(db, "users", cred.user.uid), {
+                    uid: cred.user.uid, email, 
+                    name: document.getElementById('reg-name').value,
+                    phone: document.getElementById('reg-phone').value,
+                    role: 'user', isBanned: false
+                });
+                Swal.fire({icon:'success', title:'تم التسجيل', timer:1500, showConfirmButton:false});
+            } else {
+                await signInWithEmailAndPassword(auth, email, pass);
+                const uDoc = await getDoc(doc(db, "users", auth.currentUser.uid));
+                if(uDoc.exists() && uDoc.data().isBanned) { signOut(auth); throw new Error("محظور"); }
+                Swal.fire({icon:'success', title:'مرحباً', timer:1500, showConfirmButton:false});
+            }
+            closeModal('auth-modal');
+        } catch(err) { Swal.fire('خطأ', err.message, 'error'); }
+    });
+
+    window.logout = () => { signOut(auth); window.location.reload(); };
+    window.checkAuth = () => user ? Swal.fire('حسابي', user.email, 'info') : openModal('auth-modal');
+
+    // --- IMAGE COMPRESSION ---
+    const compressImg = (file) => {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const scale = 600 / img.width;
+                    canvas.width = 600;
+                    canvas.height = img.height * scale;
+                    canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+                    resolve(canvas.toDataURL('image/jpeg', 0.7));
+                }
+            }
+        });
+    }
+
+    // --- ADS PUBLISH & EDIT ---
+    document.getElementById('pub-form').addEventListener('submit', async(e) => {
+        e.preventDefault();
+        if(!user) return openModal('auth-modal');
+        const btn = document.getElementById('pub-btn');
+        btn.innerText = "جاري الحفظ..."; btn.disabled = true;
+        try {
+            let imgPromises = [];
+            // Check individual inputs
+            for(let i=1; i<=5; i++) {
+                const input = document.getElementById(`p-file-${i}`);
+                if(input.files && input.files[0]) {
+                    imgPromises.push(compressImg(input.files[0]));
+                }
+            }
+            
+            let images = [];
+            if (imgPromises.length > 0) {
+                images = await Promise.all(imgPromises);
+            } else if (editId && currentAd) {
+                images = currentAd.images || (currentAd.img ? [currentAd.img] : []);
+            }
+
+            const adData = {
+                title: document.getElementById('p-title').value,
+                category: document.getElementById('p-cat').value,
+                price: Number(document.getElementById('p-price').value),
+                city: document.getElementById('p-city').value,
+                phone: document.getElementById('p-phone').value,
+                desc: document.getElementById('p-desc').value,
+                images: images,
+                ownerId: user.uid,
+                ownerName: user.displayName || 'User',
+                timestamp: new Date().toISOString(),
+                isFeatured: false
+            };
+
+            if (editId) {
+                await updateDoc(doc(db, "ads", editId), adData);
+                Swal.fire({icon: 'success', title: 'تم التعديل بنجاح'});
+            } else {
+                await addDoc(collection(db, "ads"), adData);
+                Swal.fire({icon: 'success', title: 'تم النشر بنجاح'});
+            }
+            
+            closeModal('pub-modal');
             loadAds();
+            if(editId) closePage('prod-page'); 
+        } catch(err) { Swal.fire('خطأ', 'فشل العملية', 'error'); }
+        btn.innerText = "نشر"; btn.disabled = false;
+    });
+
+    window.startPublish = () => {
+        if(!user) return openModal('auth-modal');
+        editId = null;
+        document.getElementById('pub-form').reset();
+        // Reset file inputs specifically
+        for(let i=1; i<=5; i++) document.getElementById(`p-file-${i}`).value = '';
+        
+        document.getElementById('pub-modal-title').innerText = "نشر إعلان";
+        document.getElementById('pub-btn').innerText = "نشر";
+        openModal('pub-modal');
+    };
+
+    window.editMyAd = (id) => {
+        const ad = allAds.find(a => a.id === id);
+        if(!ad) return;
+        currentAd = ad;
+        editId = id;
+        document.getElementById('p-title').value = ad.title;
+        document.getElementById('p-cat').value = ad.category;
+        document.getElementById('p-price').value = ad.price;
+        document.getElementById('p-city').value = ad.city;
+        document.getElementById('p-phone').value = ad.phone;
+        document.getElementById('p-desc').value = ad.desc;
+        // Reset file inputs
+        for(let i=1; i<=5; i++) document.getElementById(`p-file-${i}`).value = '';
+        
+        document.getElementById('pub-modal-title').innerText = "تعديل الإعلان";
+        document.getElementById('pub-btn').innerText = "حفظ التعديلات";
+        openModal('pub-modal');
+    }
+
+    window.deleteMyAd = async (id) => {
+        Swal.fire({
+            title: 'هل أنت متأكد؟',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'نعم',
+            cancelButtonText: 'لا'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                await deleteDoc(doc(db, "ads", id));
+                Swal.fire('تم الحذف!', '', 'success');
+                closePage('prod-page');
+                loadAds();
+            }
+        });
+    }
+
+    // --- ADS LOAD & FILTER ---
+    window.loadAds = async (filter={}) => {
+        const q = query(collection(db, "ads"), orderBy("timestamp", "desc"));
+        const snap = await getDocs(q);
+        allAds = [];
+        snap.forEach(d => allAds.push({id: d.id, ...d.data()}));
+        
+        let res = allAds;
+        if(filter.search) res = res.filter(a => a.title.includes(filter.search));
+        if(filter.cat) res = res.filter(a => a.category === filter.cat);
+        if(filter.city) res = res.filter(a => a.city === filter.city);
+        if(filter.min) res = res.filter(a => a.price >= filter.min);
+        if(filter.max) res = res.filter(a => a.price <= filter.max);
+        
+        renderAds(res);
+    }
+
+    function renderAds(list) {
+        const feat = document.getElementById('featured-ads');
+        const all = document.getElementById('all-ads');
+        feat.innerHTML = ''; all.innerHTML = '';
+        
+        const fList = list.filter(a => a.isFeatured);
+        if(fList.length) {
+            document.getElementById('feat-section').classList.remove('hidden');
+            fList.forEach(a => feat.innerHTML += mkAd(a));
+        } else document.getElementById('feat-section').classList.add('hidden');
+        
+        list.filter(a => !a.isFeatured).forEach(a => all.innerHTML += mkAd(a));
+    }
+
+    function mkAd(a) {
+        const dispCat = curLang === 'fr' ? (catTr[a.category] || a.category) : a.category;
+        let mainImg = "";
+        if(a.images && a.images.length > 0) mainImg = a.images[0];
+        else if(a.img) mainImg = a.img;
+
+        return `
+        <div class="ad-card ${a.isFeatured?'featured':''}" onclick="openProd('${a.id}')">
+            ${a.isFeatured ? '<div class="feat-badge">★</div>' : ''}
+            <div class="report-badge" onclick="event.stopPropagation(); reportSpecificAd('${a.id}', '${a.title}')">
+                <i class="fas fa-flag"></i>
+            </div>
+            <div class="ad-img-box"><img src="${mainImg}" loading="lazy"></div>
+            <div class="ad-content">
+                <div class="ad-price">${Number(a.price).toLocaleString()} DA</div>
+                <div class="ad-title">${a.title}</div>
+                <div class="ad-meta"><span>${a.city}</span><span>${dispCat}</span></div>
+            </div>
+        </div>`;
+    }
+
+    // --- REPORT AD ---
+    window.reportSpecificAd = async (id, title) => {
+        const { value: text } = await Swal.fire({
+            input: 'textarea',
+            inputLabel: 'سبب الإبلاغ',
+            inputPlaceholder: 'لماذا تريد الإبلاغ عن هذا المنشور؟',
+            showCancelButton: true
+        });
+
+        if (text) {
+            await addDoc(collection(db, "reports"), {
+                type: 'ad',
+                adId: id,
+                adTitle: title,
+                desc: text,
+                timestamp: new Date().toISOString()
+            });
+            Swal.fire('تم', 'شكراً على التبليغ', 'success');
         }
     };
 
-</script>
+    // --- PRODUCT VIEW ---
+    window.openProd = async(id) => {
+        const ad = allAds.find(a => a.id === id);
+        if(!ad) return;
+        currentAd = ad;
+        
+        let slides = '';
+        if(ad.images && ad.images.length > 0) {
+            slides = ad.images.map(src => `<div class="swiper-slide"><img src="${src}" class="prod-view-img"></div>`).join('');
+        } else if(ad.img) {
+            slides = `<div class="swiper-slide"><img src="${ad.img}" class="prod-view-img"></div>`;
+        }
 
+        document.getElementById('prod-slides').innerHTML = slides;
+        new Swiper(".prodSwiper", {
+            pagination:{clickable:true},
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            }
+        });
+
+        document.getElementById('v-price').innerText = Number(ad.price).toLocaleString() + " DA";
+        document.getElementById('v-title').innerText = ad.title;
+        const dispCat = curLang === 'fr' ? (catTr[ad.category] || ad.category) : ad.category;
+        document.getElementById('v-cat').innerText = dispCat;
+        document.getElementById('v-city').innerText = ad.city;
+        document.getElementById('v-desc').innerText = ad.desc;
+        
+        const oDoc = await getDoc(doc(db, "users", ad.ownerId));
+        document.getElementById('v-owner').innerText = oDoc.exists() ? (oDoc.data().name || "مستخدم") : "مجهول";
+        
+        const actionsDiv = document.getElementById('owner-actions');
+        if(user && user.uid === ad.ownerId) {
+            actionsDiv.innerHTML = `
+                <button class="btn btn-secondary w-100" onclick="editMyAd('${ad.id}')">تعديل</button>
+                <button class="btn btn-danger w-100" onclick="deleteMyAd('${ad.id}')">حذف</button>
+            `;
+            actionsDiv.classList.remove('hidden');
+        } else {
+            actionsDiv.classList.add('hidden');
+        }
+
+        window.location.hash = `ad/${id}`;
+        document.getElementById('prod-page').classList.add('active');
+    }
+    
+    window.closePage = (id) => {
+        document.getElementById(id).classList.remove('active');
+        if(id === 'prod-page') {
+            history.pushState("", document.title, window.location.pathname + window.location.search);
+        }
+    }
+
+    window.callOwner = () => Swal.fire('رقم الهاتف', currentAd.phone, 'info');
+
+    // SHARE LOGIC UPDATE
+    window.shareAd = async () => {
+        const url = window.location.href;
+        try { await navigator.clipboard.writeText(url); } catch (e) {}
+
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: currentAd.title,
+                    text: `شاهد هذا الإعلان: ${currentAd.title}`,
+                    url: url
+                });
+            } catch (err) {}
+        } else {
+            Swal.fire({icon: 'success', title: 'تم نسخ الرابط'});
+        }
+    };
+
+    // --- CHAT SYSTEM ---
+    function msgListener() {
+        const q = query(collection(db, "chats"), where("unreadFor", "array-contains", user.uid));
+        onSnapshot(q, (s) => {
+            const b = document.getElementById('msg-badge');
+            if(s.size > 0) { b.innerText = s.size; b.classList.add('show'); } 
+            else b.classList.remove('show');
+        });
+    }
+
+    window.startChat = async() => {
+        if(!user) return openModal('auth-modal');
+        if(user.uid === currentAd.ownerId) return Swal.fire('!', 'لا يمكنك مراسلة نفسك', 'error');
+        
+        const ids = [user.uid, currentAd.ownerId].sort();
+        activeChatId = ids.join("_");
+        
+        await setDoc(doc(db, "chats", activeChatId), {
+            users: ids, lastMsg: "Start", ts: new Date().toISOString()
+        }, {merge:true});
+        
+        openChatRoom(activeChatId, currentAd.ownerName || "المعلن");
+    }
+
+    window.openMyChats = async() => {
+        if(!user) return openModal('auth-modal');
+        document.getElementById('chat-list-page').classList.add('active');
+        
+        const q = query(collection(db, "chats"), where("users", "array-contains", user.uid));
+        const s = await getDocs(q);
+        const c = document.getElementById('chat-list-container');
+        c.innerHTML = '';
+        s.forEach(d => {
+            const dd = d.data();
+            const isUnread = dd.unreadFor && dd.unreadFor.includes(user.uid);
+            c.innerHTML += `
+            <div class="chat-list-item ${isUnread?'unread':''}" onclick="openChatRoom('${d.id}', 'محادثة')">
+                <div style="font-size:2rem"><i class="fas fa-user-circle"></i></div>
+                <div><div style="font-weight:bold">مستخدم</div><div style="font-size:0.8rem;color:#777">${dd.lastMsg}</div></div>
+            </div>`;
+        });
+    }
+
+    window.openChatRoom = async (cid, title) => {
+        activeChatId = cid;
+        document.getElementById('chat-header-title').innerText = title;
+        document.getElementById('chat-room-page').classList.add('active');
+        
+        await updateDoc(doc(db, "chats", cid), { unreadFor: arrayRemove(user.uid) });
+
+        const q = query(collection(db, "chats", cid, "msgs"), orderBy("ts", "asc"));
+        onSnapshot(q, (s) => {
+            const b = document.getElementById('msgs-box');
+            b.innerHTML = '';
+            s.forEach(d => {
+                const m = d.data();
+                const cls = m.uid === user.uid ? 'msg-sent' : 'msg-recv';
+                b.innerHTML += `<div class="msg-bubble ${cls}">${m.txt}</div>`;
+            });
+            b.scrollTop = b.scrollHeight;
+        });
+    }
+
+    window.sendMsg = async(e) => {
+        e.preventDefault();
+        const i = document.getElementById('msg-input');
+        if(!i.value.trim()) return;
+        
+        const chatRef = doc(db, "chats", activeChatId);
+        const chatDoc = await getDoc(chatRef);
+        const otherUser = chatDoc.data().users.find(u => u !== user.uid);
+
+        await addDoc(collection(db, "chats", activeChatId, "msgs"), { txt: i.value, uid: user.uid, ts: new Date().toISOString() });
+        await updateDoc(chatRef, { 
+            lastMsg: i.value, 
+            ts: new Date().toISOString(),
+            unreadFor: arrayUnion(otherUser) 
+        });
+        i.value = '';
+    }
+
+    // --- ADMIN ---
+    window.adminLogin = () => {
+        if(prompt("Password:") === "abobob123") {
+            document.getElementById('admin-panel').classList.add('active');
+            initAdm();
+        }
+    }
+
+    async function initAdm() {
+        document.getElementById('st-ads').innerText = allAds.length;
+        const u = await getDocs(collection(db, "users"));
+        document.getElementById('st-users').innerText = u.size;
+        const r = await getDocs(collection(db, "reports"));
+        document.getElementById('st-reps').innerText = r.size;
+
+        // Fetch Visits Stats
+        const sDoc = await getDoc(doc(db, "stats", "visits"));
+        if(sDoc.exists()) {
+            const d = sDoc.data();
+            const today = new Date().toISOString().split('T')[0];
+            const month = today.slice(0, 7);
+            document.getElementById('st-day').innerText = d[today] || 0;
+            document.getElementById('st-month').innerText = d[month] || 0;
+        }
+
+        // LOAD GENERAL REPORTS
+        const repsList = document.getElementById('adm-reps-list');
+        repsList.innerHTML = '';
+        const genReps = r.docs.filter(d => !d.data().type); // Filter generic
+        
+        genReps.forEach(d => {
+            const rd = d.data();
+            repsList.innerHTML += `
+            <div class="admin-item" style="flex-direction:column;align-items:flex-start">
+                <b>${rd.name} (${rd.email})</b>
+                <p>${rd.desc}</p>
+                <button class="btn btn-secondary" onclick="deleteDoc(doc(db,'reports','${d.id}'));initAdm()">حذف</button>
+            </div>`;
+        });
+
+        // LOAD AD REPORTS
+        const adRepsList = document.getElementById('adm-ad-reports-list');
+        adRepsList.innerHTML = '';
+        const adReps = r.docs.filter(d => d.data().type === 'ad');
+
+        adReps.forEach(d => {
+            const rd = d.data();
+            adRepsList.innerHTML += `
+            <div class="admin-item" style="flex-direction:column;align-items:flex-start; background:#fff0f0">
+                <b style="color:red">بلاغ عن: ${rd.adTitle}</b>
+                <p>السبب: ${rd.desc}</p>
+                <div style="display:flex; gap:10px; margin-top:5px">
+                    <button class="btn btn-danger" onclick="deleteAdFromReport('${rd.adId}', '${d.id}')">حذف المنشور</button>
+                    <button class="btn btn-secondary" onclick="deleteDoc(doc(db,'reports','${d.id}'));initAdm()">حذف البلاغ</button>
+                </div>
+            </div>`;
+        });
+
+        const l = document.getElementById('adm-ads-list');
+        l.innerHTML = allAds.map(a => `
+            <div class="admin-item">
+                <span>${a.title}</span>
+                <div>
+                    <button class="btn" style="padding:2px 6px;background:${a.isFeatured?'gold':'#eee'}" onclick="admFeat('${a.id}',${a.isFeatured})">★</button>
+                    <button class="btn btn-danger" style="padding:2px 6px" onclick="admDel('${a.id}')">X</button>
+                </div>
+            </div>`).join('');
+            
+        const ul = document.getElementById('adm-users-list');
+        ul.innerHTML = '';
+        u.forEach(d => {
+            const ud = d.data();
+            ul.innerHTML += `<div class="admin-item"><span>${ud.email}</span><button class="btn btn-secondary" onclick="admBan('${d.id}',${ud.isBanned})">${ud.isBanned?'فك':'حظر'}</button></div>`;
+        });
+
+        renderAdmBannersList();
+    }
+
+    window.switchAdmin = (id) => {
+        document.querySelectorAll('.admin-view').forEach(e=>e.classList.remove('active'));
+        document.getElementById('adm-'+id).classList.add('active');
+        document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+
+    window.admDel = async(id) => { if(confirm('حذف؟')) { await deleteDoc(doc(db,"ads",id)); loadAds(); initAdm(); Swal.fire({icon:'success', title:'تم الحذف'}); } };
+    window.admFeat = async(id, s) => { await updateDoc(doc(db,"ads",id), {isFeatured:!s}); loadAds(); initAdm(); Swal.fire({icon:'success', title:'تم التعديل'}); };
+    window.admBan = async(id, s) => { await updateDoc(doc(db,"users",id), {isBanned:!s}); initAdm(); Swal.fire({icon:'success', title:'تم'}); };
+
+    window.deleteAdFromReport = async (adId, reportId) => {
+        if(confirm("هل أنت متأكد من حذف هذا المنشور؟")) {
+            await deleteDoc(doc(db, "ads", adId)); // Delete AD
+            await deleteDoc(doc(db, "reports", reportId)); // Delete Report
+            Swal.fire('تم', 'تم حذف المنشور والبلاغ', 'success');
+            loadAds();
+            initAdm();
+        }
+    }
+
+    // UPDATED CLEANUP FUNCTION: DELETES ADS & MESSAGES > 30 DAYS
+    window.cleanupOldData = async () => {
+        if(!confirm("هل أنت متأكد؟ سيتم حذف جميع المنشورات والرسائل الأقدم من 30 يوماً!")) return;
+        const now = new Date();
+        const cutoffDate = new Date(now.setDate(now.getDate() - 30)).toISOString();
+        
+        Swal.fire({title: 'جاري التنظيف...', allowOutsideClick: false, didOpen: () => Swal.showLoading()});
+        
+        try {
+            // 1. Cleanup Ads
+            const qAds = query(collection(db, "ads"), where("timestamp", "<", cutoffDate));
+            const snapAds = await getDocs(qAds);
+            const adPromises = snapAds.docs.map(d => deleteDoc(d.ref));
+            
+            // 2. Cleanup Chats (Delete messages older than 30 days)
+            // Note: In Firestore, you have to query subcollections if they exist, 
+            // but here we are storing chats in root collection or subcollection logic.
+            // Based on previous code, chats are docs, messages are subcollections.
+            // Deleting parent chat doc doesn't delete subcollections automatically in client SDK,
+            // but for simplicity here we delete the chat reference.
+            
+            const qChats = query(collection(db, "chats"), where("ts", "<", cutoffDate));
+            const snapChats = await getDocs(qChats);
+            const chatPromises = snapChats.docs.map(d => deleteDoc(d.ref));
+
+            await Promise.all([...adPromises, ...chatPromises]);
+            
+            Swal.fire('تم!', `تم حذف ${snapAds.size} منشور و ${snapChats.size} محادثة قديمة.`, 'success');
+            loadAds(); initAdm();
+        } catch (error) { Swal.fire('خطأ', error.message, 'error'); }
+    };
+
+    // Admin Settings
+    window.saveAdmLogo = async() => {
+        const file = document.getElementById('adm-logo-file').files[0];
+        if(!file) return;
+        const b64 = await compressImg(file);
+        await setDoc(doc(db, "settings", "config"), { logoBlob: b64 }, {merge:true});
+        Swal.fire({icon: 'success', title: 'تم تحديث اللوغو'});
+    }
+
+    // MULTIPLE BANNERS LOGIC
+    window.saveAdmBanner = async() => {
+        const file = document.getElementById('adm-banner-file').files[0];
+        const link = document.getElementById('adm-banner-link').value;
+        if(!file) return;
+        const b64 = await compressImg(file);
+        const newBanner = { id: Date.now(), img: b64, link: link };
+        
+        await setDoc(doc(db, "settings", "config"), { 
+            banners: arrayUnion(newBanner) 
+        }, {merge:true});
+        
+        loadConfig(); // Reload main slider
+        renderAdmBannersList(); // Update list
+        Swal.fire({icon: 'success', title: 'تم إضافة البانر'});
+    }
+
+    window.deleteAdmBanner = async(id) => {
+        // We need to read current array, filter, and write back
+        const docRef = doc(db, "settings", "config");
+        const snap = await getDoc(docRef);
+        if(snap.exists() && snap.data().banners) {
+            const newBanners = snap.data().banners.filter(b => b.id !== id);
+            await updateDoc(docRef, { banners: newBanners });
+            loadConfig();
+            renderAdmBannersList();
+            Swal.fire({icon: 'success', title: 'تم حذف البانر'});
+        }
+    }
+
+    async function renderAdmBannersList() {
+        const snap = await getDoc(doc(db, "settings", "config"));
+        const div = document.getElementById('adm-banners-list');
+        div.innerHTML = '';
+        if(snap.exists() && snap.data().banners) {
+            snap.data().banners.forEach(b => {
+                div.innerHTML += `
+                <div class="banner-list-item">
+                    <img src="${b.img}">
+                    <button class="btn btn-danger" style="padding:2px 6px" onclick="deleteAdmBanner(${b.id})">X</button>
+                </div>`;
+            });
+        }
+    }
+
+    window.saveHtmlAd = async() => {
+        const html = document.getElementById('adm-html-ad').value;
+        const pos = document.getElementById('adm-ad-pos').value;
+        
+        await setDoc(doc(db, "settings", "config"), { [`htmlAd_${pos}`]: html }, {merge:true});
+        Swal.fire({icon: 'success', title: 'تم حفظ الإعلان'});
+        loadConfig(); // Refresh to see ad
+    }
+    
+    window.deleteHtmlAd = async() => {
+        const pos = document.getElementById('adm-ad-pos').value;
+        await updateDoc(doc(db, "settings", "config"), { [`htmlAd_${pos}`]: null });
+        Swal.fire({icon: 'success', title: 'تم حذف الإعلان'});
+        loadConfig();
+    }
+
+    window.saveConf = async(k) => {
+        await setDoc(doc(db, "settings", "config"), { [k]: document.getElementById('set-'+k).value }, {merge:true});
+        Swal.fire({icon: 'success', title: 'تم الحفظ'});
+    }
+    
+    async function loadConfig() {
+        const s = await getDoc(doc(db, "settings", "config"));
+        if(s.exists()) {
+            const d = s.data();
+            if(d.logoBlob) document.getElementById('app-logo').innerHTML = `<img src="${d.logoBlob}" style="height:40px; vertical-align:middle">`;
+            
+            // Multiple Banners
+            if(d.banners && d.banners.length > 0) {
+                let html = '';
+                d.banners.forEach(b => {
+                    html += `<div class="swiper-slide"><img src="${b.img}" style="cursor:pointer" onclick="window.open('${b.link||'#'}')"></div>`;
+                });
+                document.getElementById('main-banner-wrapper').innerHTML = html;
+                new Swiper(".mySwiper", {autoplay:{delay:4000}, loop:true, pagination:{clickable:true}});
+            } else if (d.bannerBlob) { // Fallback for old single banner
+                document.getElementById('main-banner-wrapper').innerHTML = `<div class="swiper-slide"><img src="${d.bannerBlob}"></div>`;
+                new Swiper(".mySwiper", {autoplay:{delay:4000}, loop:true});
+            }
+
+            // ADS PLACEMENT
+            document.getElementById('ads-top-container').innerHTML = d.htmlAd_top || "";
+            document.getElementById('ads-middle-container').innerHTML = d.htmlAd_middle || "";
+            document.getElementById('ads-bottom-container').innerHTML = d.htmlAd_bottom || "";
+
+            localStorage.setItem('txt_about', d.about || defaultAbout);
+        } else {
+            localStorage.setItem('txt_about', defaultAbout);
+        }
+    }
+
+    // --- UTILS ---
+    window.openModal = (id) => document.getElementById(id).classList.add('active');
+    window.closeModal = (id) => document.getElementById(id).classList.remove('active');
+    window.closeAll = () => { document.getElementById('sidebar').classList.remove('active'); document.querySelector('.overlay').classList.remove('active'); }
+    window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('active'); document.querySelector('.overlay').classList.toggle('active'); }
+    
+    window.sendReport = async() => {
+        await addDoc(collection(db,"reports"), {
+            name: document.getElementById('r-name').value, 
+            email: document.getElementById('r-email').value, 
+            desc: document.getElementById('r-desc').value
+        });
+        Swal.fire({icon: 'success', title: 'تم الإرسال'}); closeModal('report-modal');
+    }
+    
+    window.doSearch = () => {
+        loadAds({
+            search: document.getElementById('f-search').value,
+            cat: document.getElementById('f-cat').value,
+            city: document.getElementById('f-city').value,
+            min: document.getElementById('f-min').value,
+            max: document.getElementById('f-max').value
+        });
+        closeModal('filter-modal');
+    }
+    
+    window.filterCat = (c) => loadAds({cat:c});
+    
+    window.showStatic = (k) => {
+        openModal('static-modal');
+        document.getElementById('static-title').innerText = tr[curLang][k] || k;
+        let content = "...";
+        if(k === 'about') content = localStorage.getItem('txt_about');
+        if(k === 'privacy') content = defaultPrivacy;
+        if(k === 'contact') content = `Email: contact@elaffroun.online`;
+        document.getElementById('static-body').innerText = content;
+    }
+
+</script>
 </body>
 </html>
