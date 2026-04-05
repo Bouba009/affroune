@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>El Affroun Online</title>
     
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- الملحقات الأساسية -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -17,378 +17,134 @@
             --secondary: #2c3e50;
             --bg: #f4f6f9;
             --white: #ffffff;
-            --gold: #ffc107;
-            --chat-sent: #dcf8c6;
-            --chat-recv: #ffffff;
-            --radius: 10px;
             --shadow: 0 4px 10px rgba(0,0,0,0.08);
-            --transition: all 0.3s ease;
+            --radius: 10px;
         }
 
-        html[dir="ltr"] { font-family: 'Roboto', sans-serif; }
-        html[dir="ltr"] .sidebar { right: auto; left: -280px; }
-        html[dir="ltr"] .sidebar.active { left: 0; }
-        html[dir="ltr"] .fab-zone { left: auto; right: 20px; }
-        html[dir="ltr"] .cat-card { margin-left: 0; margin-right: 15px; }
-        
-        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; font-family: 'Cairo', sans-serif; }
-        body { background-color: var(--bg); color: #333; padding-bottom: 90px; overflow-x: hidden; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg); color: #333; padding-bottom: 70px; }
 
         /* Loader */
-        #app-loader { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.5s; }
+        #app-loader { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
         .spinner { width: 50px; height: 50px; border: 5px solid #eee; border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        .hidden { display: none !important; }
-        .flex { display: flex; align-items: center; }
-        .center { display: flex; justify-content: center; align-items: center; }
-        .btn { padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; transition: var(--transition); display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; }
-        .btn:active { transform: scale(0.97); }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-secondary { background: var(--secondary); color: white; }
-        .btn-danger { background: #dc3545; color: white; }
-        .btn-success { background: #28a745; color: white; }
-        .btn-info { background: #17a2b8; color: white; }
-        .w-100 { width: 100%; }
-        
-        .swal2-container { z-index: 10000 !important; }
 
         header { background: var(--white); height: 60px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.05); padding: 0 15px; display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 1.3rem; font-weight: 800; color: var(--secondary); }
         .logo span { color: var(--primary); }
-        .nav-icons { display: flex; gap: 15px; align-items: center; }
-        .nav-icon { font-size: 1.4rem; color: var(--secondary); cursor: pointer; position: relative; }
-        .badge { position: absolute; top: -5px; right: -5px; background: red; color: white; font-size: 0.6rem; padding: 2px 5px; border-radius: 50%; display: none; }
-        .badge.show { display: block; }
-        .lang-switch { font-size: 0.8rem; font-weight: bold; border: 1px solid #ddd; padding: 4px 8px; border-radius: 4px; cursor: pointer; }
+        .nav-icons { display: flex; gap: 15px; font-size: 1.3rem; color: var(--secondary); }
 
-        .sidebar { position: fixed; top: 0; right: -280px; width: 280px; height: 100%; background: white; z-index: 1200; transition: var(--transition); box-shadow: 0 0 15px rgba(0,0,0,0.2); display: flex; flex-direction: column; padding: 20px; }
-        .sidebar.active { right: 0; }
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1100; display: none; backdrop-filter: blur(2px); }
-        .overlay.active { display: block; }
-        .menu-item { padding: 15px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-        
-        .swiper { width: 100%; height: 200px; margin-bottom: 15px; border-radius: 0 0 15px 15px; direction: ltr !important; }
+        .swiper { width: 100%; height: 200px; }
         .swiper-slide img { width: 100%; height: 100%; object-fit: cover; }
 
-        .cats-scroll { overflow-x: auto; padding: 10px 15px; white-space: nowrap; scrollbar-width: none; background: white; margin-bottom: 15px; }
-        .cats-scroll::-webkit-scrollbar { display: none; }
-        .cat-card { display: inline-flex; flex-direction: column; align-items: center; margin-left: 15px; width: 80px; cursor: pointer; }
-        .cat-img { width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid #eee; margin-bottom: 5px; transition: var(--transition); }
-        .cat-card:hover .cat-img { border-color: var(--primary); transform: scale(1.05); }
-        .cat-name { font-size: 0.7rem; font-weight: 700; color: var(--secondary); text-align: center; white-space: normal; line-height: 1.2; }
+        .cats-scroll { overflow-x: auto; padding: 15px; white-space: nowrap; background: white; margin-bottom: 10px; }
+        .cat-card { display: inline-block; text-align: center; margin-left: 15px; width: 70px; cursor: pointer; }
+        .cat-card img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #eee; }
+        .cat-card span { font-size: 0.75rem; font-weight: 700; display: block; margin-top: 5px; }
 
-        .section-title { padding: 0 15px; margin: 20px 0 10px; display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 1.1rem; }
-        .ads-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; padding: 0 10px; max-width: 1200px; margin: 0 auto; }
-        
-        .ad-card { background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); position: relative; cursor: pointer; transition: transform 0.2s; }
-        .ad-card:active { transform: scale(0.98); }
-        .ad-card.featured { border: 2px solid var(--gold); }
-        .feat-badge { position: absolute; top: 8px; right: 8px; background: var(--gold); color: black; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; z-index: 2; }
-        .report-badge { position: absolute; top: 8px; left: 8px; background: rgba(255,255,255,0.8); color: red; padding: 5px; border-radius: 50%; font-size: 0.9rem; z-index: 3; cursor: pointer; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .ads-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 10px; }
+        .ad-card { background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); position: relative; }
+        .ad-img { height: 150px; background: #eee; width: 100%; object-fit: cover; }
+        .ad-info { padding: 10px; }
+        .ad-price { color: var(--primary); font-weight: 800; font-size: 1rem; }
+        .ad-title { font-size: 0.85rem; height: 35px; overflow: hidden; margin: 5px 0; font-weight: 600; }
 
-        .ad-img-box { height: 220px; background: #eee; display: flex; justify-content: center; align-items: center; overflow: hidden; }
-        .ad-img-box img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .ad-content { padding: 10px; }
-        .ad-price { color: var(--primary); font-weight: 800; font-size: 1.1rem; }
-        .ad-title { font-size: 0.9rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 5px 0; }
-        .ad-meta { font-size: 0.7rem; color: #888; display: flex; justify-content: space-between; }
+        .fab { position: fixed; bottom: 20px; left: 20px; width: 60px; height: 60px; background: var(--primary); color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; box-shadow: 0 4px 15px rgba(242,101,34,0.4); z-index: 900; border: none; cursor: pointer; }
 
-        .custom-ads-box { padding: 10px; margin: 10px 0; text-align: center; overflow: hidden; }
+        .full-page { position: fixed; inset: 0; background: white; z-index: 1500; display: none; overflow-y: auto; flex-direction: column; }
+        .full-page.active { display: flex; }
+        .page-header { padding: 15px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; }
 
-        .fab-zone { position: fixed; bottom: 25px; left: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 900; }
-        .fab { width: 55px; height: 55px; border-radius: 50%; border: none; color: white; font-size: 1.3rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; opacity: 0.6; transition: 0.3s; }
-        .fab:hover, .fab:active { opacity: 1; transform: scale(1.1); }
-        .fab-main { background: var(--primary); font-size: 1.5rem; }
-        .fab-sec { background: var(--secondary); }
+        .form-input, .form-select, .form-area { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 10px; font-size: 1rem; }
+        .btn-main { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; }
 
-        .modal-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
-        .modal-wrap.active { display: flex; }
-        .modal-content { background: white; width: 90%; max-width: 450px; border-radius: 12px; padding: 20px; max-height: 85vh; overflow-y: auto; position: relative; animation: slideUp 0.3s ease; }
-        .close-modal { position: absolute; top: 15px; left: 15px; font-size: 1.5rem; cursor: pointer; color: #999; }
-        
-        .form-input, .form-select, .form-area { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.95rem; margin-bottom: 10px; }
-        .file-input { width: 100%; padding: 10px; background: #f9f9f9; border: 1px dashed #ccc; border-radius: 6px; margin-bottom: 10px; }
-
-        .full-page { position: fixed; inset: 0; background: white; z-index: 1500; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s ease; display: flex; flex-direction: column; }
-        .full-page.active { transform: translateY(0); }
-        
-        .page-header { padding: 15px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; position: sticky; top: 0; background: white; z-index: 10; }
-        .page-back { font-size: 1.2rem; cursor: pointer; }
-        
-        .chat-list-item { padding: 15px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 15px; cursor: pointer; }
-        .chat-list-item.unread { background: #eef7ff; font-weight: bold; border-right: 4px solid var(--primary); }
-
-        .chat-room { flex: 1; background: #e5ddd5; display: flex; flex-direction: column; }
-        .msgs-container { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; }
-        .msg-bubble { max-width: 75%; padding: 8px 12px; border-radius: 12px; font-size: 0.9rem; position: relative; word-wrap: break-word; }
-        .msg-sent { align-self: flex-end; background: var(--chat-sent); border-bottom-left-radius: 0; }
-        .msg-recv { align-self: flex-start; background: var(--chat-recv); border-bottom-right-radius: 0; }
-        .chat-input { padding: 10px; background: white; display: flex; gap: 10px; border-top: 1px solid #ddd; }
-
-        #admin-panel { z-index: 5000; background: #f4f6f9; }
-        .admin-header { background: var(--secondary); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .admin-tabs { display: flex; gap: 10px; overflow-x: auto; padding: 10px; background: white; }
-        .tab-btn { padding: 6px 15px; background: #eee; border-radius: 20px; white-space: nowrap; cursor: pointer; font-size: 0.85rem; }
-        .tab-btn.active { background: var(--secondary); color: white; }
-        .admin-view { padding: 15px; display: none; }
-        .admin-view.active { display: block; }
-        .stat-card { background: white; padding: 15px; border-radius: 8px; text-align: center; box-shadow: var(--shadow); margin-bottom: 10px; }
-        .admin-item { background: white; padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-
-        .banner-list-item { display: flex; align-items: center; justify-content: space-between; border: 1px solid #eee; padding: 5px; margin-bottom: 5px; border-radius: 5px; }
-        .banner-list-item img { height: 40px; width: 60px; object-fit: cover; }
-
-        footer { text-align: center; padding: 30px; color: #999; margin-top: 20px; font-size: 0.8rem; }
-        
-        .swiper.prodSwiper { width: 100%; height: 55vh !important; min-height: 400px; background: #000; margin: 0; direction: ltr !important; }
-        .swiper-slide img.prod-view-img { width: 100%; height: 100%; object-fit: contain; }
+        #admin-panel { background: #f8f9fa; z-index: 2000; }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-<div id="app-loader">
-    <div class="spinner"></div>
-    <h3 style="margin-top:20px;color:#555">El Affroun Online</h3>
-</div>
+<div id="app-loader"><div class="spinner"></div></div>
 
 <header>
-    <div class="flex">
-        <i class="fas fa-bars nav-icon" onclick="toggleSidebar()"></i>
-        <div class="logo" id="app-logo">El Affroun <span>Online</span></div>
-    </div>
+    <div class="logo">El Affroun <span>Online</span></div>
     <div class="nav-icons">
-        <div class="lang-switch" onclick="toggleLang()" id="lang-txt">FR</div>
-        <i class="fas fa-search nav-icon" onclick="openModal('filter-modal')"></i>
-        <i class="fas fa-envelope nav-icon" onclick="openMyChats()">
-            <span class="badge" id="msg-badge">0</span>
-        </i>
-        <i class="fas fa-user-circle nav-icon" onclick="checkAuth()"></i>
+        <i class="fas fa-search" onclick="Swal.fire('قريباً', 'ميزة البحث تحت التطوير', 'info')"></i>
+        <i class="fas fa-user-circle" id="user-icon" onclick="handleAuth()"></i>
     </div>
 </header>
 
-<div class="overlay" onclick="closeAll()"></div>
-<div class="sidebar" id="sidebar">
-    <div class="flex" style="justify-content:space-between; margin-bottom:20px; border-bottom:1px solid #eee; padding-bottom:10px">
-        <h3 class="logo" data-tr="menu">القائمة</h3>
-        <i class="fas fa-times" style="font-size:1.5rem; cursor:pointer" onclick="toggleSidebar()"></i>
-    </div>
-    <div class="menu-item" onclick="window.location.reload()"><i class="fas fa-home"></i> <span data-tr="home">الرئيسية</span></div>
-    <div class="menu-item" onclick="openMyChats()"><i class="fas fa-comments"></i> <span data-tr="msgs">الرسائل</span></div>
-    <div class="menu-item" onclick="showStatic('about')"><i class="fas fa-info-circle"></i> <span data-tr="about">من نحن</span></div>
-    <div class="menu-item" onclick="showStatic('contact')"><i class="fas fa-phone"></i> <span data-tr="contact">اتصل بنا</span></div>
-    <div class="menu-item" onclick="showStatic('privacy')"><i class="fas fa-shield-alt"></i> <span data-tr="privacy">سياسة الخصوصية</span></div>
-    <div class="menu-item" onclick="openModal('report-modal')"><i class="fas fa-bug"></i> <span data-tr="report">إبلاغ</span></div>
-    <div class="menu-item hidden" id="logout-btn" onclick="logout()" style="color:var(--primary); margin-top:auto"><i class="fas fa-sign-out-alt"></i> <span data-tr="logout">خروج</span></div>
-</div>
-
 <main>
-    <div class="swiper mySwiper">
-        <div class="swiper-wrapper" id="main-banner-wrapper">
-            <div class="swiper-slide">
-                <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=800&q=80">
-            </div>
+    <div class="swiper mainSwiper">
+        <div class="swiper-wrapper" id="banner-wrapper">
+            <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&w=800&q=80"></div>
         </div>
         <div class="swiper-pagination"></div>
     </div>
-    
-    <div id="ads-top-container" class="custom-ads-box"></div>
-    <div class="cats-scroll" id="cats-container"></div>
-    <div id="ads-middle-container" class="custom-ads-box"></div>
 
-    <div id="feat-section" class="hidden">
-        <div class="section-title"><span style="color:var(--gold)" data-tr="featured">⭐ مميزة</span></div>
-        <div class="ads-grid" id="featured-ads"></div>
-    </div>
-
-    <div class="section-title">
-        <span data-tr="latest">📦 أحدث الإعلانات</span>
-        <small style="color:var(--primary); cursor:pointer" onclick="openModal('filter-modal')"><i class="fas fa-filter"></i></small>
-    </div>
-    <div class="ads-grid" id="all-ads"></div>
-    
-    <div id="ads-bottom-container" class="custom-ads-box"></div>
+    <div class="cats-scroll" id="cats-list"></div>
+    <div class="ads-grid" id="ads-list"></div>
 </main>
 
-<div class="fab-zone">
-    <button class="fab fab-sec center" onclick="openModal('filter-modal')"><i class="fas fa-sliders-h"></i></button>
-    <button class="fab fab-main center" onclick="startPublish()"><i class="fas fa-plus"></i></button>
-</div>
+<button class="fab" onclick="openPublish()"><i class="fas fa-plus"></i></button>
 
-<!-- === MODALS === -->
-<div class="modal-wrap" id="auth-modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeModal('auth-modal')">&times;</span>
-        <h2 style="text-align:center; margin-bottom:15px" data-tr="login">دخول</h2>
-        <form id="auth-form">
-            <input type="email" id="log-email" class="form-input" data-ph="ph_email" placeholder="البريد الإلكتروني" required>
-            <input type="password" id="log-pass" class="form-input" data-ph="ph_pass" placeholder="كلمة المرور" required>
-            <div id="reg-fields" class="hidden">
-                <input type="text" id="reg-name" class="form-input" data-ph="ph_name" placeholder="الاسم">
-                <input type="tel" id="reg-phone" class="form-input" data-ph="ph_phone" placeholder="الهاتف">
-            </div>
-            <button type="submit" class="btn btn-primary w-100" data-tr="submit">دخول</button>
-            <p style="text-align:center; margin-top:15px; color:var(--primary); cursor:pointer" onclick="toggleReg()">حساب جديد / دخول</p>
-        </form>
-    </div>
-</div>
-
-<div class="modal-wrap" id="pub-modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeModal('pub-modal')">&times;</span>
-        <h3 style="margin-bottom:15px" data-tr="pub_title" id="pub-modal-title">نشر إعلان</h3>
-        <form id="pub-form">
-            <input type="text" id="p-title" class="form-input" data-ph="ph_title" placeholder="العنوان" required>
-            <select id="p-cat" class="form-select" required></select>
-            <div class="flex" style="gap:10px; margin-bottom:10px">
-                <input type="number" id="p-price" class="form-input" data-ph="ph_price" placeholder="السعر (DA)" required>
-                <select id="p-city" class="form-select" required></select>
-            </div>
-            <input type="tel" id="p-phone" class="form-input" data-ph="ph_phone" placeholder="رقم الهاتف" required>
-            <textarea id="p-desc" class="form-area" rows="3" data-ph="ph_desc" placeholder="الوصف..."></textarea>
-            <label style="font-weight:bold; font-size:0.9rem" data-tr="img_upload">صور المنتج (الحد الأقصى 5 صور)</label>
-            <div id="image-inputs-container">
-                <input type="file" id="p-file-1" class="file-input" accept="image/*">
-                <input type="file" id="p-file-2" class="file-input" accept="image/*">
-                <input type="file" id="p-file-3" class="file-input" accept="image/*">
-                <input type="file" id="p-file-4" class="file-input" accept="image/*">
-                <input type="file" id="p-file-5" class="file-input" accept="image/*">
-            </div>
-            <button type="submit" class="btn btn-primary w-100" style="margin-top:15px" id="pub-btn" data-tr="publish">نشر</button>
-        </form>
-    </div>
-</div>
-
-<div class="modal-wrap" id="filter-modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeModal('filter-modal')">&times;</span>
-        <h3 data-tr="filter">فلترة</h3><br>
-        <input type="text" id="f-search" class="form-input" data-ph="ph_search" placeholder="بحث...">
-        <select id="f-cat" class="form-select" style="margin-bottom:10px"><option value="" data-tr="all_cats">كل الفئات</option></select>
-        <select id="f-city" class="form-select" style="margin-bottom:10px"><option value="" data-tr="all_cities">كل المدن</option></select>
-        <div class="flex" style="gap:10px">
-            <input type="number" id="f-min" class="form-input" data-ph="ph_min_price" placeholder="أدنى سعر">
-            <input type="number" id="f-max" class="form-input" data-ph="ph_max_price" placeholder="أقصى سعر">
-        </div>
-        <button onclick="doSearch()" class="btn btn-secondary w-100" data-tr="search">بحث</button>
-    </div>
-</div>
-
-<div class="modal-wrap" id="report-modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeModal('report-modal')">&times;</span>
-        <h3 data-tr="report">إبلاغ</h3><br>
-        <input type="text" id="r-name" class="form-input" data-ph="ph_name" placeholder="الاسم">
-        <input type="email" id="r-email" class="form-input" data-ph="ph_email" placeholder="البريد الإلكتروني">
-        <textarea id="r-desc" class="form-area" rows="3" data-ph="ph_desc" placeholder="الوصف"></textarea>
-        <button onclick="sendReport()" class="btn btn-danger w-100" style="margin-top:10px" data-tr="send">إرسال</button>
-    </div>
-</div>
-
-<!-- === FULL PAGES === -->
-<div class="full-page" id="prod-page">
+<!-- صفحة الإعلان التفصيلية -->
+<div class="full-page" id="details-page">
     <div class="page-header">
-        <i class="fas fa-arrow-right page-back" onclick="closePage('prod-page')"></i>
-        <h3 style="flex:1" data-tr="details">التفاصيل</h3>
+        <i class="fas fa-arrow-right" onclick="closePage('details-page')"></i>
+        <h3 id="det-header-title">التفاصيل</h3>
     </div>
-    <div class="swiper prodSwiper">
-        <div class="swiper-wrapper" id="prod-slides"></div>
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-pagination"></div>
+    <div id="det-content"></div>
+</div>
+
+<!-- صفحة النشر -->
+<div class="full-page" id="pub-page">
+    <div class="page-header">
+        <i class="fas fa-times" onclick="closePage('pub-page')"></i>
+        <h3>نشر إعلان جديد</h3>
     </div>
-    <div style="padding:20px; padding-bottom:100px">
-        <div id="owner-actions" class="hidden flex" style="gap:10px; margin-bottom:15px"></div>
-        <h2 id="v-price" style="color:var(--primary); font-size:1.5rem"></h2>
-        <h3 id="v-title" style="margin:5px 0 15px 0"></h3>
-        <div class="flex" style="gap:15px; color:#666; font-size:0.9rem; margin-bottom:20px">
-            <span><i class="fas fa-map-marker-alt"></i> <span id="v-city"></span></span>
-            <span><i class="fas fa-tag"></i> <span id="v-cat"></span></span>
-        </div>
-        <hr style="border:0; border-top:1px solid #eee; margin-bottom:15px">
-        <p id="v-desc" style="white-space: pre-wrap; line-height:1.6; color:#444"></p>
-        <div style="margin-top:25px; background:#f9f9f9; padding:15px; border-radius:8px">
-            <small data-tr="owner">المعلن</small>
-            <div id="v-owner" style="font-weight:bold; font-size:1.1rem; margin-bottom:10px"></div>
-            <div style="display:flex; gap:10px;">
-                <button class="btn btn-success w-100" onclick="callOwner()"><i class="fas fa-phone"></i> <span data-tr="call">اتصال</span></button>
-                <button class="btn btn-primary w-100" onclick="startChat()"><i class="fas fa-comment"></i> <span data-tr="chat">رسالة</span></button>
-                <button class="btn btn-info w-100" onclick="shareAd()"><i class="fas fa-share-alt"></i></button>
+    <form id="pub-form" style="padding: 20px;">
+        <input type="text" id="p-title" class="form-input" placeholder="عنوان الإعلان" required>
+        <select id="p-cat" class="form-select"></select>
+        <input type="number" id="p-price" class="form-input" placeholder="السعر (دج)" required>
+        <textarea id="p-desc" class="form-area" placeholder="اكتب وصف المنتج هنا..." rows="4"></textarea>
+        <p style="font-weight: bold; margin-bottom: 10px;">صور المنتج (حتى 5 صور):</p>
+        <input type="file" class="form-input" accept="image/*" id="img1">
+        <input type="file" class="form-input" accept="image/*" id="img2">
+        <input type="file" class="form-input" accept="image/*" id="img3">
+        <button type="submit" class="btn-main" id="pub-btn">نشر الآن</button>
+    </form>
+</div>
+
+<!-- لوحة التحكم السريّة -->
+<div class="full-page" id="admin-panel">
+    <div class="page-header" style="background: var(--secondary); color: white;">
+        <h3>لوحة التحكم 🛡️</h3>
+        <i class="fas fa-times" onclick="closePage('admin-panel')"></i>
+    </div>
+    <div style="padding: 20px;">
+        <div id="admin-stats" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div style="background: white; padding: 20px; border-radius: 10px; text-align: center;">
+                <h4 id="stat-ads">0</h4>
+                <p>إعلان</p>
+            </div>
+            <div style="background: white; padding: 20px; border-radius: 10px; text-align: center;">
+                <h4 id="stat-users">0</h4>
+                <p>مستخدم</p>
             </div>
         </div>
+        <h3 style="margin-top: 20px;">الإعلانات الحالية:</h3>
+        <div id="admin-ads-list"></div>
     </div>
 </div>
-
-<!-- Admin Panel -->
-<div class="full-page" id="admin-panel">
-    <div class="admin-header">
-        <h3>Admin Dashboard 🛡️</h3>
-        <button class="btn btn-danger" onclick="closePage('admin-panel')">Exit</button>
-    </div>
-    <div class="admin-tabs">
-        <div class="tab-btn active" onclick="switchAdmin('dash')">الرئيسية</div>
-        <div class="tab-btn" onclick="switchAdmin('ads')">الإعلانات</div>
-        <div class="tab-btn" onclick="switchAdmin('users')">المستخدمين</div>
-        <div class="tab-btn" onclick="switchAdmin('ad-reports')">بلاغات المنشورات</div>
-        <div class="tab-btn" onclick="switchAdmin('settings')">إعدادات</div>
-    </div>
-    
-    <div id="adm-dash" class="admin-view active">
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px">
-            <div class="stat-card"><h3>زيارات اليوم</h3><b id="st-day">0</b></div>
-            <div class="stat-card"><h3>زيارات الشهر</h3><b id="st-month">0</b></div>
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px">
-            <div class="stat-card"><h3>الإعلانات</h3><b id="st-ads">0</b></div>
-            <div class="stat-card"><h3>المستخدمين</h3><b id="st-users">0</b></div>
-            <div class="stat-card"><h3>البلاغات</h3><b id="st-reps">0</b></div>
-        </div>
-        <h4 style="margin:15px 0">بلاغات عامة أخيرة</h4>
-        <div id="adm-reps-list"></div>
-    </div>
-
-    <div id="adm-ads" class="admin-view">
-        <div id="adm-ads-list"></div>
-    </div>
-
-    <div id="adm-users" class="admin-view">
-        <div id="adm-users-list"></div>
-    </div>
-
-    <div id="adm-ad-reports" class="admin-view">
-        <div id="adm-ad-reports-list"></div>
-    </div>
-
-    <div id="adm-settings" class="admin-view">
-        <div class="stat-card" style="text-align:right">
-            <button class="btn btn-danger w-100" onclick="cleanupOldData()">تنظيف البيانات القديمة 🗑️</button>
-        </div>
-        <div class="stat-card" style="text-align:right">
-            <label>شعار الموقع</label>
-            <input type="file" id="adm-logo-file" class="file-input">
-            <button class="btn btn-secondary" onclick="saveAdmLogo()">حفظ</button>
-        </div>
-        <div class="stat-card" style="text-align:right">
-            <label>أضف بانر جديد</label>
-            <input type="file" id="adm-banner-file" class="file-input">
-            <input type="text" id="adm-banner-link" class="form-input" placeholder="رابط التحويل">
-            <button class="btn btn-secondary" onclick="saveAdmBanner()">إضافة</button>
-            <div id="adm-banners-list" style="margin-top:10px"></div>
-        </div>
-    </div>
-</div>
-
-<footer>
-    <p>&copy; 2026 El Affroun Online</p>
-</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, orderBy, getDoc, setDoc, onSnapshot, arrayUnion, arrayRemove, increment } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
+    // إعدادات Firebase الخاصة بك
     const firebaseConfig = {
       apiKey: "AIzaSyDXdDA6rH50zAv5pmZKRkXnqosoFnC3GjY",
       authDomain: "filahadz-31183.firebaseapp.com",
@@ -402,7 +158,10 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // --- SECURITY: ADMIN SYSTEM ---
+    let currentUser = null;
+    const categories = ["مركبات", "هواتف", "عقارات", "ملابس", "خدمات", "أخرى"];
+
+    // --- وظائف الأمان (SHA-256) ---
     async function hashPassword(string) {
         const utf8 = new Uint8Array(Array.from(string).map(c => c.charCodeAt(0)));
         const hashBuffer = await crypto.subtle.digest('SHA-256', utf8);
@@ -410,238 +169,144 @@
         return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
-    window.handleAdminLogin = async () => {
-        const { value: password } = await Swal.fire({
-            title: 'منطقة محظورة 🛡️',
-            input: 'password',
-            inputLabel: 'أدخل كلمة المرور',
-            showCancelButton: true
-        });
-
-        if (password) {
-            const hashedInput = await hashPassword(password);
-            // This is the hash for "abobob123"
-            const secretHash = "483984d72004245f86915354929315053426e25f8224578e367098e946271965";
-
-            if (hashedInput === secretHash) {
-                document.getElementById('admin-panel').classList.add('active');
-                initAdm();
-                history.replaceState(null, null, ' '); // Clean URL
-            } else {
-                Swal.fire('خطأ', 'كلمة المرور غير صحيحة!', 'error');
-                window.location.hash = "";
-            }
-        } else {
-            window.location.hash = "";
-        }
-    };
-
-    // Listen for the secret hash URL
-    window.addEventListener('hashchange', () => {
-        if (window.location.hash === "#admino09") handleAdminLogin();
-    });
-
-    // --- DATA & APP LOGIC ---
-    const categories = [
-        {name: "مركبات", img: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=100"},
-        {name: "هواتف", img: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=100"},
-        {name: "كهرومنزلية", img: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=100"},
-        {name: "ملابس نساء", img: "https://images.unsplash.com/photo-1525507119028-ed4c629a60a3?w=100"},
-        {name: "ملابس رجال", img: "https://images.unsplash.com/photo-1617137968427-85924c800a22?w=100"},
-        {name: "ملابس أطفال", img: "https://images.unsplash.com/photo-1519457431-44ccd64a579b?w=100"},
-        {name: "خدمات", img: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=100"},
-        {name: "خياطة", img: "https://images.unsplash.com/photo-1528578577235-b963df6db908?w=100"},
-        {name: "حلويات", img: "https://images.unsplash.com/photo-1579372786545-d24232daf58c?w=100"},
-        {name: "وكالة سياحية", img: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=100"},
-        {name: "عقارات", img: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=100"},
-        {name: "عروض عمل", img: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=100"},
-        {name: "أخرى", img: "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=100"}
-    ];
-    const cities = ["العفرون", "موزاية", "شفة", "احمر العين", "واد جر", "حطاطبة"];
-
-    let user = null;
-    let allAds = [];
-    let curLang = "ar";
-
-    document.addEventListener('DOMContentLoaded', () => {
-        if (window.location.hash === "#admino09") handleAdminLogin();
-        renderCats();
-        fillSelects();
-        loadAds();
-        loadConfig().then(() => {
-            document.getElementById('app-loader').style.opacity = '0';
-            setTimeout(()=> document.getElementById('app-loader').remove(), 500);
-        });
-    });
-
-    // Translation maps
-    const tr = {
-        ar: { menu: "القائمة", home: "الرئيسية", msgs: "الرسائل", about: "من نحن", contact: "اتصل بنا", report: "إبلاغ", logout: "خروج", privacy: "سياسة الخصوصية", featured: "⭐ مميزة", latest: "📦 أحدث الإعلانات", login: "دخول", submit: "دخول", pub_title: "نشر إعلان", img_upload: "صورة المنتج", publish: "نشر", filter: "فلترة", search: "بحث", send: "إرسال", call: "اتصال", chat: "رسالة", owner: "المعلن", details: "التفاصيل", all_cats: "كل الفئات", all_cities: "كل المدن" },
-        fr: { menu: "Menu", home: "Accueil", msgs: "Messages", about: "À propos", contact: "Contact", report: "Signaler", logout: "Déconnexion", privacy: "Confidentialité", featured: "⭐ Vedette", latest: "📦 Dernières", login: "Connexion", submit: "Entrer", pub_title: "Publier", img_upload: "Image", publish: "Publier", filter: "Filtrer", search: "Rechercher", send: "Envoyer", call: "Appeler", chat: "Message", owner: "Vendeur", details: "Détails", all_cats: "Toutes", all_cities: "Toutes" }
-    };
-
-    window.toggleLang = () => {
-        curLang = curLang === "ar" ? "fr" : "ar";
-        document.documentElement.dir = curLang === "ar" ? "rtl" : "ltr";
-        document.getElementById('lang-txt').innerText = curLang.toUpperCase();
-        document.querySelectorAll('[data-tr]').forEach(el => el.innerText = tr[curLang][el.getAttribute('data-tr')]);
-        renderCats();
-        fillSelects();
-        loadAds();
-    };
-
-    function renderCats() {
-        document.getElementById('cats-container').innerHTML = categories.map(c => `
-            <div class="cat-card" onclick="filterCat('${c.name}')">
-                <img src="${c.img}" class="cat-img"><span class="cat-name">${c.name}</span>
-            </div>`).join('');
-    }
-
-    function fillSelects() {
-        const catOpts = categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
-        const cityOpts = cities.map(c => `<option value="${c}">${c}</option>`).join('');
-        document.getElementById('p-cat').innerHTML = catOpts;
-        document.getElementById('p-city').innerHTML = cityOpts;
-        document.getElementById('f-cat').innerHTML = `<option value="">كل الفئات</option>` + catOpts;
-        document.getElementById('f-city').innerHTML = `<option value="">كل المدن</option>` + cityOpts;
-    }
-
-    // Auth
-    onAuthStateChanged(auth, u => {
-        user = u;
-        document.getElementById('logout-btn').classList.toggle('hidden', !u);
-    });
-
-    window.logout = () => signOut(auth).then(() => window.location.reload());
-    window.checkAuth = () => user ? Swal.fire('حسابي', user.email, 'info') : openModal('auth-modal');
-
-    // Ads
-    window.loadAds = async (f = {}) => {
-        const q = query(collection(db, "ads"), orderBy("timestamp", "desc"));
-        const snap = await getDocs(q);
-        allAds = snap.docs.map(d => ({id: d.id, ...d.data()}));
-        let res = allAds;
-        if(f.cat) res = res.filter(a => a.category === f.cat);
-        renderAds(res);
-    };
-
-    function renderAds(list) {
-        const feat = document.getElementById('featured-ads');
-        const all = document.getElementById('all-ads');
-        feat.innerHTML = ''; all.innerHTML = '';
-        list.forEach(a => {
-            const html = `
-            <div class="ad-card ${a.isFeatured?'featured':''}" onclick="openProd('${a.id}')">
-                ${a.isFeatured?'<div class="feat-badge">★</div>':''}
-                <div class="ad-img-box"><img src="${a.images?.[0] || ''}" loading="lazy"></div>
-                <div class="ad-content">
-                    <div class="ad-price">${a.price} DA</div>
-                    <div class="ad-title">${a.title}</div>
-                    <div class="ad-meta"><span>${a.city}</span></div>
-                </div>
-            </div>`;
-            if(a.isFeatured) feat.innerHTML += html; else all.innerHTML += html;
-        });
-        document.getElementById('feat-section').classList.toggle('hidden', !list.some(a=>a.isFeatured));
-    }
-
-    window.openProd = (id) => {
-        const ad = allAds.find(a => a.id === id);
-        if(!ad) return;
-        document.getElementById('v-title').innerText = ad.title;
-        document.getElementById('v-price').innerText = ad.price + " DA";
-        document.getElementById('v-desc').innerText = ad.desc;
-        document.getElementById('v-city').innerText = ad.city;
-        document.getElementById('v-owner').innerText = ad.ownerName || "مستخدم";
-        document.getElementById('prod-slides').innerHTML = (ad.images || []).map(img => `<div class="swiper-slide"><img src="${img}" class="prod-view-img"></div>`).join('');
-        new Swiper(".prodSwiper", { pagination: {clickable:true} });
-        document.getElementById('prod-page').classList.add('active');
-        window.location.hash = `ad/${id}`;
-    };
-
-    // Form Submissions
-    document.getElementById('auth-form').addEventListener('submit', async e => {
-        e.preventDefault();
-        const email = document.getElementById('log-email').value;
-        const pass = document.getElementById('log-pass').value;
-        try {
-            await signInWithEmailAndPassword(auth, email, pass);
-            closeModal('auth-modal');
-        } catch(err) { Swal.fire('خطأ', err.message, 'error'); }
-    });
-
-    const compressImg = (file) => new Promise(resolve => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (e) => {
-            const img = new Image();
-            img.src = e.target.result;
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                const scale = 600 / img.width;
-                canvas.width = 600; canvas.height = img.height * scale;
-                canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
-                resolve(canvas.toDataURL('image/jpeg', 0.7));
-            }
-        }
-    });
-
-    document.getElementById('pub-form').addEventListener('submit', async e => {
-        e.preventDefault();
-        if(!user) return openModal('auth-modal');
-        const btn = document.getElementById('pub-btn');
-        btn.innerText = "جاري الحفظ..."; btn.disabled = true;
-        try {
-            const imgs = [];
-            for(let i=1; i<=5; i++){
-                const f = document.getElementById('p-file-'+i).files[0];
-                if(f) imgs.push(await compressImg(f));
-            }
-            await addDoc(collection(db, "ads"), {
-                title: document.getElementById('p-title').value,
-                category: document.getElementById('p-cat').value,
-                price: document.getElementById('p-price').value,
-                city: document.getElementById('p-city').value,
-                desc: document.getElementById('p-desc').value,
-                images: imgs,
-                ownerId: user.uid,
-                timestamp: new Date().toISOString()
+    window.checkAdminLink = async () => {
+        if (window.location.hash === "#admino09") {
+            const { value: password } = await Swal.fire({
+                title: 'دخول الإدارة',
+                input: 'password',
+                inputLabel: 'كلمة المرور السريّة',
+                showCancelButton: true
             });
-            Swal.fire('تم', 'تم النشر بنجاح', 'success');
-            closeModal('pub-modal'); loadAds();
-        } catch(e){ Swal.fire('خطأ', e.message, 'error'); }
-        btn.innerText = "نشر"; btn.disabled = false;
-    });
 
-    // Config & Static
-    async function loadConfig() {
-        const s = await getDoc(doc(db, "settings", "config"));
-        if(s.exists()){
-            const d = s.data();
-            if(d.logoBlob) document.getElementById('app-logo').innerHTML = `<img src="${d.logoBlob}" style="height:40px">`;
-            if(d.banners) {
-                document.getElementById('main-banner-wrapper').innerHTML = d.banners.map(b => `<div class="swiper-slide"><img src="${b.img}"></div>`).join('');
-                new Swiper(".mySwiper", {autoplay:true, pagination:true});
+            if (password) {
+                const hashed = await hashPassword(password);
+                // Hash الخاص بكلمة abobob123
+                if (hashed === "483984d72004245f86915354929315053426e25f8224578e367098e946271965") {
+                    document.getElementById('admin-panel').classList.add('active');
+                    loadAdminData();
+                    history.replaceState(null, null, ' '); 
+                } else {
+                    Swal.fire('خطأ', 'كلمة المرور غير صحيحة', 'error');
+                    window.location.hash = "";
+                }
             }
         }
+    };
+
+    // --- منطق التطبيق الأساسي ---
+    window.onload = () => {
+        checkAdminLink();
+        renderCategories();
+        loadAds();
+        document.getElementById('app-loader').classList.add('hidden');
+        new Swiper(".mainSwiper", { pagination: { el: ".swiper-pagination" }, autoplay: true });
+    };
+
+    window.addEventListener('hashchange', checkAdminLink);
+
+    function renderCategories() {
+        const catBox = document.getElementById('cats-list');
+        catBox.innerHTML = categories.map(c => `
+            <div class="cat-card">
+                <img src="https://via.placeholder.com/60" alt="${c}">
+                <span>${c}</span>
+            </div>
+        `).join('');
+        
+        const catSelect = document.getElementById('p-cat');
+        catSelect.innerHTML = categories.map(c => `<option value="${c}">${c}</option>`).join('');
     }
 
-    // Admin Functions (Simplified for brevity)
-    window.initAdm = async () => {
-        const sAds = await getDocs(collection(db, "ads"));
-        document.getElementById('st-ads').innerText = sAds.size;
-        // more admin logic here...
+    async function loadAds() {
+        const adsBox = document.getElementById('ads-list');
+        const q = query(collection(db, "ads"), orderBy("time", "desc"));
+        const snap = await getDocs(q);
+        adsBox.innerHTML = "";
+        snap.forEach(doc => {
+            const ad = doc.data();
+            adsBox.innerHTML += `
+                <div class="ad-card" onclick="showDetails('${doc.id}')">
+                    <img src="${ad.images?.[0] || 'https://via.placeholder.com/150'}" class="ad-img">
+                    <div class="ad-info">
+                        <div class="ad-price">${ad.price} دج</div>
+                        <div class="ad-title">${ad.title}</div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    window.openPublish = () => {
+        document.getElementById('pub-page').classList.add('active');
     };
 
     window.closePage = (id) => {
         document.getElementById(id).classList.remove('active');
-        if(id === 'prod-page') history.replaceState(null, null, ' ');
     };
-    window.openModal = id => document.getElementById(id).classList.add('active');
-    window.closeModal = id => document.getElementById(id).classList.remove('active');
-    window.toggleSidebar = () => { document.getElementById('sidebar').classList.toggle('active'); document.querySelector('.overlay').classList.toggle('active'); };
-    window.closeAll = () => { document.getElementById('sidebar').classList.remove('active'); document.querySelector('.overlay').classList.remove('active'); };
+
+    // رفع الصور وتحويلها لـ Base64 لسهولة العرض
+    const toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+
+    document.getElementById('pub-form').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('pub-btn');
+        btn.innerText = "جاري النشر..."; btn.disabled = true;
+
+        try {
+            const imgs = [];
+            const files = [document.getElementById('img1').files[0], document.getElementById('img2').files[0], document.getElementById('img3').files[0]];
+            for (let f of files) { if(f) imgs.push(await toBase64(f)); }
+
+            await addDoc(collection(db, "ads"), {
+                title: document.getElementById('p-title').value,
+                price: document.getElementById('p-price').value,
+                cat: document.getElementById('p-cat').value,
+                desc: document.getElementById('p-desc').value,
+                images: imgs,
+                time: Date.now()
+            });
+
+            Swal.fire('تم!', 'تم نشر إعلانك بنجاح', 'success');
+            closePage('pub-page');
+            loadAds();
+        } catch (err) {
+            Swal.fire('خطأ', 'حدثت مشكلة أثناء النشر', 'error');
+        } finally {
+            btn.innerText = "نشر الآن"; btn.disabled = false;
+        }
+    };
+
+    // لوحة التحكم
+    async function loadAdminData() {
+        const snap = await getDocs(collection(db, "ads"));
+        document.getElementById('stat-ads').innerText = snap.size;
+        const adminList = document.getElementById('admin-ads-list');
+        adminList.innerHTML = "";
+        snap.forEach(d => {
+            const ad = d.data();
+            adminList.innerHTML += `
+                <div style="background:white; margin-bottom:10px; padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <span>${ad.title}</span>
+                    <button onclick="deleteAd('${d.id}')" style="background:red; color:white; border:none; padding:5px 10px; border-radius:5px;">حذف</button>
+                </div>
+            `;
+        });
+    }
+
+    window.deleteAd = async (id) => {
+        if (confirm('هل أنت متأكد من حذف هذا الإعلان؟')) {
+            await deleteDoc(doc(db, "ads", id));
+            loadAdminData();
+            loadAds();
+        }
+    };
 
 </script>
+
 </body>
 </html>
